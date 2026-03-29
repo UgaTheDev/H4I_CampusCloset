@@ -4,6 +4,14 @@ export const IMPACT_FACTORS = {
   WATER_PER_GARMENT_L: 3000,
 }
 
+export const NAV_LINKS = [
+  { label: 'Events', href: '/events' },
+  { label: 'Donation', href: '/donate' },
+  { label: 'About', href: '/about' },
+  { label: 'FAQ', href: '/faq' },
+  { label: 'Contact', href: '/contact' },
+] as const
+
 export const SITE_METADATA = {
   title: 'Campus Closet — BU Clothing Swap',
   description:

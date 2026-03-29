@@ -1,13 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-
-const QUICK_LINKS = [
-  { label: 'Events', href: '/events' },
-  { label: 'Donate', href: '/donate' },
-  { label: 'About', href: '/about' },
-  { label: 'FAQ', href: '/faq' },
-  { label: 'Contact', href: '/contact' },
-]
+import { NAV_LINKS } from '@/lib/constants'
 
 export default function Footer() {
   return (
@@ -39,7 +32,7 @@ export default function Footer() {
             Quick Links
           </h3>
           <ul className="mt-4 space-y-2">
-            {QUICK_LINKS.map((link) => (
+            {NAV_LINKS.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}

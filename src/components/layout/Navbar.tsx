@@ -3,14 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
-
-const NAV_LINKS = [
-  { label: 'Events', href: '/events' },
-  { label: 'Donation', href: '/donate' },
-  { label: 'About', href: '/about' },
-  { label: 'FAQ', href: '/faq' },
-  { label: 'Contact', href: '/contact' },
-]
+import { NAV_LINKS } from '@/lib/constants'
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -51,6 +44,7 @@ export default function Navbar() {
           className="flex flex-col gap-1.5 md:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
+          aria-expanded={mobileOpen}
         >
           <span className={`block h-0.5 w-6 bg-brand-text transition-transform ${mobileOpen ? 'translate-y-2 rotate-45' : ''}`} />
           <span className={`block h-0.5 w-6 bg-brand-text transition-opacity ${mobileOpen ? 'opacity-0' : ''}`} />
