@@ -33,6 +33,5 @@
 
 body {
   font-family: 'Telegraf', sans-serif;
-  background-color: #F7F4F0;
-  color: #222222;
+  @apply bg-brand-cream text-brand-text;
 }
