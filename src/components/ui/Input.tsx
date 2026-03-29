@@ -1,4 +1,39 @@
-// Text input with label
-export default function Input() {
-  return <div>Input</div>
+import { forwardRef } from 'react'
+import { cn } from '@/lib/cn'
+
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string
+  error?: string
+  icon?: React.ReactNode
 }
+
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ label, error, icon, className, id, ...props }, ref) => {
+    const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined)
+
+    return (
+      <div className="flex flex-col gap-1">
+        {label && (
+          <label htmlFor={inputId} className="flex items-center gap-1.5 font-body text-[14px] text-brand-text">
+            {icon}
+            {label}
+          </label>
+        )}
+        <input
+          ref={ref}
+          id={inputId}
+          className={cn(
+            'w-full rounded-md border border-gray-300 px-4 py-2.5 font-body text-[16px] text-brand-text placeholder:text-gray-400 focus:border-brand-olive focus:outline-none focus:ring-1 focus:ring-brand-olive',
+            error && 'border-red-500 focus:border-red-500 focus:ring-red-500',
+            className,
+          )}
+          {...props}
+        />
+        {error && <p className="font-body text-[13px] text-red-500">{error}</p>}
+      </div>
+    )
+  }
+)
+
+Input.displayName = 'Input'
+export default Input

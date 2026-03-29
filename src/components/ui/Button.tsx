@@ -1,4 +1,67 @@
-// Reusable button with variants: primary, secondary, outline
-export default function Button({ children }: { children: React.ReactNode }) {
-  return <div>Button</div>
+import Link from 'next/link'
+import { cn } from '@/lib/cn'
+
+const variants = {
+  primary: 'bg-brand-dark-olive text-white hover:opacity-90',
+  secondary: 'bg-white text-brand-text border-2 border-black hover:bg-gray-50',
+  dark: 'bg-brand-brown text-white hover:opacity-90',
+} as const
+
+const sizes = {
+  sm: 'px-4 py-2 text-[14px]',
+  md: 'px-8 py-3 text-[16px]',
+  lg: 'px-10 py-4 text-[18px]',
+} as const
+
+interface ButtonProps {
+  variant?: keyof typeof variants
+  size?: keyof typeof sizes
+  href?: string
+  fullWidth?: boolean
+  className?: string
+  children: React.ReactNode
+  type?: 'button' | 'submit' | 'reset'
+  disabled?: boolean
+  onClick?: () => void
+}
+
+export default function Button({
+  variant = 'primary',
+  size = 'md',
+  href,
+  fullWidth = false,
+  className,
+  children,
+  type = 'button',
+  disabled,
+  onClick,
+}: ButtonProps) {
+  const classes = cn(
+    'inline-flex items-center justify-center font-heading font-bold rounded-lg transition-opacity',
+    variants[variant],
+    sizes[size],
+    variant === 'secondary' && 'rounded-full',
+    fullWidth && 'w-full',
+    disabled && 'opacity-50 cursor-not-allowed',
+    className,
+  )
+
+  if (href && !disabled) {
+    return (
+      <Link href={href} className={classes}>
+        {children}
+      </Link>
+    )
+  }
+
+  return (
+    <button
+      type={type}
+      className={classes}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  )
 }
