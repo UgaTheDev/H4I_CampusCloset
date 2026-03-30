@@ -10,19 +10,31 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [status, setStatus] = useState<'loading' | 'authorized' | 'denied'>('loading')
 
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
+    async function checkAdmin(email: string) {
+      const res = await fetch(`/api/admin/check?email=${encodeURIComponent(email)}`)
+      setStatus(res.ok ? 'authorized' : 'denied')
+    }
+
+    // Check current session on mount
+    supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session?.user?.email) {
         router.replace('/admin/login')
         return
       }
-
-      const res = await fetch(`/api/admin/check?email=${encodeURIComponent(session.user.email)}`)
-      if (res.ok) {
-        setStatus('authorized')
-      } else {
-        setStatus('denied')
-      }
+      checkAdmin(session.user.email)
     })
+
+    // Listen for auth state changes (sign-out, token refresh, session expiry)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session?.user?.email) {
+        setStatus('loading')
+        router.replace('/admin/login')
+        return
+      }
+      checkAdmin(session.user.email)
+    })
+
+    return () => subscription.unsubscribe()
   }, [router])
 
   if (status === 'loading') {

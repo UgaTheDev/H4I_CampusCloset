@@ -12,11 +12,17 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    // Check on mount
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        router.replace('/admin')
-      }
+      if (session?.user) router.replace('/admin')
     })
+
+    // Auto-redirect when session appears (e.g. after OAuth callback)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) router.replace('/admin')
+    })
+
+    return () => subscription.unsubscribe()
   }, [router])
 
   async function handleSignIn() {
