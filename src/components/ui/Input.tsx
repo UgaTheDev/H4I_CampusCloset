@@ -10,6 +10,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, icon, className, id, ...props }, ref) => {
     const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined)
+    const errorId = error && inputId ? `${inputId}-error` : undefined
 
     return (
       <div className="flex flex-col gap-1">
@@ -22,6 +23,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <input
           ref={ref}
           id={inputId}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={errorId}
           className={cn(
             'w-full rounded-md border border-gray-300 px-4 py-2.5 font-body text-[16px] text-brand-text placeholder:text-gray-400 focus:border-brand-olive focus:outline-none focus:ring-1 focus:ring-brand-olive',
             error && 'border-red-500 focus:border-red-500 focus:ring-red-500',
@@ -29,7 +32,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
           {...props}
         />
-        {error && <p className="font-body text-[13px] text-red-500">{error}</p>}
+        {error && <p id={errorId} className="font-body text-[13px] text-red-500">{error}</p>}
       </div>
     )
   }
