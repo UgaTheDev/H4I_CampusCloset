@@ -11,11 +11,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     async function checkAdmin() {
-      const res = await fetch('/api/admin/check')
-      if (res.status === 401) {
+      try {
+        const res = await fetch('/api/admin/check')
+        if (res.status === 401) {
+          router.replace('/admin/login')
+        } else {
+          setStatus(res.ok ? 'authorized' : 'denied')
+        }
+      } catch {
         router.replace('/admin/login')
-      } else {
-        setStatus(res.ok ? 'authorized' : 'denied')
       }
     }
 

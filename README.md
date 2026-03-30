@@ -40,7 +40,7 @@ npm run dev
 
 ## Project Structure
 
-```
+```text
 src/
 ├── app/
 │   ├── (public)/         # Public pages (wrapped in Navbar + Footer)

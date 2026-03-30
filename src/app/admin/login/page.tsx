@@ -27,7 +27,11 @@ export default function AdminLoginPage() {
 
   async function handleSignIn() {
     setLoading(true)
-    await signInWithGoogle()
+    try {
+      await signInWithGoogle()
+    } catch {
+      setLoading(false)
+    }
   }
 
   return (
