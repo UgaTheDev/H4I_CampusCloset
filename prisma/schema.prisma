@@ -84,8 +84,11 @@ model ContactRequest {
   name      String
   email     String
   message   String
-  type      String   @default("general") // "pickup" | "dropoff" | "general"
-  status    String   @default("new")     // "new" | "responded" | "completed"
+  type              String   @default("general") // "pickup" | "dropoff" | "general"
+  status            String   @default("new")     // "new" | "responded" | "completed"
+  preferredLocation String?
+  preferredDate     String?
+  preferredTime     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
