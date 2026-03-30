@@ -35,7 +35,7 @@ export default function Modal({ open, onClose, title, className, children }: Mod
       <div className="absolute inset-0 bg-black/50" onClick={onClose} aria-hidden="true" />
       <div
         role="dialog"
-        aria-modal
+        aria-modal={true}
         aria-label={title}
         className={cn('relative z-10 w-full max-w-lg rounded-xl bg-white p-6 shadow-xl', className)}
       >
