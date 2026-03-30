@@ -1,6 +1,6 @@
-import Link from 'next/link'
-import Image from 'next/image'
-import { NAV_LINKS } from '@/lib/constants'
+import Link from "next/link";
+import Image from "next/image";
+import { NAV_LINKS } from "@/lib/constants";
 
 export default function Footer() {
   return (
@@ -78,10 +78,21 @@ export default function Footer() {
         <div className="mx-auto max-w-[1440px] px-6 py-4 lg:px-[104px]">
           <p className="font-body text-[14px] text-white/50">
             &copy; {new Date().getFullYear()} Campus Closet &middot; Boston
-            University &middot; Built by Hack4Impact BU
+            University
+          </p>
+          <p className="mt-1 font-body text-[14px] text-white/50">
+            Developed by{" "}
+            <a
+              href="https://bu.hack4impact.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/70 underline transition-opacity hover:opacity-100"
+            >
+              Hack4Impact BU
+            </a>
           </p>
         </div>
       </div>
     </footer>
-  )
+  );
 }
