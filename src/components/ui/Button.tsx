@@ -2,9 +2,9 @@ import Link from 'next/link'
 import { cn } from '@/lib/cn'
 
 const variants = {
-  primary: 'bg-brand-dark-olive text-white hover:opacity-90',
-  secondary: 'bg-white text-brand-text border-2 border-black hover:bg-gray-50',
-  dark: 'bg-brand-brown text-white hover:opacity-90',
+  primary: 'bg-brand-dark-olive text-white hover:opacity-90 rounded-lg',
+  secondary: 'bg-white text-brand-text border-2 border-black hover:bg-gray-50 rounded-full',
+  dark: 'bg-brand-brown text-white hover:opacity-90 rounded-lg',
 } as const
 
 const sizes = {
@@ -37,10 +37,9 @@ export default function Button({
   onClick,
 }: ButtonProps) {
   const classes = cn(
-    'inline-flex items-center justify-center font-heading font-bold rounded-lg transition-opacity',
+    'inline-flex items-center justify-center font-heading font-bold transition-opacity',
     variants[variant],
     sizes[size],
-    variant === 'secondary' && 'rounded-full',
     fullWidth && 'w-full',
     disabled && 'opacity-50 cursor-not-allowed',
     className,

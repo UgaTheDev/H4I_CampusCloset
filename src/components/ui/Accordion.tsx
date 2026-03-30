@@ -20,11 +20,7 @@ export default function Accordion({ items, allowMultiple = false, className }: A
   function toggle(index: number) {
     setOpenIndices((prev) => {
       const next = new Set(allowMultiple ? prev : [])
-      if (prev.has(index)) {
-        next.delete(index)
-      } else {
-        next.add(index)
-      }
+      prev.has(index) ? next.delete(index) : next.add(index)
       return next
     })
   }
