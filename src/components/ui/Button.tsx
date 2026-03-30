@@ -22,7 +22,7 @@ interface ButtonProps {
   children: React.ReactNode
   type?: 'button' | 'submit' | 'reset'
   disabled?: boolean
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 export default function Button({
