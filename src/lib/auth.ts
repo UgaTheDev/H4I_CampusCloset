@@ -7,7 +7,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 export async function signInWithGoogle() {
   return supabase.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: `${SITE_URL}/admin` },
+    options: { redirectTo: `${SITE_URL}/auth/callback` },
   })
 }
 
