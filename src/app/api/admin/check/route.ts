@@ -1,13 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
+import { createSupabaseServerClient } from '@/lib/supabase-server'
 import { prisma } from '@/lib/prisma'
 
-/** GET /api/admin/check?email=... — Check if email is an admin */
-export async function GET(req: NextRequest) {
-  const email = req.nextUrl.searchParams.get('email')
-  if (!email) return NextResponse.json({ error: 'Missing email' }, { status: 400 })
+/** GET /api/admin/check — Check if the current session user is an admin */
+export async function GET() {
+  const supabase = await createSupabaseServerClient()
+  const { data: { user } } = await supabase.auth.getUser()
 
-  const admin = await prisma.adminUser.findUnique({ where: { email } })
-  if (!admin) return NextResponse.json({ error: 'Not admin' }, { status: 403 })
+  if (!user?.email) {
+    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+  }
+
+  const admin = await prisma.adminUser.findUnique({ where: { email: user.email } })
+  if (!admin) {
+    return NextResponse.json({ error: 'Not admin' }, { status: 403 })
+  }
 
   return NextResponse.json({ ok: true })
 }
