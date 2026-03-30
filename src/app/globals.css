@@ -32,5 +32,8 @@
 /* ── Base Styles ──────────────────────────────────────── */
 
 body {
+  /* Telegraf is set via Tailwind's font-body utility (see tailwind.config.ts).
+     This explicit declaration ensures Telegraf loads even if a component
+     forgets to add the font-body class. */
   font-family: 'Telegraf', sans-serif;
 }

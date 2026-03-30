@@ -16,9 +16,9 @@ export default function Navbar() {
           <Image
             src="/images/logo.png"
             alt="Campus Closet logo"
-            width={82}
-            height={82}
-            className="h-[82px] w-[82px] object-cover"
+            width={80}
+            height={80}
+            className="h-20 w-20 object-cover"
             priority
           />
           <span className="font-display text-[36px] leading-none text-brand-text">
