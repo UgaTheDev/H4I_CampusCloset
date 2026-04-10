@@ -29,12 +29,6 @@
   font-display: swap;
 }
 
-/* ── Leaflet Map ──────────────────────────────────────── */
-
-.leaflet-container {
-  filter: grayscale(0.6) sepia(0.25) hue-rotate(70deg) brightness(1.05);
-}
-
 /* ── Base Styles ──────────────────────────────────────── */
 
 body {
