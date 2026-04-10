@@ -102,6 +102,9 @@ export default function DonatePage() {
         </div>
       </section>
 
+      {/* ── Green divider bar ───────────────────────────── */}
+      <div className="h-9 w-full bg-brand-olive-light" />
+
       {/* ── Section 2: How to Donate ────────────────────── */}
       <section className="bg-brand-cream py-16">
         <div className={`${INNER} text-center`}>
