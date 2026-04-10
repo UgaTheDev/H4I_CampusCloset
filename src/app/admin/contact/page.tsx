@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Badge from '@/components/ui/Badge'
 import Modal from '@/components/ui/Modal'
 import Button from '@/components/ui/Button'
@@ -43,9 +43,9 @@ function TypeBadge({ type }: { type: string }) {
   const label = type.charAt(0).toUpperCase() + type.slice(1)
   const extra = TYPE_STYLES[type] ?? ''
   return (
-    <Badge className={cn('px-3 py-1 text-[12px]', extra || 'border border-black bg-white text-brand-text')}>
+    <span className={cn('inline-block rounded-full px-3 py-1 font-body text-[12px] font-medium', extra || 'border border-black bg-white text-brand-text')}>
       {label}
-    </Badge>
+    </span>
   )
 }
 
@@ -53,9 +53,9 @@ function StatusBadge({ status }: { status: string }) {
   const label = status.charAt(0).toUpperCase() + status.slice(1)
   const extra = STATUS_STYLES[status] ?? 'border border-gray-300 text-brand-text'
   return (
-    <Badge className={cn('px-3 py-1 text-[12px]', extra)}>
+    <span className={cn('inline-block rounded-full px-3 py-1 font-body text-[12px] font-medium', extra)}>
       {label}
-    </Badge>
+    </span>
   )
 }
 
@@ -72,46 +72,15 @@ function formatDate(iso: string) {
 export default function AdminContactPage() {
   const [requests, setRequests] = useState<ContactRequest[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [selected, setSelected] = useState<ContactRequest | null>(null)
   const [updatingId, setUpdatingId] = useState<string | null>(null)
-  const [sortField, setSortField] = useState<keyof ContactRequest>('createdAt')
-  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
-
-  const sortedRequests = useMemo(() => {
-    return [...requests].sort((a, b) => {
-      const av = a[sortField] ?? ''
-      const bv = b[sortField] ?? ''
-      const cmp = String(av).localeCompare(String(bv))
-      return sortDir === 'asc' ? cmp : -cmp
-    })
-  }, [requests, sortField, sortDir])
-
-  function toggleSort(field: keyof ContactRequest) {
-    if (field === sortField) {
-      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
-    } else {
-      setSortField(field)
-      setSortDir('asc')
-    }
-  }
 
   const fetchRequests = useCallback(async () => {
     setLoading(true)
-    setError(null)
     try {
       const res = await fetch('/api/contact')
-      if (!res.ok) {
-        const msg = res.status === 401 ? 'Not authenticated'
-          : res.status === 403 ? 'Not authorized'
-          : `Failed to load requests (${res.status})`
-        setError(msg)
-        return
-      }
       const json = (await res.json()) as { data: ContactRequest[] }
       setRequests(json.data ?? [])
-    } catch {
-      setError('Failed to load requests')
     } finally {
       setLoading(false)
     }
@@ -122,7 +91,6 @@ export default function AdminContactPage() {
   // ── Status update ─────────────────────────────────────
 
   async function updateStatus(id: string, status: ContactStatus) {
-    setError(null)
     setUpdatingId(id)
     try {
       const res = await fetch(`/api/contact/${id}`, {
@@ -130,10 +98,7 @@ export default function AdminContactPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
       })
-      if (!res.ok) {
-        setError(`Failed to update status (${res.status})`)
-        return
-      }
+      if (!res.ok) throw new Error()
 
       setRequests((prev) =>
         prev.map((r) => (r.id === id ? { ...r, status } : r))
@@ -141,8 +106,6 @@ export default function AdminContactPage() {
       if (selected?.id === id) {
         setSelected((prev) => prev ? { ...prev, status } : prev)
       }
-    } catch {
-      setError('Failed to update status')
     } finally {
       setUpdatingId(null)
     }
@@ -165,10 +128,6 @@ export default function AdminContactPage() {
         <div className="flex items-center justify-center py-16">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-olive border-t-transparent" />
         </div>
-      ) : error ? (
-        <div className="rounded-xl border border-red-200 bg-red-50 py-16 text-center">
-          <p className="font-body text-[15px] text-red-600">{error}</p>
-        </div>
       ) : requests.length === 0 ? (
         <div className="rounded-xl border border-dashed border-gray-300 py-16 text-center">
           <p className="font-body text-[15px] text-brand-text/50">No messages yet.</p>
@@ -178,36 +137,15 @@ export default function AdminContactPage() {
           <table className="w-full text-left">
             <thead className="border-b border-gray-200 bg-gray-50">
               <tr>
-                {([
-                  { label: 'Name',    field: 'name'      },
-                  { label: 'Email',   field: 'email'     },
-                  { label: 'Type',    field: 'type'      },
-                  { label: 'Status',  field: 'status'    },
-                  { label: 'Date',    field: 'createdAt' },
-                ] as { label: string; field: keyof ContactRequest }[]).map(({ label, field }) => (
-                  <th
-                    key={field}
-                    aria-sort={sortField === field ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
-                    className="px-4 py-3"
-                  >
-                    <button
-                      onClick={() => toggleSort(field)}
-                      className="flex items-center gap-1 font-heading text-[13px] font-bold uppercase tracking-wide text-brand-text/50 hover:text-brand-text"
-                    >
-                      {label}
-                      <span aria-hidden="true" className="text-[10px]">
-                        {sortField === field ? (sortDir === 'asc' ? '▲' : '▼') : '⇅'}
-                      </span>
-                    </button>
+                {['Name', 'Email', 'Type', 'Status', 'Date', 'Actions'].map((h) => (
+                  <th key={h} className="px-4 py-3 font-heading text-[13px] font-bold uppercase tracking-wide text-brand-text/50">
+                    {h}
                   </th>
                 ))}
-                <th className="px-4 py-3 font-heading text-[13px] font-bold uppercase tracking-wide text-brand-text/50">
-                  Actions
-                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {sortedRequests.map((req) => (
+              {requests.map((req) => (
                 <tr key={req.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3 font-body text-[14px] font-medium text-brand-text">
                     {req.name}
