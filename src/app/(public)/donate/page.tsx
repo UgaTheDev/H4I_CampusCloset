@@ -125,7 +125,7 @@ export default function DonatePage() {
 
       {/* ── Section 3: What We Accept ───────────────────── */}
       <section className="bg-white py-16">
-        <div className="mx-auto max-w-[1440px] px-6 lg:px-[104px]">
+        <div className="mx-auto max-w-4xl px-6 lg:px-8">
           <div className="grid gap-6 md:grid-cols-2">
             {/* Accept */}
             <Card variant="outlined" className="p-8">
@@ -199,7 +199,7 @@ export default function DonatePage() {
 
       {/* ── Section 5: Schedule a Pickup ────────────────── */}
       <section className="bg-white py-16">
-        <div className="mx-auto max-w-[1440px] px-6 lg:px-[104px]">
+        <div className="mx-auto max-w-4xl px-6 lg:px-8">
           <div className="text-center">
             <h2 className="font-display text-3xl text-brand-text">Schedule a Pickup</h2>
             <p className="mt-3 font-body text-brand-text/70">
