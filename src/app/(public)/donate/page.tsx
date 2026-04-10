@@ -43,7 +43,7 @@ function XIcon({ className }: { className?: string }) {
   )
 }
 
-// ── Section helpers ────────────────────────────────────────
+// ── Data ───────────────────────────────────────────────────
 
 const ACCEPT_ITEMS = [
   'Tops (t-shirts, blouses, long sleeves)',
@@ -81,6 +81,9 @@ const HOW_STEPS = [
   },
 ]
 
+// Shared container — every section uses this
+const INNER = 'mx-auto max-w-5xl px-6 lg:px-12'
+
 // ── Page ──────────────────────────────────────────────────
 
 export default function DonatePage() {
@@ -88,7 +91,7 @@ export default function DonatePage() {
     <>
       {/* ── Section 1: Hero ─────────────────────────────── */}
       <section className="bg-brand-cream py-16">
-        <div className="mx-auto max-w-[1440px] px-6 text-center lg:px-[104px]">
+        <div className={`${INNER} text-center`}>
           <h1 className="font-display text-4xl md:text-5xl text-brand-text">
             Donate Clothes
           </h1>
@@ -101,7 +104,7 @@ export default function DonatePage() {
 
       {/* ── Section 2: How to Donate ────────────────────── */}
       <section className="bg-brand-cream py-16">
-        <div className="mx-auto max-w-[1440px] px-6 text-center lg:px-[104px]">
+        <div className={`${INNER} text-center`}>
           <h2 className="font-display text-3xl text-brand-text">How to Donate</h2>
           <p className="mt-3 font-body text-brand-text/70">
             Simple steps to make your clothing donation count!
@@ -125,7 +128,7 @@ export default function DonatePage() {
 
       {/* ── Section 3: What We Accept ───────────────────── */}
       <section className="bg-white py-16">
-        <div className="mx-auto max-w-4xl px-6 lg:px-8">
+        <div className={INNER}>
           <div className="grid gap-6 md:grid-cols-2">
             {/* Accept */}
             <Card variant="outlined" className="p-8">
@@ -176,7 +179,7 @@ export default function DonatePage() {
 
       {/* ── Section 4: Drop-Off Locations ───────────────── */}
       <section className="bg-white py-16">
-        <div className="mx-auto max-w-[1440px] px-6 text-center lg:px-[104px]">
+        <div className={`${INNER} text-center`}>
           <h2 className="font-display text-3xl text-brand-text">Drop-Off Locations</h2>
           <p className="mt-3 font-body text-brand-text/70">
             Find convenient donation bins across BU campus
@@ -199,7 +202,7 @@ export default function DonatePage() {
 
       {/* ── Section 5: Schedule a Pickup ────────────────── */}
       <section className="bg-white py-16">
-        <div className="mx-auto max-w-4xl px-6 lg:px-8">
+        <div className={INNER}>
           <div className="text-center">
             <h2 className="font-display text-3xl text-brand-text">Schedule a Pickup</h2>
             <p className="mt-3 font-body text-brand-text/70">
@@ -215,7 +218,7 @@ export default function DonatePage() {
 
       {/* ── Section 6: Questions? ───────────────────────── */}
       <section className="bg-white py-16">
-        <div className="mx-auto max-w-[1440px] px-6 text-center lg:px-[104px]">
+        <div className={`${INNER} text-center`}>
           <h2 className="font-display text-3xl text-brand-text">Questions?</h2>
           <p className="mt-3 font-body text-brand-text/70">
             We&apos;re here to help with any questions about donating to BU Campus Closet.
