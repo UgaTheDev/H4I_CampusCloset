@@ -47,8 +47,8 @@ export default function DonationMap() {
       scrollWheelZoom={false}
     >
       <TileLayer
-        attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
-        url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+        attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
+        url="https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png"
       />
       {bins
         .filter((bin) => bin.active)
