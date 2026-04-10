@@ -103,7 +103,7 @@ export default function DonatePage() {
       </section>
 
       {/* ── Green divider bar ───────────────────────────── */}
-      <div className="h-9 w-full bg-brand-olive-light" />
+      <div className="h-9 w-full bg-brand-olive-light border-y-2 border-brand-brown" />
 
       {/* ── Section 2: How to Donate ────────────────────── */}
       <section className="bg-brand-cream py-16">
