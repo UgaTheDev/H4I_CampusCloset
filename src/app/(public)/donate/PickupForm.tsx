@@ -147,15 +147,16 @@ export default function PickupForm() {
         <p className="font-body text-[14px] text-red-500">{error}</p>
       )}
 
-      <Button
-        type="submit"
-        fullWidth
-        variant="primary"
-        disabled={submitting}
-        className="mt-2 rounded-full bg-brand-terra hover:bg-brand-terra/90"
-      >
-        {submitting ? 'Submitting…' : 'Schedule Pickup'}
-      </Button>
+      <div className="mt-2 flex">
+        <Button
+          type="submit"
+          variant="primary"
+          disabled={submitting}
+          className="rounded-full bg-brand-olive hover:opacity-90 px-10"
+        >
+          {submitting ? 'Submitting…' : 'Schedule Pickup'}
+        </Button>
+      </div>
     </form>
   )
 }
