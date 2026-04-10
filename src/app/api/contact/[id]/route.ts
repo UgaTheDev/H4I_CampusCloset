@@ -1,11 +1,17 @@
 // TODO: requireAdmin() on all mutating handlers before wiring to Prisma
 import { NextResponse } from 'next/server'
-import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { createSupabaseServerClient } from '@/lib/supabase-server'
 
 interface UpdateContactBody {
   status?: string
+  name?: string
+  email?: string
+  message?: string
+  type?: string
+  preferredLocation?: string
+  preferredDate?: string
+  preferredTime?: string
 }
 
 // Admin only — update a contact request (e.g. status change)
@@ -28,23 +34,19 @@ export async function PATCH(
 
     const { id } = await params
     const body = (await request.json()) as UpdateContactBody
-    const { status } = body
 
     const validStatuses = ['new', 'responded', 'completed']
-    if (!status || !validStatuses.includes(status)) {
+    if (body.status && !validStatuses.includes(body.status)) {
       return NextResponse.json({ error: 'Invalid status value' }, { status: 400 })
     }
 
     const contactRequest = await prisma.contactRequest.update({
       where: { id },
-      data: { status },
+      data: body,
     })
 
     return NextResponse.json({ data: contactRequest })
-  } catch (err) {
-    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
-      return NextResponse.json({ error: 'Contact request not found' }, { status: 404 })
-    }
+  } catch {
     return NextResponse.json({ error: 'Failed to update contact request' }, { status: 500 })
   }
 }
