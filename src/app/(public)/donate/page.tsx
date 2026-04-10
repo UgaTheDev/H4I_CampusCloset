@@ -1,4 +1,242 @@
-// Donation page — how to donate, map, pickup form
+import type { Metadata } from 'next'
+import dynamic from 'next/dynamic'
+import Button from '@/components/ui/Button'
+import Card from '@/components/ui/Card'
+import PickupForm from './PickupForm'
+
+export const metadata: Metadata = {
+  title: 'Donate | Campus Closet',
+  description: 'Donate clothing to BU Campus Closet',
+}
+
+const DonationMap = dynamic(() => import('./DonationMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[400px] animate-pulse rounded-xl bg-gray-100" />
+  ),
+})
+
+// ── SVG Icons ─────────────────────────────────────────────
+
+function CheckIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+  )
+}
+
+function BoxIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10" />
+    </svg>
+  )
+}
+
+function HandsIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+    </svg>
+  )
+}
+
+function XIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  )
+}
+
+// ── Section helpers ────────────────────────────────────────
+
+const ACCEPT_ITEMS = [
+  'Tops (t-shirts, blouses, long sleeves)',
+  'Bottoms (jeans, pants, skirts, shorts)',
+  'Dresses & jumpsuits',
+  'Sweaters & hoodies',
+  'Jackets & coats',
+]
+
+const REJECT_ITEMS = [
+  'Undergarments',
+  'Shoes',
+  'Bedding or linens',
+  'Heavily damaged items',
+]
+
+const HOW_STEPS = [
+  {
+    icon: <CheckIcon className="h-8 w-8 text-white" />,
+    bg: 'bg-brand-olive',
+    label: '1. Check Quality',
+    desc: 'Ensure items are clean, wearable, and in good condition before donating.',
+  },
+  {
+    icon: <BoxIcon className="h-8 w-8 text-white" />,
+    bg: 'bg-brand-tan',
+    label: '2. Drop Off or Schedule',
+    desc: 'Find a campus bin near you or schedule a free pickup at your building.',
+  },
+  {
+    icon: <HandsIcon className="h-8 w-8 text-white" />,
+    bg: 'bg-brand-olive-light',
+    label: '3. We Handle the Rest',
+    desc: 'We sort, display, and redistribute your items at our next swap event.',
+  },
+]
+
+// ── Page ──────────────────────────────────────────────────
+
 export default function DonatePage() {
-  return <div>DonatePage</div>
+  return (
+    <>
+      {/* ── Section 1: Hero ─────────────────────────────── */}
+      <section className="bg-brand-cream py-16">
+        <div className="mx-auto max-w-[1440px] px-6 text-center lg:px-[104px]">
+          <h1 className="font-display text-4xl md:text-5xl text-brand-text">
+            Donate Clothes
+          </h1>
+          <p className="mx-auto mt-4 max-w-xl font-body text-brand-text/70">
+            Help keep clothing out of landfills and make sustainable fashion accessible to
+            BU students. Your donations make our swaps possible.
+          </p>
+        </div>
+      </section>
+
+      {/* ── Section 2: How to Donate ────────────────────── */}
+      <section className="bg-brand-cream py-16">
+        <div className="mx-auto max-w-[1440px] px-6 text-center lg:px-[104px]">
+          <h2 className="font-display text-3xl text-brand-text">How to Donate</h2>
+          <p className="mt-3 font-body text-brand-text/70">
+            Simple steps to make your clothing donation count!
+          </p>
+
+          <div className="mt-12 grid gap-8 md:grid-cols-3">
+            {HOW_STEPS.map((step) => (
+              <div key={step.label} className="flex flex-col items-center text-center">
+                <div className={`flex h-16 w-16 items-center justify-center rounded-full ${step.bg}`}>
+                  {step.icon}
+                </div>
+                <p className="mt-4 font-heading text-[17px] font-bold text-brand-text">
+                  {step.label}
+                </p>
+                <p className="mt-2 font-body text-sm text-brand-text/70">{step.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Section 3: What We Accept ───────────────────── */}
+      <section className="bg-white py-16">
+        <div className="mx-auto max-w-[1440px] px-6 lg:px-[104px]">
+          <div className="grid gap-6 md:grid-cols-2">
+            {/* Accept */}
+            <Card variant="outlined" className="p-8">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-olive">
+                  <CheckIcon className="h-5 w-5 text-white" />
+                </div>
+                <h3 className="font-heading text-xl font-bold text-brand-text">What We Accept</h3>
+              </div>
+
+              <ul className="mt-6 flex flex-col gap-3">
+                {ACCEPT_ITEMS.map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <CheckIcon className="mt-0.5 h-5 w-5 shrink-0 text-brand-olive" />
+                    <span className="font-body text-[15px] text-brand-text">{item}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <p className="mt-6 font-body text-sm text-brand-text/60">
+                All items should be clean and in good condition.
+              </p>
+            </Card>
+
+            {/* Reject */}
+            <Card variant="outlined" className="p-8">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-brown">
+                  <XIcon className="h-5 w-5 text-white" />
+                </div>
+                <h3 className="font-heading text-xl font-bold text-brand-text">
+                  What We Don&apos;t Accept
+                </h3>
+              </div>
+
+              <ul className="mt-6 flex flex-col gap-3">
+                {REJECT_ITEMS.map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <XIcon className="mt-0.5 h-5 w-5 shrink-0 text-brand-text/40" />
+                    <span className="font-body text-[15px] text-brand-text">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Section 4: Drop-Off Locations ───────────────── */}
+      <section className="bg-white py-16">
+        <div className="mx-auto max-w-[1440px] px-6 text-center lg:px-[104px]">
+          <h2 className="font-display text-3xl text-brand-text">Drop-Off Locations</h2>
+          <p className="mt-3 font-body text-brand-text/70">
+            Find convenient donation bins across BU campus
+          </p>
+
+          <div className="mt-8 h-[400px] overflow-hidden rounded-xl">
+            <DonationMap />
+          </div>
+
+          <p className="mt-6 font-body text-brand-text/70">
+            Can&apos;t make it to a bin? Bring your clothes to a swap or donation drive near you.
+          </p>
+          <div className="mt-4 flex justify-center">
+            <Button variant="dark" href="/events" className="rounded-full">
+              Find Swap &amp; Drive Events
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Section 5: Schedule a Pickup ────────────────── */}
+      <section className="bg-white py-16">
+        <div className="mx-auto max-w-[1440px] px-6 lg:px-[104px]">
+          <div className="text-center">
+            <h2 className="font-display text-3xl text-brand-text">Schedule a Pickup</h2>
+            <p className="mt-3 font-body text-brand-text/70">
+              Can&apos;t make it to a bin? Request a pickup and we&apos;ll coordinate a time.
+            </p>
+          </div>
+
+          <Card className="mt-8 p-8">
+            <PickupForm />
+          </Card>
+        </div>
+      </section>
+
+      {/* ── Section 6: Questions? ───────────────────────── */}
+      <section className="bg-white py-16">
+        <div className="mx-auto max-w-[1440px] px-6 text-center lg:px-[104px]">
+          <h2 className="font-display text-3xl text-brand-text">Questions?</h2>
+          <p className="mt-3 font-body text-brand-text/70">
+            We&apos;re here to help with any questions about donating to BU Campus Closet.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-4">
+            <Button href="/faq" className="rounded-full bg-brand-olive text-white hover:opacity-90">
+              View FAQ Page
+            </Button>
+            <Button href="/contact" className="rounded-full bg-brand-tan text-white hover:opacity-90">
+              Contact Us
+            </Button>
+          </div>
+        </div>
+      </section>
+    </>
+  )
 }
