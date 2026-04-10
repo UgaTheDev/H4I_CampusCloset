@@ -1,20 +1,13 @@
 import type { Metadata } from 'next'
-import dynamic from 'next/dynamic'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import PickupForm from './PickupForm'
+import DonationMapWrapper from './DonationMapWrapper'
 
 export const metadata: Metadata = {
   title: 'Donate | Campus Closet',
   description: 'Donate clothing to BU Campus Closet',
 }
-
-const DonationMap = dynamic(() => import('./DonationMap'), {
-  ssr: false,
-  loading: () => (
-    <div className="h-[400px] animate-pulse rounded-xl bg-gray-100" />
-  ),
-})
 
 // ── SVG Icons ─────────────────────────────────────────────
 
@@ -190,7 +183,7 @@ export default function DonatePage() {
           </p>
 
           <div className="mt-8 h-[400px] overflow-hidden rounded-xl">
-            <DonationMap />
+            <DonationMapWrapper />
           </div>
 
           <p className="mt-6 font-body text-brand-text/70">
