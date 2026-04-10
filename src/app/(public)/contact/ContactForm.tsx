@@ -34,6 +34,22 @@ const TYPE_OPTIONS: { value: ContactType; label: string }[] = [
   { value: 'dropoff', label: 'Dropoff Question' },
 ]
 
+function PersonIcon() {
+  return (
+    <svg className="h-4 w-4 text-brand-text/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+    </svg>
+  )
+}
+
+function EnvelopeIcon() {
+  return (
+    <svg className="h-4 w-4 text-brand-text/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+    </svg>
+  )
+}
+
 export default function ContactForm() {
   const [form, setForm] = useState<FormState>(INITIAL)
   const [submitting, setSubmitting] = useState(false)
@@ -112,6 +128,7 @@ export default function ContactForm() {
       <div className="grid gap-4 md:grid-cols-2">
         <Input
           label="Name"
+          icon={<PersonIcon />}
           placeholder="Your name"
           value={form.name}
           onChange={handleChange('name')}
@@ -119,6 +136,7 @@ export default function ContactForm() {
         />
         <Input
           label="Email"
+          icon={<EnvelopeIcon />}
           type="email"
           placeholder="your@email.com"
           value={form.email}
@@ -127,19 +145,18 @@ export default function ContactForm() {
         />
       </div>
 
-      {/* Type select */}
+      {/* Subject select */}
       <div className="flex flex-col gap-1">
         <label htmlFor="contact-type" className="font-body text-[14px] text-brand-text">
-          Type
+          Subject
         </label>
         <select
           id="contact-type"
           value={form.type}
           onChange={handleChange('type')}
           className={cn(
-            'w-full rounded-md border border-gray-300 px-4 py-2.5 font-body text-[16px] text-brand-text',
+            'w-full rounded-md border border-gray-300 px-4 py-2.5 font-body text-[16px] text-brand-text bg-white',
             'focus:border-brand-olive focus:outline-none focus:ring-1 focus:ring-brand-olive',
-            'bg-white',
           )}
         >
           {TYPE_OPTIONS.map((opt) => (
@@ -195,7 +212,7 @@ export default function ContactForm() {
         fullWidth
         variant="primary"
         disabled={submitting}
-        className="mt-2 rounded-full"
+        className="mt-2 rounded-lg bg-brand-olive hover:opacity-90"
       >
         {submitting ? 'Sending…' : 'Send Message'}
       </Button>

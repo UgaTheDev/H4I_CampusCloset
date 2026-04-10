@@ -9,60 +9,54 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <>
-      {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="bg-brand-cream py-16">
-        <div className="mx-auto max-w-[1440px] px-6 text-center lg:px-[104px]">
-          <h1 className="font-display text-4xl md:text-5xl text-brand-text">Contact Us</h1>
-          <p className="mx-auto mt-4 max-w-xl font-body text-brand-text/70">
-            Have a question, want to schedule a pickup, or just want to say hi?
-            We&apos;d love to hear from you.
-          </p>
-        </div>
-      </section>
+    <section className="bg-brand-cream py-20 pb-28">
+      <div className="mx-auto max-w-[1440px] px-6 lg:px-[104px]">
+        <div className="mx-auto max-w-2xl">
+          {/* Heading */}
+          <div className="mb-10 text-center">
+            <h1 className="font-display text-4xl md:text-5xl text-brand-text">
+              Still have questions?
+            </h1>
+            <p className="mx-auto mt-4 max-w-lg font-body text-brand-text/70">
+              Can&apos;t find the answer you&apos;re looking for? Fill out the form below and
+              our team will get back to you within 24 hours.
+            </p>
+          </div>
 
-      {/* ── Contact info + form ──────────────────────────── */}
-      <section className="bg-brand-cream pb-24 pt-8">
-        <div className="mx-auto max-w-[1440px] px-6 lg:px-[104px]">
-          <div className="mx-auto max-w-2xl">
-            {/* Quick contact info */}
-            <div className="mb-8 flex flex-wrap justify-center gap-8 text-center">
-              <div>
-                <p className="font-heading text-[14px] font-bold uppercase tracking-wide text-brand-text/50">
-                  Email
-                </p>
-                <a
-                  href="mailto:campuscloset@bu.edu"
-                  className="mt-1 font-body text-[16px] text-brand-olive hover:underline"
-                >
-                  campuscloset@bu.edu
-                </a>
-              </div>
-              <div>
-                <p className="font-heading text-[14px] font-bold uppercase tracking-wide text-brand-text/50">
-                  Instagram
-                </p>
-                <a
-                  href="https://www.instagram.com/bucampuscloset/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-1 font-body text-[16px] text-brand-olive hover:underline"
-                >
-                  @bucampuscloset
-                </a>
-              </div>
+          {/* Form card */}
+          <Card className="shadow-sm border border-gray-200 p-8 md:p-10">
+            <ContactForm />
+          </Card>
+
+          {/* Contact info — below form */}
+          <div className="mt-8 flex flex-wrap justify-center gap-8 text-center">
+            <div>
+              <p className="font-heading text-[13px] font-bold uppercase tracking-wide text-brand-text/40">
+                Email
+              </p>
+              <a
+                href="mailto:campuscloset@bu.edu"
+                className="mt-1 font-body text-[15px] text-brand-olive hover:underline"
+              >
+                campuscloset@bu.edu
+              </a>
             </div>
-
-            {/* Form */}
-            <Card variant="outlined" className="p-8">
-              <h2 className="mb-6 font-heading text-[22px] font-bold text-brand-text">
-                Send Us a Message
-              </h2>
-              <ContactForm />
-            </Card>
+            <div>
+              <p className="font-heading text-[13px] font-bold uppercase tracking-wide text-brand-text/40">
+                Instagram
+              </p>
+              <a
+                href="https://www.instagram.com/bucampuscloset/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 font-body text-[15px] text-brand-olive hover:underline"
+              >
+                @bucampuscloset
+              </a>
+            </div>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   )
 }
