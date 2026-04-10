@@ -32,7 +32,7 @@
 /* ── Leaflet Map ──────────────────────────────────────── */
 
 .leaflet-container {
-  filter: hue-rotate(40deg) saturate(0.5);
+  filter: sepia(0.3) hue-rotate(80deg) saturate(0.6) brightness(1.05);
 }
 
 /* ── Base Styles ──────────────────────────────────────── */
