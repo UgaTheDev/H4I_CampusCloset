@@ -40,9 +40,24 @@ export async function PATCH(
       return NextResponse.json({ error: 'Invalid status value' }, { status: 400 })
     }
 
+    const updateData: {
+      status?: string
+      preferredDate?: string
+      preferredTime?: string
+      preferredLocation?: string
+    } = {}
+    if (body.status !== undefined) updateData.status = body.status
+    if (body.preferredDate !== undefined) updateData.preferredDate = body.preferredDate
+    if (body.preferredTime !== undefined) updateData.preferredTime = body.preferredTime
+    if (body.preferredLocation !== undefined) updateData.preferredLocation = body.preferredLocation
+
+    if (Object.keys(updateData).length === 0) {
+      return NextResponse.json({ error: 'No valid fields to update' }, { status: 400 })
+    }
+
     const contactRequest = await prisma.contactRequest.update({
       where: { id },
-      data: body,
+      data: updateData,
     })
 
     return NextResponse.json({ data: contactRequest })

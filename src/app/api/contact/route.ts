@@ -44,7 +44,11 @@ export async function POST(request: Request) {
     const body = (await request.json()) as CreateContactBody
     const { name, email, message, type, preferredLocation, preferredDate, preferredTime } = body
 
-    if (!name || !email || !message) {
+    const nameTrim = name?.trim()
+    const emailTrim = email?.trim()
+    const messageTrim = message?.trim()
+
+    if (!nameTrim || !emailTrim || !messageTrim) {
       return NextResponse.json({ error: 'name, email, and message are required' }, { status: 400 })
     }
 
@@ -53,13 +57,13 @@ export async function POST(request: Request) {
 
     const contactRequest = await prisma.contactRequest.create({
       data: {
-        name,
-        email,
-        message,
+        name: nameTrim,
+        email: emailTrim,
+        message: messageTrim,
         type: resolvedType,
-        preferredLocation: preferredLocation ?? null,
-        preferredDate: preferredDate ?? null,
-        preferredTime: preferredTime ?? null,
+        preferredLocation: preferredLocation?.trim() ?? null,
+        preferredDate: preferredDate?.trim() ?? null,
+        preferredTime: preferredTime?.trim() ?? null,
       },
     })
 

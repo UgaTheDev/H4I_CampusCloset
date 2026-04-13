@@ -49,6 +49,7 @@ export default function AdminBinsPage() {
   const [modalOpen, setModalOpen] = useState(false)
   const [editTarget, setEditTarget] = useState<DonationBin | null>(null)
   const [form, setForm] = useState<BinFormState>(EMPTY_FORM)
+  const [error, setError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
   const [deleteId, setDeleteId] = useState<string | null>(null)
@@ -57,10 +58,17 @@ export default function AdminBinsPage() {
 
   const fetchBins = useCallback(async () => {
     setLoading(true)
+    setError(null)
     try {
       const res = await fetch('/api/donations/bins')
+      if (!res.ok) {
+        const text = await res.text()
+        throw new Error(`Failed to load bins (${res.status} ${res.statusText}): ${text}`)
+      }
       const json = (await res.json()) as { data: DonationBin[] }
       setBins(json.data ?? [])
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load bins')
     } finally {
       setLoading(false)
     }
@@ -175,6 +183,10 @@ export default function AdminBinsPage() {
       {loading ? (
         <div className="flex items-center justify-center py-16">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-olive border-t-transparent" />
+        </div>
+      ) : error ? (
+        <div className="rounded-xl border border-red-200 bg-red-50 px-5 py-4">
+          <p className="font-body text-[14px] text-red-600">{error}</p>
         </div>
       ) : bins.length === 0 ? (
         <div className="rounded-xl border border-dashed border-gray-300 py-16 text-center">
