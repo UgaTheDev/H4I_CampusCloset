@@ -41,8 +41,17 @@ export async function POST(request: Request) {
     const body = (await request.json()) as CreateBinBody
     const { name, building, latitude, longitude, active } = body
 
-    if (!name || !building || latitude == null || longitude == null) {
-      return NextResponse.json({ error: 'name, building, latitude, and longitude are required' }, { status: 400 })
+    if (typeof name !== 'string' || name.trim() === '') {
+      return NextResponse.json({ error: 'name must be a non-empty string' }, { status: 400 })
+    }
+    if (typeof building !== 'string' || building.trim() === '') {
+      return NextResponse.json({ error: 'building must be a non-empty string' }, { status: 400 })
+    }
+    if (!Number.isFinite(latitude)) {
+      return NextResponse.json({ error: 'latitude must be a finite number' }, { status: 400 })
+    }
+    if (!Number.isFinite(longitude)) {
+      return NextResponse.json({ error: 'longitude must be a finite number' }, { status: 400 })
     }
 
     const bin = await prisma.donationBin.create({

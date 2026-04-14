@@ -1,5 +1,6 @@
 // TODO: requireAdmin() on all mutating handlers before wiring to Prisma
 import { NextResponse } from 'next/server'
+import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { createSupabaseServerClient } from '@/lib/supabase-server'
 
@@ -38,14 +39,18 @@ export async function PATCH(
 
     const { id } = await params
     const body = (await request.json()) as UpdateBinBody
+    const { name, building, latitude, longitude, active } = body
 
     const bin = await prisma.donationBin.update({
       where: { id },
-      data: body,
+      data: { name, building, latitude, longitude, active },
     })
 
     return NextResponse.json({ data: bin })
-  } catch {
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
+      return NextResponse.json({ error: 'Bin not found' }, { status: 404 })
+    }
     return NextResponse.json({ error: 'Failed to update bin' }, { status: 500 })
   }
 }
@@ -64,7 +69,10 @@ export async function DELETE(
     await prisma.donationBin.delete({ where: { id } })
 
     return NextResponse.json({ message: 'Bin deleted' })
-  } catch {
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
+      return NextResponse.json({ error: 'Bin not found' }, { status: 404 })
+    }
     return NextResponse.json({ error: 'Failed to delete bin' }, { status: 500 })
   }
 }
