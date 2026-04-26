@@ -22,21 +22,14 @@ export default function AdminPhotosPage() {
 
   async function load() {
     setLoading(true)
-    try {
-      const [photosRes, eventsRes] = await Promise.all([
-        fetch('/api/photos'),
-        fetch('/api/events'),
-      ])
-      if (!photosRes.ok) throw new Error(`Failed to load photos: ${photosRes.status}`)
-      if (!eventsRes.ok) throw new Error(`Failed to load events: ${eventsRes.status}`)
-      const [photosJson, eventsJson] = await Promise.all([photosRes.json(), eventsRes.json()])
-      setPhotos(photosJson.data ?? [])
-      setEvents(eventsJson.data ?? [])
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load')
-    } finally {
-      setLoading(false)
-    }
+    const [photosRes, eventsRes] = await Promise.all([
+      fetch('/api/photos'),
+      fetch('/api/events'),
+    ])
+    const [photosJson, eventsJson] = await Promise.all([photosRes.json(), eventsRes.json()])
+    setPhotos(photosJson.data ?? [])
+    setEvents(eventsJson.data ?? [])
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -69,13 +62,8 @@ export default function AdminPhotosPage() {
 
   async function handleDelete(id: string) {
     if (!confirm('Delete this photo?')) return
-    try {
-      const res = await fetch(`/api/photos/${id}`, { method: 'DELETE' })
-      if (!res.ok) throw new Error((await res.json()).error ?? `Failed: ${res.status}`)
-      await load()
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete')
-    }
+    await fetch(`/api/photos/${id}`, { method: 'DELETE' })
+    await load()
   }
 
   return (
@@ -118,7 +106,7 @@ export default function AdminPhotosPage() {
               ))}
             </select>
           </div>
-          {error && <p className="font-body text-[13px] text-brand-terra">{error}</p>}
+          {error && <p className="font-body text-[13px] text-red-600">{error}</p>}
           <Button type="submit" variant="primary" disabled={submitting}>
             {submitting ? 'Adding...' : 'Add Photo'}
           </Button>
@@ -150,7 +138,7 @@ export default function AdminPhotosPage() {
                 )}
                 <button
                   onClick={() => handleDelete(p.id)}
-                  className="font-body text-[12px] text-brand-terra hover:underline"
+                  className="font-body text-[12px] text-red-600 hover:underline"
                 >
                   Delete
                 </button>

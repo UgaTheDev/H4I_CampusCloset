@@ -19,15 +19,11 @@ export async function PATCH(request: Request, { params }: RouteContext) {
   const body = await request.json()
   const { url, caption, eventId } = body
 
-  try {
-    const photo = await prisma.galleryPhoto.update({
-      where: { id },
-      data: { url, caption, eventId },
-    })
-    return NextResponse.json({ data: photo })
-  } catch {
-    return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  }
+  const photo = await prisma.galleryPhoto.update({
+    where: { id },
+    data: { url, caption, eventId },
+  })
+  return NextResponse.json({ data: photo })
 }
 
 export async function DELETE(_request: Request, { params }: RouteContext) {
@@ -35,10 +31,6 @@ export async function DELETE(_request: Request, { params }: RouteContext) {
   if (guard.error) return guard.error
 
   const { id } = await params
-  try {
-    await prisma.galleryPhoto.delete({ where: { id } })
-    return NextResponse.json({ ok: true })
-  } catch {
-    return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  }
+  await prisma.galleryPhoto.delete({ where: { id } })
+  return NextResponse.json({ ok: true })
 }
