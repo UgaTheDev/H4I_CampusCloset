@@ -14,15 +14,10 @@ export async function requireAdmin() {
     }
   }
 
-  const admin = await prisma.adminUser.findUnique({
-    where: { email: user.email },
-  })
-
+  const admin = await prisma.adminUser.findUnique({ where: { email: user.email } })
   if (!admin) {
-    return {
-      error: NextResponse.json({ error: 'Not admin' }, { status: 403 }),
-    }
+    return { error: NextResponse.json({ error: 'Not admin' }, { status: 403 }) }
   }
 
-  return { user, admin }
+  return { user }
 }
