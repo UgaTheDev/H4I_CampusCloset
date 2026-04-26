@@ -1,4 +1,36 @@
 import { NextResponse } from 'next/server'
-// PUT, DELETE
-export async function PUT() { return NextResponse.json({ message: 'updated' }) }
-export async function DELETE() { return NextResponse.json({ message: 'deleted' }) }
+import { prisma } from '@/lib/prisma'
+import { requireAdmin } from '@/lib/admin-guard'
+
+type RouteContext = { params: Promise<{ id: string }> }
+
+export async function GET(_request: Request, { params }: RouteContext) {
+  const { id } = await params
+  const item = await prisma.faqItem.findUnique({ where: { id } })
+  if (!item) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  return NextResponse.json({ data: item })
+}
+
+export async function PATCH(request: Request, { params }: RouteContext) {
+  const guard = await requireAdmin()
+  if (guard.error) return guard.error
+
+  const { id } = await params
+  const body = await request.json()
+  const { question, answer, category, displayOrder } = body
+
+  const item = await prisma.faqItem.update({
+    where: { id },
+    data: { question, answer, category, displayOrder },
+  })
+  return NextResponse.json({ data: item })
+}
+
+export async function DELETE(_request: Request, { params }: RouteContext) {
+  const guard = await requireAdmin()
+  if (guard.error) return guard.error
+
+  const { id } = await params
+  await prisma.faqItem.delete({ where: { id } })
+  return NextResponse.json({ ok: true })
+}
