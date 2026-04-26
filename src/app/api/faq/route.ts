@@ -1,4 +1,32 @@
 import { NextResponse } from 'next/server'
-// GET, POST
-export async function GET() { return NextResponse.json({ data: [] }) }
-export async function POST() { return NextResponse.json({ message: 'created' }, { status: 201 }) }
+import { prisma } from '@/lib/prisma'
+import { requireAdmin } from '@/lib/admin-guard'
+
+export async function GET() {
+  const items = await prisma.faqItem.findMany({
+    orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
+  })
+  return NextResponse.json({ data: items })
+}
+
+export async function POST(request: Request) {
+  const guard = await requireAdmin()
+  if (guard.error) return guard.error
+
+  const body = await request.json()
+  const { question, answer, category, displayOrder } = body
+
+  if (!question || !answer) {
+    return NextResponse.json({ error: 'question and answer are required' }, { status: 400 })
+  }
+
+  const item = await prisma.faqItem.create({
+    data: {
+      question,
+      answer,
+      category: category ?? 'General',
+      displayOrder: displayOrder ?? 0,
+    },
+  })
+  return NextResponse.json({ data: item }, { status: 201 })
+}
