@@ -19,15 +19,11 @@ export async function PATCH(request: Request, { params }: RouteContext) {
   const body = await request.json()
   const { question, answer, category, displayOrder } = body
 
-  try {
-    const item = await prisma.faqItem.update({
-      where: { id },
-      data: { question, answer, category, displayOrder },
-    })
-    return NextResponse.json({ data: item })
-  } catch {
-    return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  }
+  const item = await prisma.faqItem.update({
+    where: { id },
+    data: { question, answer, category, displayOrder },
+  })
+  return NextResponse.json({ data: item })
 }
 
 export async function DELETE(_request: Request, { params }: RouteContext) {
@@ -35,10 +31,6 @@ export async function DELETE(_request: Request, { params }: RouteContext) {
   if (guard.error) return guard.error
 
   const { id } = await params
-  try {
-    await prisma.faqItem.delete({ where: { id } })
-    return NextResponse.json({ ok: true })
-  } catch {
-    return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  }
+  await prisma.faqItem.delete({ where: { id } })
+  return NextResponse.json({ ok: true })
 }
