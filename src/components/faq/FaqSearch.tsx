@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
+import Input from '@/components/ui/Input'
+import Button from '@/components/ui/Button'
 
 interface FaqSearchProps {
   onSearch: (query: string) => void
@@ -17,23 +18,14 @@ export default function FaqSearch({ onSearch }: FaqSearchProps) {
   }
 
   return (
-    <Card className="mx-auto w-full max-w-5xl px-8 py-8 shadow-[0px_4px_40px_0px_rgba(0,0,0,0.25)]">
-      <h2 className="mb-5 text-center font-body text-[22px] font-extrabold text-brand-text md:text-[30px]">
+    <Card className="mx-auto w-full max-w-2xl px-6 py-6 shadow-sm">
+      <h2 className="mb-4 text-center font-heading text-[18px] font-bold text-brand-text">
         How can we help?
       </h2>
-      <form onSubmit={handleSubmit} className="flex items-stretch gap-3">
-        <div className="relative flex-1">
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-brand-text/50"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 md:h-6 md:w-6">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-          </span>
-          <input
-            type="text"
+      <form onSubmit={handleSubmit} className="flex items-end gap-3">
+        <div className="flex-1">
+          <Input
+            aria-label="Search FAQs"
             placeholder="Search for questions..."
             value={value}
             onChange={(e) => {

@@ -10,21 +10,15 @@ interface FaqListProps {
   items: FaqItem[]
 }
 
-const CATEGORY_HEADINGS: Record<string, string> = {
-  Participation: 'Participation & Rules',
-  Donations: 'Donating Clothes',
-  'Events & Logistics': 'Events & Logistics',
-  Volunteering: 'Volunteering',
-}
-
 export default function FaqList({ items }: FaqListProps) {
   const [activeCategory, setActiveCategory] = useState<string>(FAQ_CATEGORIES[0])
   const [query, setQuery] = useState('')
-  const [openIndex, setOpenIndex] = useState<number | null>(0)
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   const categories = useMemo(() => {
     const fromData = Array.from(new Set(items.map((i) => i.category)))
-    return [...FAQ_CATEGORIES, ...fromData.filter((c) => !FAQ_CATEGORIES.includes(c as never))]
+    const merged = [...FAQ_CATEGORIES, ...fromData.filter((c) => !(FAQ_CATEGORIES as readonly string[]).includes(c))]
+    return merged
   }, [items])
 
   const filtered = useMemo(() => {
@@ -38,20 +32,13 @@ export default function FaqList({ items }: FaqListProps) {
       )
   }, [items, activeCategory, query])
 
-  function handleCategoryChange(cat: string) {
-    setActiveCategory(cat)
-    setOpenIndex(0)
-  }
-
-  const heading = CATEGORY_HEADINGS[activeCategory] ?? activeCategory
-
   return (
     <div>
-      <div className="-mt-28 mb-16 md:-mt-36">
+      <div className="mb-12">
         <FaqSearch onSearch={setQuery} />
       </div>
 
-      <div className="mx-auto grid max-w-5xl gap-10 md:grid-cols-[260px_1fr]">
+      <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-[200px_1fr]">
         <aside>
           <div className="mb-3 h-px bg-gray-300" />
           <h3 className="mb-4 font-body text-[20px] font-extrabold text-brand-text md:text-[30px]">
@@ -64,9 +51,9 @@ export default function FaqList({ items }: FaqListProps) {
                 <li key={category}>
                   <button
                     type="button"
-                    onClick={() => handleCategoryChange(category)}
+                    onClick={() => setActiveCategory(category)}
                     className={cn(
-                      'w-full rounded-[10px] px-5 py-2.5 text-left font-body text-[16px] transition-colors md:text-[20px]',
+                      'w-full rounded-md px-3 py-2 text-left font-body text-[14px] transition-colors',
                       isActive
                         ? 'border-l-[7px] border-brand-blue-light bg-brand-faq-active pl-4 font-medium text-brand-text'
                         : 'text-brand-text/70 hover:text-brand-text',
@@ -81,10 +68,9 @@ export default function FaqList({ items }: FaqListProps) {
         </aside>
 
         <div>
-          <h2 className="mb-6 font-body text-[24px] font-extrabold text-brand-text md:text-[40px]">
-            {heading}
+          <h2 className="mb-6 font-heading text-[24px] font-bold text-brand-text">
+            {activeCategory}
           </h2>
-
           {filtered.length > 0 ? (
             <div className="flex flex-col gap-3">
               {filtered.map((item, i) => {

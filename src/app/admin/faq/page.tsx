@@ -24,16 +24,10 @@ export default function AdminFaqPage() {
 
   async function load() {
     setLoading(true)
-    try {
-      const res = await fetch('/api/faq')
-      if (!res.ok) throw new Error(`Failed to load: ${res.status}`)
-      const json = await res.json()
-      setItems(json.data ?? [])
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load FAQ items')
-    } finally {
-      setLoading(false)
-    }
+    const res = await fetch('/api/faq')
+    const json = await res.json()
+    setItems(json.data ?? [])
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -61,52 +55,37 @@ export default function AdminFaqPage() {
   }
 
   async function handleUpdate(item: FaqItem, patch: Partial<FaqItem>) {
-    try {
-      const res = await fetch(`/api/faq/${item.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(patch),
-      })
-      if (!res.ok) throw new Error((await res.json()).error ?? `Failed: ${res.status}`)
-      await load()
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update')
-    }
+    await fetch(`/api/faq/${item.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(patch),
+    })
+    await load()
   }
 
   async function handleDelete(id: string) {
     if (!confirm('Delete this FAQ item?')) return
-    try {
-      const res = await fetch(`/api/faq/${id}`, { method: 'DELETE' })
-      if (!res.ok) throw new Error((await res.json()).error ?? `Failed: ${res.status}`)
-      await load()
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete')
-    }
+    await fetch(`/api/faq/${id}`, { method: 'DELETE' })
+    await load()
   }
 
   async function handleReorder(index: number, direction: -1 | 1) {
     const swapWith = visible[index + direction]
     const current = visible[index]
     if (!swapWith || !current) return
-    try {
-      const [r1, r2] = await Promise.all([
-        fetch(`/api/faq/${current.id}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ displayOrder: swapWith.displayOrder }),
-        }),
-        fetch(`/api/faq/${swapWith.id}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ displayOrder: current.displayOrder }),
-        }),
-      ])
-      if (!r1.ok || !r2.ok) throw new Error('Failed to reorder')
-      await load()
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to reorder')
-    }
+    await Promise.all([
+      fetch(`/api/faq/${current.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ displayOrder: swapWith.displayOrder }),
+      }),
+      fetch(`/api/faq/${swapWith.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ displayOrder: current.displayOrder }),
+      }),
+    ])
+    await load()
   }
 
   const visible = filter === 'All' ? items : items.filter((i) => i.category === filter)
@@ -148,7 +127,7 @@ export default function AdminFaqPage() {
               ))}
             </select>
           </div>
-          {error && <p className="font-body text-[13px] text-brand-terra">{error}</p>}
+          {error && <p className="font-body text-[13px] text-red-600">{error}</p>}
           <Button type="submit" variant="primary" disabled={submitting}>
             {submitting ? 'Adding...' : 'Add Question'}
           </Button>
@@ -217,7 +196,7 @@ export default function AdminFaqPage() {
                   </Button>
                   <button
                     onClick={() => handleDelete(item.id)}
-                    className="font-body text-[13px] text-brand-terra hover:underline"
+                    className="font-body text-[13px] text-red-600 hover:underline"
                   >
                     Delete
                   </button>
