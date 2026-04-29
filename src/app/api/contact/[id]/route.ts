@@ -6,13 +6,6 @@ import { createSupabaseServerClient } from '@/lib/supabase-server'
 
 interface UpdateContactBody {
   status?: string
-  name?: string
-  email?: string
-  message?: string
-  type?: string
-  preferredLocation?: string
-  preferredDate?: string
-  preferredTime?: string
 }
 
 // Admin only — update a contact request (e.g. status change)
@@ -35,15 +28,16 @@ export async function PATCH(
 
     const { id } = await params
     const body = (await request.json()) as UpdateContactBody
+    const { status } = body
 
     const validStatuses = ['new', 'responded', 'completed']
-    if (body.status && !validStatuses.includes(body.status)) {
+    if (!status || !validStatuses.includes(status)) {
       return NextResponse.json({ error: 'Invalid status value' }, { status: 400 })
     }
 
     const contactRequest = await prisma.contactRequest.update({
       where: { id },
-      data: body,
+      data: { status },
     })
 
     return NextResponse.json({ data: contactRequest })

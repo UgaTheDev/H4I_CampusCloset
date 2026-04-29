@@ -43,9 +43,9 @@ function TypeBadge({ type }: { type: string }) {
   const label = type.charAt(0).toUpperCase() + type.slice(1)
   const extra = TYPE_STYLES[type] ?? ''
   return (
-    <span className={cn('inline-block rounded-full px-3 py-1 font-body text-[12px] font-medium', extra || 'border border-black bg-white text-brand-text')}>
+    <Badge className={cn('px-3 py-1 text-[12px]', extra || 'border border-black bg-white text-brand-text')}>
       {label}
-    </span>
+    </Badge>
   )
 }
 
@@ -53,9 +53,9 @@ function StatusBadge({ status }: { status: string }) {
   const label = status.charAt(0).toUpperCase() + status.slice(1)
   const extra = STATUS_STYLES[status] ?? 'border border-gray-300 text-brand-text'
   return (
-    <span className={cn('inline-block rounded-full px-3 py-1 font-body text-[12px] font-medium', extra)}>
+    <Badge className={cn('px-3 py-1 text-[12px]', extra)}>
       {label}
-    </span>
+    </Badge>
   )
 }
 

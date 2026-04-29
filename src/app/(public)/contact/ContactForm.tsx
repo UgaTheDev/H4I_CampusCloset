@@ -212,7 +212,7 @@ export default function ContactForm() {
         fullWidth
         variant="primary"
         disabled={submitting}
-        className="mt-2 rounded-lg bg-brand-olive hover:opacity-90"
+        className="mt-2"
       >
         {submitting ? 'Sending…' : 'Send Message'}
       </Button>
