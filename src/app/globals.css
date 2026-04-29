@@ -31,7 +31,7 @@
 
 /* ── Leaflet Map ──────────────────────────────────────── */
 
-.leaflet-container {
+.leaflet-tile-pane {
   filter: sepia(0.5) hue-rotate(90deg) saturate(0.5) brightness(0.88);
 }
 

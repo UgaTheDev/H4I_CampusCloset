@@ -227,7 +227,7 @@ export default function DonatePage() {
             We&apos;re here to help with any questions about donating to BU Campus Closet.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-4">
-            <Button href="/faq" className="rounded-full bg-brand-olive text-white hover:opacity-90">
+            <Button href="/faq" variant="olive">
               View FAQ Page
             </Button>
             <Button href="/contact" className="rounded-full bg-brand-tan text-white hover:opacity-90">

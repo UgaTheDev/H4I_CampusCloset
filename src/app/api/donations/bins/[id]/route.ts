@@ -41,6 +41,22 @@ export async function PATCH(
     const body = (await request.json()) as UpdateBinBody
     const { name, building, latitude, longitude, active } = body
 
+    if (name !== undefined && (typeof name !== 'string' || name.trim() === '')) {
+      return NextResponse.json({ error: 'name must be a non-empty string' }, { status: 400 })
+    }
+    if (building !== undefined && (typeof building !== 'string' || building.trim() === '')) {
+      return NextResponse.json({ error: 'building must be a non-empty string' }, { status: 400 })
+    }
+    if (latitude !== undefined && !Number.isFinite(latitude)) {
+      return NextResponse.json({ error: 'latitude must be a finite number' }, { status: 400 })
+    }
+    if (longitude !== undefined && !Number.isFinite(longitude)) {
+      return NextResponse.json({ error: 'longitude must be a finite number' }, { status: 400 })
+    }
+    if (active !== undefined && typeof active !== 'boolean') {
+      return NextResponse.json({ error: 'active must be a boolean' }, { status: 400 })
+    }
+
     const bin = await prisma.donationBin.update({
       where: { id },
       data: { name, building, latitude, longitude, active },

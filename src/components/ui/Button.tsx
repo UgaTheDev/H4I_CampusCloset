@@ -5,7 +5,7 @@ const variants = {
   primary: 'bg-brand-dark-olive text-white hover:opacity-90 rounded-lg',
   secondary: 'bg-white text-brand-text border-2 border-black hover:bg-gray-50 rounded-full',
   dark: 'bg-brand-brown text-white hover:opacity-90 rounded-lg',
-  blue: 'bg-brand-blue text-white hover:opacity-90 rounded-lg',
+  olive: 'bg-brand-olive text-white hover:opacity-90 rounded-full',
 } as const
 
 const sizes = {

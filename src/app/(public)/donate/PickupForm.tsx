@@ -150,9 +150,9 @@ export default function PickupForm() {
       <div className="mt-2 flex">
         <Button
           type="submit"
-          variant="primary"
+          variant="olive"
           disabled={submitting}
-          className="rounded-full bg-brand-olive hover:opacity-90 px-10"
+          className="px-10"
         >
           {submitting ? 'Submitting…' : 'Schedule Pickup'}
         </Button>
