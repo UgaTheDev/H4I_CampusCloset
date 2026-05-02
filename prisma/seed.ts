@@ -138,44 +138,21 @@ async function main() {
     }),
   ])
 
-  // Team members
+  // Team members — real eboard
   await Promise.all([
-    prisma.teamMember.create({
-      data: {
-        name: 'Jordan Rivera',
-        role: 'President',
-        bio: 'Junior studying Environmental Analysis & Policy. Passionate about making sustainable fashion accessible.',
-        photoUrl: 'https://placehold.co/400x400?text=JR',
-        displayOrder: 1,
-      },
-    }),
-    prisma.teamMember.create({
-      data: {
-        name: 'Sam Chen',
-        role: 'VP of Operations',
-        bio: 'Sophomore in the School of Management. Coordinates all swap logistics and donation drives.',
-        photoUrl: 'https://placehold.co/400x400?text=SC',
-        displayOrder: 2,
-      },
-    }),
-    prisma.teamMember.create({
-      data: {
-        name: 'Priya Patel',
-        role: 'Marketing Director',
-        bio: 'Senior in COM. Runs Campus Closet\'s social media and outreach campaigns.',
-        photoUrl: 'https://placehold.co/400x400?text=PP',
-        displayOrder: 3,
-      },
-    }),
-    prisma.teamMember.create({
-      data: {
-        name: 'Alex Thompson',
-        role: 'Sustainability Lead',
-        bio: 'Junior in Earth & Environment. Tracks our impact metrics and partners with BU Sustainability.',
-        photoUrl: 'https://placehold.co/400x400?text=AT',
-        displayOrder: 4,
-      },
-    }),
+    prisma.teamMember.create({ data: { name: 'Sasha', role: 'President', photoUrl: '/team/sasha-president.jpg', displayOrder: 1 } }),
+    prisma.teamMember.create({ data: { name: 'Ria', role: 'Vice President', photoUrl: '/team/ria-vp.jpg', displayOrder: 2 } }),
+    prisma.teamMember.create({ data: { name: 'Jess', role: 'Treasurer', photoUrl: '/team/jess-treasurer.jpg', displayOrder: 3 } }),
+    prisma.teamMember.create({ data: { name: 'Emmett', role: 'Secretary', photoUrl: '/team/emmett-secretary.jpg', displayOrder: 4 } }),
+    prisma.teamMember.create({ data: { name: 'Harry', role: 'Marketing', photoUrl: '/team/harry-marketing.jpg', displayOrder: 5 } }),
+    prisma.teamMember.create({ data: { name: 'Owen', role: 'Marketing', photoUrl: '/team/owen-marketing.jpg', displayOrder: 6 } }),
+    prisma.teamMember.create({ data: { name: 'Andrew', role: 'Media', photoUrl: '/team/andrew-media.jpg', displayOrder: 7 } }),
+    prisma.teamMember.create({ data: { name: 'Kailey', role: 'Media', photoUrl: '/team/kailey-media.jpg', displayOrder: 8 } }),
+    prisma.teamMember.create({ data: { name: 'Kelly', role: 'Media', photoUrl: '/team/kelly-media.jpg', displayOrder: 9 } }),
+    prisma.teamMember.create({ data: { name: 'Dan', role: 'Outreach', photoUrl: '/team/dan-outreach.jpg', displayOrder: 10 } }),
+    prisma.teamMember.create({ data: { name: 'Destiny', role: 'Outreach', photoUrl: '/team/destiny-outreach.jpg', displayOrder: 11 } }),
+    prisma.teamMember.create({ data: { name: 'Alanna', role: 'Events', photoUrl: '/team/alanna-events.jpg', displayOrder: 12 } }),
+    prisma.teamMember.create({ data: { name: 'Isobel', role: 'Events', photoUrl: '/team/isobel-events.jpg', displayOrder: 13 } }),
   ])
 
   // FAQ items
