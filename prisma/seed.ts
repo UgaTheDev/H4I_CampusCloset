@@ -197,11 +197,12 @@ async function main() {
     prisma.contactRequest.create({ data: { name: 'Sofia Ramirez', email: 'sramirez@bu.edu', message: 'I dropped off a bag at the GSU bin last week. Just wanted to confirm it was received!', type: 'dropoff', status: 'completed' } }),
   ])
 
-  // Replace these with real Google emails for your eboard members
   await prisma.adminUser.createMany({
     data: [
-      { email: 'president@bu.edu' },
-      { email: 'dev-lead@bu.edu' },
+      { email: 'kzingade@bu.edu' },
+      { email: 'dliao@bu.edu' },
+      { email: 'aflopez@bu.edu' },
+      { email: 'diggyzar@bu.edu' },
     ],
   })
 
