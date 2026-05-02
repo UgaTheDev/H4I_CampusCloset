@@ -262,7 +262,11 @@ function EditFaqModal({
         onSubmit={async (e) => {
           e.preventDefault()
           setSaving(true)
-          await onSave({ question, answer, category })
+          try {
+            await onSave({ question, answer, category })
+          } finally {
+            setSaving(false)
+          }
         }}
         className="flex flex-col gap-4"
       >

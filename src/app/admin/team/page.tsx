@@ -243,7 +243,11 @@ function EditMemberModal({
         onSubmit={async (e) => {
           e.preventDefault()
           setSaving(true)
-          await onSave({ name, role, bio, photoUrl })
+          try {
+            await onSave({ name, role, bio, photoUrl })
+          } finally {
+            setSaving(false)
+          }
         }}
         className="flex flex-col gap-4"
       >

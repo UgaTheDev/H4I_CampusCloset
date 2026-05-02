@@ -20,10 +20,10 @@ export default async function AboutImpactStats() {
   const wasteLbs = Math.round((agg._sum.wasteDivertedKg ?? 0) * KG_TO_LBS)
 
   const cards = [
-    { value: fmt(items), label: 'Clothing Items Swapped', bgClass: 'bg-[#f6f7f4]', colorClass: 'text-brand-dark-olive' },
-    { value: `${swapCount}+`, label: 'Swap Events Hosted', bgClass: 'bg-[#ede7dd]', colorClass: 'text-brand-brown-light' },
-    { value: `${wasteLbs} lbs`, label: 'Waste Diverted', bgClass: 'bg-[#f6f7f4]', colorClass: 'text-brand-dark-olive' },
-    { value: fmt(attendance), label: 'Students Participated', bgClass: 'bg-[#fdf5f3]', colorClass: 'text-brand-terra' },
+    { value: fmt(items), label: 'Clothing Items Swapped', bgClass: 'bg-brand-stat-green', colorClass: 'text-brand-dark-olive' },
+    { value: `${swapCount}+`, label: 'Swap Events Hosted', bgClass: 'bg-brand-stat-tan', colorClass: 'text-brand-brown-light' },
+    { value: `${wasteLbs} lbs`, label: 'Waste Diverted', bgClass: 'bg-brand-stat-green', colorClass: 'text-brand-dark-olive' },
+    { value: fmt(attendance), label: 'Students Participated', bgClass: 'bg-brand-stat-terra', colorClass: 'text-brand-terra' },
   ]
 
   return (
