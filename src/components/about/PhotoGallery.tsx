@@ -31,7 +31,6 @@ export default async function PhotoGallery() {
                 src={photo.url}
                 alt={photo.caption ?? 'Campus Closet event photo'}
                 fill
-                unoptimized
                 sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
                 className="object-cover transition-transform hover:scale-105"
               />

@@ -40,7 +40,7 @@ export default function FaqSearch({ onSearch }: FaqSearchProps) {
               setValue(e.target.value)
               onSearch(e.target.value.trim())
             }}
-            className="h-[52px] w-full rounded-[10px] border border-[#858585] bg-[#f9f9f9] pl-12 pr-4 font-body text-[16px] text-brand-text/60 placeholder:text-brand-text/40 focus:outline-none focus:ring-1 focus:ring-brand-olive md:h-[62px] md:text-[20px]"
+            className="h-[52px] w-full rounded-[10px] border border-gray-400 bg-gray-50 pl-12 pr-4 font-body text-[16px] text-brand-text/60 placeholder:text-brand-text/40 focus:outline-none focus:ring-1 focus:ring-brand-olive md:h-[62px] md:text-[20px]"
           />
         </div>
         <button

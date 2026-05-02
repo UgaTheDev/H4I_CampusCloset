@@ -97,7 +97,7 @@ export default function FaqList({ items }: FaqListProps) {
                   <div
                     key={item.id}
                     className={cn(
-                      'overflow-hidden rounded-[15px] border border-[#9e9e9e]',
+                      'overflow-hidden rounded-[15px] border border-gray-400',
                       isOpen ? 'bg-brand-faq-active' : 'bg-white',
                     )}
                   >

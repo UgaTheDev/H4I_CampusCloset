@@ -7,10 +7,7 @@ const ROTATIONS = ['-rotate-2', 'rotate-1', '-rotate-1', 'rotate-2']
 export default async function TeamGrid() {
   const members = await prisma.teamMember.findMany({
     orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
-  }).catch((err) => {
-    console.error('Failed to load team members', err)
-    return []
-  })
+  }).catch(() => [])
 
   if (members.length === 0) {
     return (
@@ -54,7 +51,6 @@ export default async function TeamGrid() {
                     fill
                     sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
                     className="object-cover"
-                    unoptimized
                   />
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
                     <p className="font-heading text-[13px] font-bold text-white">
