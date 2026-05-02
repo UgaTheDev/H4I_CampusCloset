@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import { cn } from '@/lib/cn'
 
 const KG_TO_LBS = 2.20462
 
@@ -31,9 +32,9 @@ export default async function AboutImpactStats() {
       {cards.map((card) => (
         <div
           key={card.label}
-          className={`overflow-hidden rounded-[15px] border-2 border-brand-text px-6 py-6 ${card.bgClass}`}
+          className={cn('overflow-hidden rounded-[15px] border-2 border-brand-text px-6 py-6', card.bgClass)}
         >
-          <p className={`mb-1 font-body text-[28px] font-extrabold leading-[40px] md:text-[36px] ${card.colorClass}`}>
+          <p className={cn('mb-1 font-body text-[28px] font-extrabold leading-[40px] md:text-[36px]', card.colorClass)}>
             {card.value}
           </p>
           <p className="font-body text-[14px] text-brand-text md:text-[16px]">

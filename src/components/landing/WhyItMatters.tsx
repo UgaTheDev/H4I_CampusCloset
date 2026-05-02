@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { prisma } from '@/lib/prisma'
+import { cn } from '@/lib/cn'
 
 const KG_TO_LBS = 2.20462
 
@@ -47,7 +48,7 @@ export default async function WhyItMatters() {
                 key={stat.label}
                 className="rounded-xl border border-gray-200 bg-brand-cream px-5 py-4"
               >
-                <p className={`font-body text-[24px] font-extrabold ${stat.color}`}>
+                <p className={cn('font-body text-[24px] font-extrabold', stat.color)}>
                   {stat.value}
                 </p>
                 <p className="font-body text-[13px] text-brand-text/70">

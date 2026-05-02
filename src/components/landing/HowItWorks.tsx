@@ -1,4 +1,5 @@
 import Button from '@/components/ui/Button'
+import { cn } from '@/lib/cn'
 
 const steps = [
   {
@@ -36,7 +37,7 @@ export default function HowItWorks() {
           {steps.map((step) => (
             <div key={step.number} className="flex flex-col items-center text-center">
               <div
-                className={`mb-5 flex h-16 w-16 items-center justify-center rounded-full ${step.bg}`}
+                className={cn('mb-5 flex h-16 w-16 items-center justify-center rounded-full', step.bg)}
               >
                 <span className="font-heading text-[28px] font-bold text-white">
                   {step.number}

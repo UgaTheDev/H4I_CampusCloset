@@ -27,7 +27,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'File must be under 5 MB' }, { status: 400 })
   }
 
-  const ext = file.name.split('.').pop()
+  const MIME_TO_EXT: Record<string, string> = {
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/webp': 'webp',
+    'image/gif': 'gif',
+  }
+  const ext = MIME_TO_EXT[file.type] ?? 'jpg'
   const filename = `team/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
 
   const buffer = await file.arrayBuffer()

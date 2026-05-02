@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import Button from '@/components/ui/Button'
+import { cn } from '@/lib/cn'
 
 const CARD_COLORS = [
   'bg-brand-olive-light',
@@ -17,7 +18,7 @@ function formatDate(date: Date) {
 
 export default async function UpcomingEventsPreview() {
   const events = await prisma.event.findMany({
-    where: { isPast: false },
+    where: { date: { gte: new Date() } },
     orderBy: { date: 'asc' },
     take: 3,
   })
@@ -42,7 +43,7 @@ export default async function UpcomingEventsPreview() {
             >
               {/* Colored top section with calendar icon */}
               <div
-                className={`flex h-40 items-center justify-center ${CARD_COLORS[i % CARD_COLORS.length]}`}
+                className={cn('flex h-40 items-center justify-center', CARD_COLORS[i % CARD_COLORS.length])}
               >
                 <svg
                   className="h-12 w-12 text-brand-text/30"

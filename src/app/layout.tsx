@@ -9,9 +9,21 @@ const plusJakarta = Plus_Jakarta_Sans({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: 'Campus Closet — BU Clothing Swap',
   description:
     'A sustainability-focused clothing swap initiative at Boston University.',
+  openGraph: {
+    title: 'Campus Closet — BU Clothing Swap',
+    description: 'Swap, donate, and discover clothing while reducing fast fashion at BU.',
+    siteName: 'Campus Closet',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Campus Closet — BU Clothing Swap',
+    description: 'Swap, donate, and discover clothing while reducing fast fashion at BU.',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -1,4 +1,11 @@
+import type { Metadata } from 'next'
 import Badge from '@/components/ui/Badge'
+
+export const metadata: Metadata = {
+  title: 'About | Campus Closet',
+  description:
+    'Learn about Campus Closet — our mission, impact, and the team behind BU\'s sustainability-focused clothing swap initiative.',
+}
 import Button from '@/components/ui/Button'
 import MissionSection from '@/components/about/MissionSection'
 import TeamGrid from '@/components/about/TeamGrid'

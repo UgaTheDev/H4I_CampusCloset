@@ -27,12 +27,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           aria-describedby={errorId}
           className={cn(
             'w-full rounded-md border border-gray-300 px-4 py-2.5 font-body text-[16px] text-brand-text placeholder:text-gray-400 focus:border-brand-olive focus:outline-none focus:ring-1 focus:ring-brand-olive',
-            error && 'border-red-500 focus:border-red-500 focus:ring-red-500',
+            error && 'border-brand-terra focus:border-brand-terra focus:ring-brand-terra',
             className,
           )}
           {...props}
         />
-        {error && <p id={errorId} className="font-body text-[13px] text-red-500">{error}</p>}
+        {error && <p id={errorId} className="font-body text-[13px] text-brand-terra">{error}</p>}
       </div>
     )
   }

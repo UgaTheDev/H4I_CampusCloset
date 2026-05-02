@@ -13,13 +13,13 @@ export default function FooterCta() {
         </p>
 
         <div className="flex flex-wrap justify-center gap-4">
-          <Button variant="dark" href="/events" className="bg-brand-dark-olive">
+          <Button variant="primary" href="/events">
             See Our Events
           </Button>
-          <Button variant="dark" href="/donate">
+          <Button variant="primary" href="/donate">
             Donate Clothes
           </Button>
-          <Button variant="dark" href="/contact" className="bg-brand-dark-olive">
+          <Button variant="primary" href="/contact">
             Contact Us
           </Button>
         </div>

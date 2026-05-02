@@ -1,4 +1,11 @@
+import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
+
+export const metadata: Metadata = {
+  title: 'FAQ | Campus Closet',
+  description:
+    'Frequently asked questions about Campus Closet — how swaps work, what to donate, and how to get involved.',
+}
 import FaqList from '@/components/faq/FaqList'
 import FaqContactForm from '@/components/faq/FaqContactForm'
 

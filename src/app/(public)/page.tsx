@@ -1,4 +1,11 @@
+import type { Metadata } from 'next'
 import Hero from '@/components/landing/Hero'
+
+export const metadata: Metadata = {
+  title: 'Campus Closet — BU Clothing Swap',
+  description:
+    'A sustainability-focused clothing swap initiative at Boston University promoting circular fashion through free, recurring clothing swaps.',
+}
 import WhatIsCampusCloset from '@/components/landing/WhatIsCampusCloset'
 import HowItWorks from '@/components/landing/HowItWorks'
 import WhyItMatters from '@/components/landing/WhyItMatters'
