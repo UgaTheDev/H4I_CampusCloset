@@ -1,15 +1,23 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import AdminSidebar from '@/components/layout/AdminSidebar'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
+  const pathname = usePathname()
+  const isLoginPage = pathname === '/admin/login'
   const [status, setStatus] = useState<'loading' | 'authorized' | 'denied'>('loading')
 
   useEffect(() => {
+    // Skip auth check on the login page to avoid redirect loop
+    if (isLoginPage) {
+      setStatus('authorized')
+      return
+    }
+
     async function checkAdmin() {
       try {
         const res = await fetch('/api/admin/check')
@@ -37,7 +45,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     })
 
     return () => subscription.unsubscribe()
-  }, [router])
+  }, [router, isLoginPage])
 
   if (status === 'loading') {
     return (
@@ -65,6 +73,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </button>
       </div>
     )
+  }
+
+  if (isLoginPage) {
+    return <>{children}</>
   }
 
   return (
