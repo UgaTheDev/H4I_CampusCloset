@@ -8,37 +8,83 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Event {
-  id          String       @id @default(uuid())
-  title       String
-  type        String       // "swap" | "drive" | "meeting"
-  date        DateTime
-  location    String
-  description String?
-  itemLimit   Int?
-  isPast      Boolean      @default(false)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-
-  impactStats ImpactStats?
-  photos      GalleryPhoto[]
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model AdminUser {
+  id        String   @id
+  email     String   @unique
+  createdAt DateTime @default(now())
 }
 
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model ContactRequest {
+  id                String   @id
+  name              String
+  email             String
+  message           String
+  type              String   @default("general")
+  status            String   @default("new")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime
+  preferredDate     String?
+  preferredLocation String?
+  preferredTime     String?
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model DonationBin {
-  id        String   @id @default(uuid())
+  id        String   @id
   name      String
   building  String
   latitude  Float
   longitude Float
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime
 }
 
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model Event {
+  id           String         @id
+  title        String
+  type         String
+  date         DateTime
+  location     String
+  description  String?
+  itemLimit    Int?
+  isPast       Boolean        @default(false)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime
+  GalleryPhoto GalleryPhoto[]
+  ImpactStats  ImpactStats?
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model FaqItem {
+  id           String   @id
+  question     String
+  answer       String
+  category     String   @default("General")
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model GalleryPhoto {
+  id           String   @id
+  url          String
+  caption      String?
+  eventId      String?
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  Event        Event?   @relation(fields: [eventId], references: [id])
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model ImpactStats {
-  id              String   @id @default(uuid())
+  id              String   @id
   eventId         String?  @unique
-  event           Event?   @relation(fields: [eventId], references: [id])
   itemsReused     Int      @default(0)
   itemsDonated    Int      @default(0)
   attendance      Int      @default(0)
@@ -46,11 +92,13 @@ model ImpactStats {
   waterSavedL     Float    @default(0)
   carbonSavedKg   Float    @default(0)
   createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  updatedAt       DateTime
+  Event           Event?   @relation(fields: [eventId], references: [id])
 }
 
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model TeamMember {
-  id           String   @id @default(uuid())
+  id           String   @id
   name         String
   role         String
   bio          String?

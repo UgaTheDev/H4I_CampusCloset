@@ -63,7 +63,7 @@ export default function MissionSection() {
               <div key={pillar.title} className="flex gap-3">
                 <div className="mt-1 h-24 w-[3px] shrink-0 rounded-full bg-gray-300" />
                 <div>
-                  <img src={pillar.icon} alt="" className={`mb-1 h-6 ${pillar.iconClass ?? 'w-6'}`} aria-hidden="true" />
+                  <Image src={pillar.icon} alt="" width={24} height={24} className={`mb-1 h-6 ${pillar.iconClass ?? 'w-6'}`} aria-hidden="true" unoptimized />
                   <h3 className="mb-1 font-body text-[14px] font-extrabold tracking-[0.2px] text-brand-text md:text-[20px]">
                     {pillar.title}
                   </h3>

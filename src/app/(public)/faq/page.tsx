@@ -14,7 +14,7 @@ import FaqContactForm from '@/components/faq/FaqContactForm'
 export default async function FaqPage() {
   const items = await prisma.faqItem.findMany({
     orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
-  })
+  }).catch(() => [])
 
   return (
     <>

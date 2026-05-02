@@ -102,12 +102,12 @@ export default function FaqContactForm() {
           {status === 'submitting' ? 'Sending...' : 'Send Message'}
         </Button>
         {status === 'success' && (
-          <p className="text-center font-body text-[14px] text-brand-olive">
+          <p role="alert" className="text-center font-body text-[14px] text-brand-olive">
             Thanks! We&apos;ll get back to you within 24 hours.
           </p>
         )}
         {status === 'error' && (
-          <p className="text-center font-body text-[14px] text-brand-terra">
+          <p role="alert" className="text-center font-body text-[14px] text-brand-terra">
             {error ?? 'Failed to send. Please try again.'}
           </p>
         )}

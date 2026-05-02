@@ -12,8 +12,8 @@ export default async function AboutImpactStats() {
   const [agg, swapCount] = await Promise.all([
     prisma.impactStats.aggregate({
       _sum: { itemsReused: true, attendance: true, wasteDivertedKg: true },
-    }),
-    prisma.event.count({ where: { type: 'swap' } }),
+    }).catch(() => ({ _sum: { itemsReused: 0, attendance: 0, wasteDivertedKg: 0 } })),
+    prisma.event.count({ where: { type: 'swap' } }).catch(() => 0),
   ])
 
   const items = agg._sum.itemsReused ?? 0

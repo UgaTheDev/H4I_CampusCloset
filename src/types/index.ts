@@ -15,6 +15,7 @@ export const FAQ_CATEGORIES = [
   'Donations',
   'Events & Logistics',
   'Volunteering',
+  'General',
 ] as const
 
 export type FaqCategory = (typeof FAQ_CATEGORIES)[number]
