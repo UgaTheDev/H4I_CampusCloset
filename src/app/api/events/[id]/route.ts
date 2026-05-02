@@ -1,4 +1,3 @@
-// TODO: requireAdmin() on all mutating handlers before wiring to Prisma
 import { NextResponse } from 'next/server'
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'

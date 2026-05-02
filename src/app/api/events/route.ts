@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { createSupabaseServerClient } from '@/lib/supabase-server'
+import { requireAdmin } from '@/lib/admin-guard'
 
 interface CreateEvent {
     title: string
@@ -26,17 +26,8 @@ export async function GET() {
 
 export async function POST(request: Request) { 
     try {
-    const supabase = await createSupabaseServerClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user?.email) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
-    }
-
-    const admin = await prisma.adminUser.findUnique({ where: { email: user.email } })
-    if (!admin) {
-      return NextResponse.json({ error: 'Not admin' }, { status: 403 })
-    }
+    const authResult = await requireAdmin()
+    if (authResult.error) return authResult.error
 
     const body = (await request.json()) as CreateEvent
 

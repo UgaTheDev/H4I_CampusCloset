@@ -1,11 +1,13 @@
 'use client';
 import { useState } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { enUS } from "date-fns/locale/en-US";
 
 interface Event {
+  id: string;
   title: string;
   type: string;
   date: Date;
@@ -72,18 +74,18 @@ export default function EventCalendar({ events }: EventCalendarProps) {
   const currentMonthString = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
 
   return (
-    <div style={{ backgroundColor: "#ffffff", display: "flex", justifyContent: "space-between", padding: "40px" }}>
+    <div className="flex justify-between bg-white p-10">
       
-      <div style={{ width: "60%", marginTop: "30px", marginLeft: "20px" }}>
-        <h1 style={{ fontFamily: "Brasika Display", fontSize: "48px", marginBottom: "0px" }}>
+      <div className="ml-5 mt-[30px] w-[60%]">
+        <h1 className="mb-0 font-display text-[48px]">
           Calendar
         </h1>
-        <p style={{ fontFamily: "Telegraf", marginBottom: "30px", color: "#666" }}>
+        <p className="mb-[30px] font-body text-brand-text/60">
           (Events for {currentMonthString})
         </p>
 
         {Object.keys(groupedEvents).length === 0 && (
-          <p style={{ fontFamily: "Telegraf", color: "#888" }}>
+          <p className="font-body text-brand-text/50">
             No events scheduled for this month.
           </p>
         )}
@@ -92,31 +94,19 @@ export default function EventCalendar({ events }: EventCalendarProps) {
           const date = new Date(dateStr);
 
           return (
-            <div key={dateStr} style={{ marginBottom: "30px" }}>
-              <h2 style={{
-                fontFamily: "Telegraf",
-                fontWeight: "800",
-                fontSize: "20px",
-                marginBottom: "10px"
-              }}>
+            <div key={dateStr} className="mb-[30px]">
+              <h2 className="mb-2.5 font-body text-[20px] font-extrabold">
                 {formatHeader(date)}
               </h2>
 
-              <div style={{
-                borderBottom: "1px solid #ccc",
-                marginBottom: "10px"
-              }} />
+              <div className="mb-2.5 border-b border-gray-300" />
 
               {dayEvents.map((event, idx) => (
-                <div key={idx} style={{
-                  display: "flex",
-                  gap: "20px",
-                  marginBottom: "8px"
-                }}>
-                  <span style={{ width: "80px", fontFamily: "Telegraf" }}>
+                <div key={`${event.id}-${idx}`} className="mb-2 flex gap-5">
+                  <span className="w-20 font-body">
                     {formatTime(event.date)}
                   </span>
-                  <span style={{ fontFamily: "Telegraf" }}>
+                  <span className="font-body">
                     {event.title} ({event.location})
                   </span>
                 </div>
@@ -126,14 +116,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
         })}
       </div>
 
-      <div
-        style={{
-          width: "35%",
-          height: "500px",
-          borderRadius: "12px",
-          overflow: "hidden",
-        }}
-      >
+      <div className="h-[500px] w-[35%] overflow-hidden rounded-xl">
         <Calendar
           localizer={localizer}
           events={calendarEvents}
@@ -144,7 +127,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
           // 4. Bind the calendar to our state variables
           date={currentDate}
           onNavigate={(newDate) => setCurrentDate(newDate)}
-          style={{ height: "100%", fontFamily: "Telegraf" }}
+          className="h-full font-body"
         />
       </div>
 

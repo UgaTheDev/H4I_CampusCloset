@@ -1,6 +1,9 @@
 import React from 'react';
+import Card from '@/components/ui/Card';
+import { cn } from '@/lib/cn';
 
 interface Event {
+  id: string;
   title: string;
   type: string;
   date: Date;
@@ -25,22 +28,16 @@ export default function EventCard({ event, colorIndex }: EventCardProps) {
   });
 
   const colors = [
-    "#d1d7c7", "#dfd6e3", "#ddd0bb"
+    "bg-brand-olive-light", "bg-brand-lavender-light", "bg-brand-tan-light"
   ]
 
-  const chosenColor = colors[colorIndex]
+  const chosenColor = colors[colorIndex % colors.length]
 
   
   return (
-    <div 
-      className="card-container flex flex-col overflow-hidden bg-white shadow-xl rounded-[20px]"
-      style={{ 
-        fontFamily: "Telegraf, sans-serif"
-      }}
-    >
+    <Card className="card-container flex flex-col overflow-hidden rounded-[20px] bg-white font-body shadow-xl">
       <div 
-        className={`top-placeholder h-40`} 
-        style={{ borderRadius: "20px 20px 0 0", backgroundColor: chosenColor }}
+        className={cn("top-placeholder h-40 rounded-t-[20px]", chosenColor)}
       >
         {/* Placeholder background */}
       </div>
@@ -68,6 +65,6 @@ export default function EventCard({ event, colorIndex }: EventCardProps) {
           </p>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

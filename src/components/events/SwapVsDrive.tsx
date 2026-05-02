@@ -3,22 +3,15 @@ import React from 'react';
 export default function SwapVsDrive() {
   return (
     <div className="w-full bg-white">
-      <div 
-        className="max-w-5xl mx-auto p-8 text-black" 
-        style={{ fontFamily: 'Telegraf, sans-serif' }}
-      >
-        <p 
-          className="text-5xl text-center mb-10 font-bold" 
-          style={{ fontFamily: '"Brasika Display", serif' }}
-        >
+      <div className="mx-auto max-w-5xl p-8 font-body text-black">
+        <p className="mb-10 text-center font-display text-5xl font-bold">
           Clothing Swap Vs. Drive
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           
           <div 
-            className="rounded-xl p-8 border border-gray-600 shadow-sm"
-            style={{ backgroundColor: '#DEE8D0' }}
+            className="rounded-xl border border-gray-600 bg-brand-olive-light p-8 shadow-sm"
           >
             <h2 className="text-3xl font-bold mb-6">Clothing Swap</h2>
             
@@ -43,8 +36,7 @@ export default function SwapVsDrive() {
           </div>
 
           <div 
-            className="rounded-xl p-8 border border-gray-500 shadow-sm"
-            style={{ backgroundColor: '#CED8E0' }}
+            className="rounded-xl border border-gray-500 bg-brand-blue-light p-8 shadow-sm"
           >
             <h2 className="text-3xl font-bold mb-6">Clothing Drive</h2>
             
@@ -71,8 +63,7 @@ export default function SwapVsDrive() {
         </div>
 
         <div 
-          className="rounded-xl p-6 border border-amber-900/20 shadow-sm max-w-4xl mx-auto mt-10"
-          style={{ backgroundColor: '#FFFAF4' }}
+          className="mx-auto mt-10 max-w-4xl rounded-xl border border-amber-900/20 bg-brand-cream p-6 shadow-sm"
         >
           <h2 className="text-2xl font-bold text-center mb-6">General Guidelines for All Events</h2>
           
