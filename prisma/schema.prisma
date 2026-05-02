@@ -10,41 +10,42 @@ datasource db {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model AdminUser {
-  id        String   @id
+  id        String   @id @default(uuid())
   email     String   @unique
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model ContactRequest {
-  id                String   @id
+  id                String   @id @default(uuid())
   name              String
   email             String
   message           String
   type              String   @default("general")
   status            String   @default("new")
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime
   preferredDate     String?
   preferredLocation String?
   preferredTime     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model DonationBin {
-  id        String   @id
+  id        String   @id @default(uuid())
   name      String
   building  String
   latitude  Float
   longitude Float
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
-  updatedAt DateTime
+  updatedAt DateTime @updatedAt
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model Event {
-  id           String         @id
+  id           String         @id @default(uuid())
   title        String
   type         String
   date         DateTime
@@ -53,37 +54,14 @@ model Event {
   itemLimit    Int?
   isPast       Boolean        @default(false)
   createdAt    DateTime       @default(now())
-  updatedAt    DateTime
+  updatedAt    DateTime       @updatedAt
   GalleryPhoto GalleryPhoto[]
   ImpactStats  ImpactStats?
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model FaqItem {
-  id           String   @id
-  question     String
-  answer       String
-  category     String   @default("General")
-  displayOrder Int      @default(0)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime
-}
-
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model GalleryPhoto {
-  id           String   @id
-  url          String
-  caption      String?
-  eventId      String?
-  displayOrder Int      @default(0)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  Event        Event?   @relation(fields: [eventId], references: [id])
-}
-
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model ImpactStats {
-  id              String   @id
+  id              String   @id @default(uuid())
   eventId         String?  @unique
   itemsReused     Int      @default(0)
   itemsDonated    Int      @default(0)
@@ -92,13 +70,13 @@ model ImpactStats {
   waterSavedL     Float    @default(0)
   carbonSavedKg   Float    @default(0)
   createdAt       DateTime @default(now())
-  updatedAt       DateTime
+  updatedAt       DateTime @updatedAt
   Event           Event?   @relation(fields: [eventId], references: [id])
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model TeamMember {
-  id           String   @id
+  id           String   @id @default(uuid())
   name         String
   role         String
   bio          String?
@@ -127,24 +105,4 @@ model GalleryPhoto {
   displayOrder Int      @default(0)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-}
-
-model ContactRequest {
-  id        String   @id @default(uuid())
-  name      String
-  email     String
-  message   String
-  type              String   @default("general") // "pickup" | "dropoff" | "general"
-  status            String   @default("new")     // "new" | "responded" | "completed"
-  preferredLocation String?
-  preferredDate     String?
-  preferredTime     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model AdminUser {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  createdAt DateTime @default(now())
 }
