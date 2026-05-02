@@ -12,41 +12,46 @@ import Button from '@/components/ui/Button'
 import MissionSection from '@/components/about/MissionSection'
 import TeamGrid from '@/components/about/TeamGrid'
 import PhotoGallery from '@/components/about/PhotoGallery'
-import ImpactStats from '@/components/impact/ImpactStats'
+import AboutImpactStats from '@/components/about/AboutImpactStats'
 
 export default function AboutPage() {
   return (
     <>
-      <section className="bg-brand-cream px-6 py-20 text-center md:px-12">
-        <div className="mx-auto max-w-3xl">
+      <section className="bg-brand-cream px-6 pb-20 pt-16 text-center md:px-12">
+        <div className="mx-auto max-w-4xl">
           <div className="mb-6 flex justify-center">
-            <Badge variant="outline">About Us</Badge>
+            <Badge variant="outline" className="px-16">About Us</Badge>
           </div>
-          <h1 className="mb-4 font-display text-[56px] leading-tight text-brand-text md:text-[80px]">
+          <h1 className="mb-5 font-display text-[48px] leading-[1.05] text-brand-text md:text-[64px]">
             Campus Closet
           </h1>
-          <p className="font-body text-[15px] leading-relaxed text-brand-text/80">
+          <p className="mx-auto max-w-3xl font-body text-[16px] leading-[1.4] text-brand-text/85 md:text-[20px] md:leading-[28px]">
             Est. 2021 | Our mission is to cultivate community and environmental
             responsibility through{' '}
-            <span className="font-bold">free, sustainable, and circular</span>{' '}
+            <span className="font-extrabold">free, sustainable, and circular</span>{' '}
             clothing consumption.
           </p>
         </div>
       </section>
 
+      <div
+        className="h-12 border-y-2 border-brand-brown bg-brand-olive-light"
+        aria-hidden="true"
+      />
+
       <MissionSection />
 
       <section className="bg-brand-cream px-6 py-20 md:px-12">
-        <div className="mx-auto max-w-5xl">
+        <div className="mx-auto max-w-6xl">
           <div className="mb-10 text-center">
-            <h2 className="mb-3 font-display text-[40px] text-brand-text md:text-[52px]">
+            <h2 className="mb-3 font-display text-[40px] text-brand-text md:text-[54px]">
               Our Impact
             </h2>
-            <p className="font-body text-[15px] text-brand-text/70">
+            <p className="font-body text-[20px] leading-[28px] text-brand-text">
               Since our launch, Campus Closet has made significant steps in promoting sustainable fashion.
             </p>
           </div>
-          <ImpactStats />
+          <AboutImpactStats />
         </div>
       </section>
 

@@ -1,7 +1,7 @@
 import { cn } from '@/lib/cn'
 
 const variants = {
-  outline: 'border border-black bg-white text-brand-text',
+  outline: 'border-2 border-black bg-white text-brand-text',
   filled: 'bg-brand-olive-light text-brand-text',
 } as const
 
@@ -15,7 +15,7 @@ export default function Badge({ variant = 'outline', className, children }: Badg
   return (
     <span
       className={cn(
-        'inline-block rounded-full px-4 py-1.5 font-body text-[13px] font-medium',
+        'inline-flex items-center justify-center rounded-[30px] px-5 py-2.5 font-body text-[18px]',
         variants[variant],
         className,
       )}
