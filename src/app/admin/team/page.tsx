@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
+import ImageUpload from '@/components/ui/ImageUpload'
 import Input from '@/components/ui/Input'
 import Modal from '@/components/ui/Modal'
 import Textarea from '@/components/ui/Textarea'
@@ -131,11 +132,9 @@ export default function AdminTeamPage() {
               required
             />
           </div>
-          <Input
-            label="Photo URL"
-            placeholder="https://..."
-            value={form.photoUrl}
-            onChange={(e) => setForm({ ...form, photoUrl: e.target.value })}
+          <ImageUpload
+            currentUrl={form.photoUrl}
+            onUpload={(url) => setForm({ ...form, photoUrl: url })}
           />
           <Textarea
             label="Bio"
@@ -250,10 +249,9 @@ function EditMemberModal({
       >
         <Input label="Name" value={name} onChange={(e) => setName(e.target.value)} required />
         <Input label="Role" value={role} onChange={(e) => setRole(e.target.value)} required />
-        <Input
-          label="Photo URL"
-          value={photoUrl}
-          onChange={(e) => setPhotoUrl(e.target.value)}
+        <ImageUpload
+          currentUrl={photoUrl}
+          onUpload={(url) => setPhotoUrl(url)}
         />
         <Textarea label="Bio" rows={3} value={bio} onChange={(e) => setBio(e.target.value)} />
         <div className="flex justify-end gap-2">
