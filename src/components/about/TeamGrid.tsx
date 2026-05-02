@@ -7,7 +7,10 @@ const ROTATIONS = ['-rotate-2', 'rotate-1', '-rotate-1', 'rotate-2']
 export default async function TeamGrid() {
   const members = await prisma.teamMember.findMany({
     orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
-  }).catch(() => [])
+  }).catch((err) => {
+    console.error('Failed to load team members', err)
+    return []
+  })
 
   if (members.length === 0) {
     return (

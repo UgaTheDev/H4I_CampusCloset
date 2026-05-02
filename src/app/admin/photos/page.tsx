@@ -82,7 +82,15 @@ export default function AdminPhotosPage() {
           eventId: form.eventId || undefined,
         }),
       })
-      if (!res.ok) throw new Error((await res.json()).error ?? 'Failed')
+      if (!res.ok) {
+        // Clean up the already-uploaded file to avoid orphaned storage objects
+        await fetch('/api/upload', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: uploadJson.url }),
+        }).catch(() => {})
+        throw new Error((await res.json()).error ?? 'Failed')
+      }
       setForm(EMPTY)
       setFile(null)
       setPreview(null)
@@ -95,17 +103,13 @@ export default function AdminPhotosPage() {
   }
 
   async function handleUpdate(photo: GalleryPhoto, patch: Partial<GalleryPhoto>) {
-    try {
-      const res = await fetch(`/api/photos/${photo.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(patch),
-      })
-      if (!res.ok) throw new Error((await res.json()).error ?? `Failed: ${res.status}`)
-      await load()
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update')
-    }
+    const res = await fetch(`/api/photos/${photo.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(patch),
+    })
+    if (!res.ok) throw new Error((await res.json()).error ?? `Failed: ${res.status}`)
+    await load()
   }
 
   async function handleDelete(id: string) {
@@ -285,7 +289,10 @@ function EditPhotoModal({
           e.preventDefault()
           setSaving(true)
           try {
-            await onSave({ caption: caption || undefined, eventId: eventId || undefined })
+            await onSave({
+              caption: caption === '' ? null : caption,
+              eventId: eventId === '' ? null : eventId,
+            })
           } finally {
             setSaving(false)
           }

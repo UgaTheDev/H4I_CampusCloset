@@ -34,7 +34,9 @@ export async function POST(request: Request) {
     'image/gif': 'gif',
   }
   const ext = MIME_TO_EXT[file.type] ?? 'jpg'
-  const folder = (formData.get('folder') as string) || 'team'
+  const rawFolder = (formData.get('folder') as string) || 'team'
+  const ALLOWED_FOLDERS = ['team', 'gallery'] as const
+  const folder = (ALLOWED_FOLDERS as readonly string[]).includes(rawFolder) ? rawFolder : 'team'
   const filename = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
 
   const buffer = await file.arrayBuffer()
@@ -48,4 +50,27 @@ export async function POST(request: Request) {
 
   const { data } = supabaseAdmin.storage.from('photos').getPublicUrl(filename)
   return NextResponse.json({ url: data.publicUrl }, { status: 201 })
+}
+
+export async function DELETE(request: Request) {
+  const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  )
+
+  const guard = await requireAdmin()
+  if (guard.error) return guard.error
+
+  const { url } = await request.json()
+  if (!url) return NextResponse.json({ error: 'No url provided' }, { status: 400 })
+
+  const baseUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/photos/`
+  if (!url.startsWith(baseUrl)) {
+    return NextResponse.json({ error: 'Invalid url' }, { status: 400 })
+  }
+
+  const path = url.slice(baseUrl.length)
+  const { error } = await supabaseAdmin.storage.from('photos').remove([path])
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  return NextResponse.json({ ok: true })
 }
