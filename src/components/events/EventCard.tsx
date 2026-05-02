@@ -12,9 +12,10 @@ interface Event {
 
 interface EventCardProps {
   event: Event;
+  colorIndex: number
 }
 
-export default function EventCard({ event }: EventCardProps) {
+export default function EventCard({ event, colorIndex }: EventCardProps) {
   const formattedDate = event.date.toLocaleString("en-US", {
     weekday: "short",
     month: "short",
@@ -22,6 +23,12 @@ export default function EventCard({ event }: EventCardProps) {
     hour: "numeric",
     minute: "2-digit",
   });
+
+  const colors = [
+    "#d1d7c7", "#dfd6e3", "#ddd0bb"
+  ]
+
+  const chosenColor = colors[colorIndex]
 
   
   return (
@@ -32,8 +39,8 @@ export default function EventCard({ event }: EventCardProps) {
       }}
     >
       <div 
-        className="top-placeholder h-40 bg-purple-100" 
-        style={{ borderRadius: "20px 20px 0 0" }}
+        className={`top-placeholder h-40`} 
+        style={{ borderRadius: "20px 20px 0 0", backgroundColor: chosenColor }}
       >
         {/* Placeholder background */}
       </div>

@@ -89,7 +89,7 @@ export default function EventsPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         {upcomingEvents.slice(0, 3).map((e, index) => (
-          <EventCard key={index} event={e} />
+          <EventCard key={index} event={e} colorIndex={index}/>
         ))}
       </div>
 
