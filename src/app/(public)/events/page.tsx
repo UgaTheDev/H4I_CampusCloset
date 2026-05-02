@@ -20,17 +20,28 @@ interface Event {
 export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
 
-  const upcomingEvents = events.filter((event) => {
-    return (
-      event.isPast == true
-    );
-  });
+  const upcomingEvents = events
+    .filter((event) => event.isPast === false)
+    .sort((a, b) => a.date.getTime() - b.date.getTime());
 
     useEffect(() => {
     async function fetchEvents() {
       try {
         const res = await fetch("/api/events");
+
+        if (!res.ok) {
+          console.error("Failed to fetch events: Response not OK", res.status);
+          setEvents([]);
+          return;
+        }
+
         const events = await res.json();
+
+        if (!events || !events.data || !Array.isArray(events.data)) {
+          console.error("Failed to fetch events: Invalid data structure", events);
+          setEvents([]);
+          return;
+        }
 
         const parsed: Event[] = events.data.map((e: any) => ({
           ...e,

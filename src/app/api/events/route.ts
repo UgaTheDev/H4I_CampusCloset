@@ -1,4 +1,3 @@
-// TODO: requireAdmin() on all mutating handlers before wiring to Prisma
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { createSupabaseServerClient } from '@/lib/supabase-server'
@@ -6,7 +5,7 @@ import { createSupabaseServerClient } from '@/lib/supabase-server'
 interface CreateEvent {
     title: string
     type: string
-    date: Date
+    date: string
     location: string
     description: string
     itemLimit: number
@@ -50,6 +49,11 @@ export async function POST(request: Request) {
     if (typeof type !== 'string' || type.trim() === '') {
       return NextResponse.json({ error: 'type must be a non-empty string' }, { status: 400 })
     }
+
+    if (typeof date !== 'string' || isNaN(Date.parse(date))) {
+      return NextResponse.json({ error: 'date must be a valid ISO date string' }, { status: 400 })
+    }
+
     if (typeof location !== 'string' || location.trim() === '') {
       return NextResponse.json({ error: 'location must be a non-empty string' }, { status: 400 })
     }
@@ -57,15 +61,20 @@ export async function POST(request: Request) {
     if (typeof description !== 'string' || description.trim() === '') {
       return NextResponse.json({ error: 'description must be a non-empty string' }, { status: 400 })
     }
-    if (!Number.isFinite(itemLimit)) {
-      return NextResponse.json({ error: 'itemLimit must be a finite number' }, { status: 400 })
+    
+    if (!Number.isInteger(itemLimit) || itemLimit < 0) {
+      return NextResponse.json({ error: 'itemLimit must be a non-negative integer' }, { status: 400 })
+    }
+
+    if (typeof isPast !== 'boolean') {
+      return NextResponse.json({ error: 'isPast must be a boolean' }, { status: 400 })
     }
 
     const event = await prisma.event.create({
       data: {
         title,
         type,
-        date,
+        date: new Date(date),
         location,
         description,
         itemLimit,

@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server'
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
-import { createSupabaseServerClient } from '@/lib/supabase-server'
+import { requireAdmin } from '@/lib/admin-guard'
 
 interface UpdateEventBody {
   title?: string
@@ -10,41 +10,27 @@ interface UpdateEventBody {
   location?: string
   description?: string
   itemLimit?: number
-  isPast?: Boolean
-}
-
-async function requireAdmin(): Promise<{ error: NextResponse } | { error: null }> {
-  const supabase = await createSupabaseServerClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user?.email) {
-    return { error: NextResponse.json({ error: 'Not authenticated' }, { status: 401 }) }
-  }
-
-  const admin = await prisma.adminUser.findUnique({ where: { email: user.email } })
-  if (!admin) {
-    return { error: NextResponse.json({ error: 'Not admin' }, { status: 403 }) }
-  }
-
-  return { error: null }
+  isPast?: boolean
 }
 
 // GET (single), PUT (update), DELETE
-export async function GET(_request: Request,
-    { params }: { params: Promise<{ id: string }> }) { 
-    try {
-        const { id } = await params
-        
-        const event = await prisma.event.findMany({
-            where: { id },
-        })
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) { 
+  try {
+    const { id } = await params
+    
+    const event = await prisma.event.findUnique({
+      where: { id },
+    })
 
-        return NextResponse.json({ data: event })
-    } catch (err) {
-    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
+    if (!event) {
       return NextResponse.json({ error: 'Event not found' }, { status: 404 })
     }
-    return NextResponse.json({ error: 'Failed to get bin' }, { status: 500 })
+    return NextResponse.json({ data: event })
+  } catch (err) {
+    return NextResponse.json({ error: 'Failed to get event' }, { status: 500 })
   }
 }
 
@@ -59,11 +45,11 @@ export async function PUT(request: Request,
         const { id } = await params
         const body = (await request.json()) as UpdateEventBody
 
-        const { title, type, location, description, itemLimit } = body
+        const { title, type, location, description, itemLimit, isPast } = body
 
         const event = await prisma.event.update({
             where: { id },
-            data: { title, type, location, description, itemLimit },
+            data: { title, type, location, description, itemLimit, isPast },
         })
 
         return NextResponse.json({ data: event })
