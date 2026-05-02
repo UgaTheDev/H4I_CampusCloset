@@ -66,7 +66,6 @@ export default function AdminPhotosPage() {
     setSubmitting(true)
     setError(null)
     try {
-      // Upload file to Supabase Storage
       const formData = new FormData()
       formData.append('file', file)
       formData.append('folder', 'gallery')
@@ -74,7 +73,6 @@ export default function AdminPhotosPage() {
       const uploadJson = await uploadRes.json()
       if (!uploadRes.ok) throw new Error(uploadJson.error ?? 'Upload failed')
 
-      // Create gallery photo record with the uploaded URL
       const res = await fetch('/api/photos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
