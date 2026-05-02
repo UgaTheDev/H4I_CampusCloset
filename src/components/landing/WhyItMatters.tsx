@@ -12,13 +12,14 @@ export default async function WhyItMatters() {
   const [agg, swapCount] = await Promise.all([
     prisma.impactStats.aggregate({
       _sum: { itemsReused: true, attendance: true, wasteDivertedKg: true },
-    }),
-    prisma.event.count({ where: { type: 'swap' } }),
+    }).catch(() => ({ _sum: { itemsReused: 0, attendance: 0, wasteDivertedKg: 0 } })),
+    prisma.event.count({ where: { type: 'swap' } }).catch(() => 0),
   ])
 
   const items = agg._sum.itemsReused ?? 0
   const attendance = agg._sum.attendance ?? 0
   const wasteLbs = Math.round((agg._sum.wasteDivertedKg ?? 0) * KG_TO_LBS)
+  const hasStats = items > 0 || attendance > 0 || wasteLbs > 0 || swapCount > 0
 
   const stats = [
     { value: fmt(items), label: 'Clothing Items Swapped', color: 'text-brand-dark-olive' },
@@ -30,7 +31,6 @@ export default async function WhyItMatters() {
   return (
     <section className="bg-white px-6 py-20 md:px-12">
       <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
-        {/* Left side — text + stats */}
         <div>
           <h2 className="mb-4 font-display text-[40px] text-brand-text md:text-[52px]">
             Why it Matters?
@@ -42,24 +42,27 @@ export default async function WhyItMatters() {
             accessible on campus.
           </p>
 
-          <div className="grid grid-cols-2 gap-3">
-            {stats.map((stat) => (
-              <div
-                key={stat.label}
-                className="rounded-xl border border-gray-200 bg-brand-cream px-5 py-4"
-              >
-                <p className={cn('font-body text-[24px] font-extrabold', stat.color)}>
-                  {stat.value}
-                </p>
-                <p className="font-body text-[13px] text-brand-text/70">
-                  {stat.label}
-                </p>
-              </div>
-            ))}
-          </div>
+          {hasStats ? (
+            <div className="grid grid-cols-2 gap-3">
+              {stats.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="rounded-xl border border-gray-200 bg-brand-cream px-5 py-4"
+                >
+                  <p className={cn('font-body text-[24px] font-extrabold', stat.color)}>
+                    {stat.value}
+                  </p>
+                  <p className="font-body text-[13px] text-brand-text/70">
+                    {stat.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="font-body text-[14px] text-brand-text/50">Stats coming soon.</p>
+          )}
         </div>
 
-        {/* Right side — photo */}
         <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100">
           <Image
             src="/mission.png"

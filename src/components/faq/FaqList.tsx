@@ -15,6 +15,7 @@ const CATEGORY_HEADINGS: Record<string, string> = {
   Donations: 'Donating Clothes',
   'Events & Logistics': 'Events & Logistics',
   Volunteering: 'Volunteering',
+  General: 'General',
 }
 
 export default function FaqList({ items }: FaqListProps) {
@@ -24,7 +25,7 @@ export default function FaqList({ items }: FaqListProps) {
 
   const categories = useMemo(() => {
     const fromData = Array.from(new Set(items.map((i) => i.category)))
-    return [...FAQ_CATEGORIES, ...fromData.filter((c) => !FAQ_CATEGORIES.includes(c as never))]
+    return [...FAQ_CATEGORIES, ...fromData.filter((c) => !(FAQ_CATEGORIES as readonly string[]).includes(c))]
   }, [items])
 
   const filtered = useMemo(() => {
@@ -65,6 +66,7 @@ export default function FaqList({ items }: FaqListProps) {
                   <button
                     type="button"
                     onClick={() => handleCategoryChange(category)}
+                    aria-current={isActive ? 'true' : undefined}
                     className={cn(
                       'w-full rounded-[10px] px-5 py-2.5 text-left font-body text-[16px] transition-colors md:text-[20px]',
                       isActive
@@ -89,19 +91,23 @@ export default function FaqList({ items }: FaqListProps) {
             <div className="flex flex-col gap-3">
               {filtered.map((item, i) => {
                 const isOpen = openIndex === i
+                const panelId = `faq-panel-${item.id}`
+                const buttonId = `faq-btn-${item.id}`
                 return (
                   <div
                     key={item.id}
                     className={cn(
-                      'overflow-hidden rounded-[15px] border border-gray-400',
+                      'overflow-hidden rounded-[15px] border border-[#9e9e9e]',
                       isOpen ? 'bg-brand-faq-active' : 'bg-white',
                     )}
                   >
                     <button
+                      id={buttonId}
                       type="button"
                       className="flex w-full items-center justify-between px-6 py-5 text-left"
                       onClick={() => setOpenIndex(isOpen ? null : i)}
                       aria-expanded={isOpen}
+                      aria-controls={panelId}
                     >
                       <span className="font-body text-[16px] font-extrabold text-brand-text md:text-[20px]">
                         {item.question}
@@ -123,7 +129,12 @@ export default function FaqList({ items }: FaqListProps) {
                       </svg>
                     </button>
                     {isOpen && (
-                      <div className="border-t border-gray-400 px-6 pb-5 pt-4">
+                      <div
+                        id={panelId}
+                        role="region"
+                        aria-labelledby={buttonId}
+                        className="border-t border-gray-400 px-6 pb-5 pt-4"
+                      >
                         <p className="font-body text-[15px] leading-relaxed text-brand-text md:text-[20px] md:leading-[32px]">
                           {item.answer}
                         </p>

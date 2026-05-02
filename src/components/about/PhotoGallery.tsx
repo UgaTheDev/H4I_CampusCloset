@@ -3,9 +3,9 @@ import { prisma } from '@/lib/prisma'
 
 export default async function PhotoGallery() {
   const photos = await prisma.galleryPhoto.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
     take: 12,
-  })
+  }).catch(() => [])
 
   if (photos.length === 0) return null
 
@@ -31,6 +31,7 @@ export default async function PhotoGallery() {
                 src={photo.url}
                 alt={photo.caption ?? 'Campus Closet event photo'}
                 fill
+                unoptimized
                 sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
                 className="object-cover transition-transform hover:scale-105"
               />

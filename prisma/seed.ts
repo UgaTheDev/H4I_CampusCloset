@@ -163,6 +163,8 @@ async function main() {
     prisma.faqItem.create({ data: { question: 'How do clothing swaps work?', answer: 'Bring gently used clothing items (up to the event limit) and receive tokens to "shop" from what others have brought. No money changes hands!', category: 'Participation', displayOrder: 1 } }),
     prisma.faqItem.create({ data: { question: 'Do I need to bring items to take items?', answer: 'At swaps, yes — you trade items. At post-swap free shops, remaining items are available to everyone.', category: 'Participation', displayOrder: 2 } }),
     prisma.faqItem.create({ data: { question: 'How can I volunteer?', answer: 'Visit the About page and fill out the Get Involved form, or attend one of our e-board meetings!', category: 'Participation', displayOrder: 3 } }),
+    prisma.faqItem.create({ data: { question: 'Do I have to donate to participate?', answer: 'You don\'t need to donate to attend a swap, but bringing items lets you take more home. Free shops are open to everyone after each swap.', category: 'Participation', displayOrder: 4 } }),
+    prisma.faqItem.create({ data: { question: 'Is this only for BU students?', answer: 'Our swaps are primarily for BU students, but we welcome guests when capacity allows. Donation bins are open to anyone in the community.', category: 'Participation', displayOrder: 5 } }),
     prisma.faqItem.create({ data: { question: 'What happens to unclaimed items?', answer: 'After each swap, remaining items are donated to local shelters and organizations like Goodwill and Boomerangs.', category: 'General', displayOrder: 1 } }),
     prisma.faqItem.create({ data: { question: 'Is Campus Closet affiliated with BU?', answer: 'Campus Closet is a student-run initiative at Boston University, built and maintained by Hack4Impact BU.', category: 'General', displayOrder: 2 } }),
   ])
@@ -172,6 +174,18 @@ async function main() {
     prisma.contactRequest.create({ data: { name: 'Emily Watson', email: 'ewatson@bu.edu', message: 'I have 3 bags of clothes from my spring cleaning. Can someone pick them up from South Campus?', type: 'pickup', status: 'new' } }),
     prisma.contactRequest.create({ data: { name: 'Marcus Lee', email: 'mlee@bu.edu', message: 'Are you looking for volunteers for the End-of-Year Mega Swap?', type: 'general', status: 'responded' } }),
     prisma.contactRequest.create({ data: { name: 'Sofia Ramirez', email: 'sramirez@bu.edu', message: 'I dropped off a bag at the GSU bin last week. Just wanted to confirm it was received!', type: 'dropoff', status: 'completed' } }),
+  ])
+
+  // Gallery photos — tagged to past events where applicable
+  await Promise.all([
+    prisma.galleryPhoto.create({ data: { url: 'https://placehold.co/800x800/B89F7B/FFFFFF?text=Spring+Swap+1', caption: 'Browsing the racks at Spring Swap', eventId: events[0].id } }),
+    prisma.galleryPhoto.create({ data: { url: 'https://placehold.co/800x800/8B7355/FFFFFF?text=Spring+Swap+2', caption: 'Volunteers sorting donations', eventId: events[0].id } }),
+    prisma.galleryPhoto.create({ data: { url: 'https://placehold.co/800x800/A89071/FFFFFF?text=Spring+Swap+3', caption: 'Full house at the GSU Ballroom', eventId: events[0].id } }),
+    prisma.galleryPhoto.create({ data: { url: 'https://placehold.co/800x800/6B5D4F/FFFFFF?text=Winter+Drive+1', caption: 'Coats collected for local shelters', eventId: events[1].id } }),
+    prisma.galleryPhoto.create({ data: { url: 'https://placehold.co/800x800/9B8268/FFFFFF?text=Winter+Drive+2', caption: 'Drop-off station at Warren Towers', eventId: events[1].id } }),
+    prisma.galleryPhoto.create({ data: { url: 'https://placehold.co/800x800/C7B299/FFFFFF?text=Fall+Kickoff+1', caption: 'Welcome back swap kickoff', eventId: events[2].id } }),
+    prisma.galleryPhoto.create({ data: { url: 'https://placehold.co/800x800/8E7B5F/FFFFFF?text=Fall+Kickoff+2', caption: 'New friends at Marsh Plaza', eventId: events[2].id } }),
+    prisma.galleryPhoto.create({ data: { url: 'https://placehold.co/800x800/B89F7B/FFFFFF?text=Behind+the+Scenes', caption: 'E-board planning the next event', eventId: null } }),
   ])
 
   await prisma.adminUser.createMany({

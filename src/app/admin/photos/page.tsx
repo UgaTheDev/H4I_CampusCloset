@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import Input from '@/components/ui/Input'
+import Modal from '@/components/ui/Modal'
 import type { GalleryPhoto } from '@/types'
 
 type Form = { caption: string; eventId: string }
@@ -22,6 +23,7 @@ export default function AdminPhotosPage() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
+  const [editing, setEditing] = useState<GalleryPhoto | null>(null)
 
   async function load() {
     setLoading(true)
@@ -64,7 +66,6 @@ export default function AdminPhotosPage() {
     setSubmitting(true)
     setError(null)
     try {
-      // Upload file to Supabase Storage
       const formData = new FormData()
       formData.append('file', file)
       formData.append('folder', 'gallery')
@@ -72,7 +73,6 @@ export default function AdminPhotosPage() {
       const uploadJson = await uploadRes.json()
       if (!uploadRes.ok) throw new Error(uploadJson.error ?? 'Upload failed')
 
-      // Create gallery photo record with the uploaded URL
       const res = await fetch('/api/photos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -82,7 +82,15 @@ export default function AdminPhotosPage() {
           eventId: form.eventId || undefined,
         }),
       })
-      if (!res.ok) throw new Error((await res.json()).error ?? 'Failed')
+      if (!res.ok) {
+        // Clean up the already-uploaded file to avoid orphaned storage objects
+        await fetch('/api/upload', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: uploadJson.url }),
+        }).catch(() => {})
+        throw new Error((await res.json()).error ?? 'Failed')
+      }
       setForm(EMPTY)
       setFile(null)
       setPreview(null)
@@ -92,6 +100,16 @@ export default function AdminPhotosPage() {
     } finally {
       setSubmitting(false)
     }
+  }
+
+  async function handleUpdate(photo: GalleryPhoto, patch: Partial<GalleryPhoto>) {
+    const res = await fetch(`/api/photos/${photo.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(patch),
+    })
+    if (!res.ok) throw new Error((await res.json()).error ?? `Failed: ${res.status}`)
+    await load()
   }
 
   async function handleDelete(id: string) {
@@ -214,17 +232,100 @@ export default function AdminPhotosPage() {
                     {p.caption}
                   </p>
                 )}
-                <button
-                  onClick={() => handleDelete(p.id)}
-                  className="font-body text-[12px] text-brand-terra hover:underline"
-                >
-                  Delete
-                </button>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setEditing(p)}
+                    className="font-body text-[12px] text-brand-blue hover:underline"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(p.id)}
+                    className="font-body text-[12px] text-brand-terra hover:underline"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </Card>
           ))}
         </div>
       )}
+
+      {editing && (
+        <EditPhotoModal
+          photo={editing}
+          events={events}
+          onClose={() => setEditing(null)}
+          onSave={async (patch) => {
+            await handleUpdate(editing, patch)
+            setEditing(null)
+          }}
+        />
+      )}
     </div>
+  )
+}
+
+function EditPhotoModal({
+  photo,
+  events,
+  onClose,
+  onSave,
+}: {
+  photo: GalleryPhoto
+  events: { id: string; title: string }[]
+  onClose: () => void
+  onSave: (patch: Partial<GalleryPhoto>) => Promise<void>
+}) {
+  const [caption, setCaption] = useState(photo.caption ?? '')
+  const [eventId, setEventId] = useState(photo.eventId ?? '')
+  const [saving, setSaving] = useState(false)
+
+  return (
+    <Modal open onClose={onClose} title="Edit Photo">
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault()
+          setSaving(true)
+          try {
+            await onSave({
+              caption: caption === '' ? null : caption,
+              eventId: eventId === '' ? null : eventId,
+            })
+          } finally {
+            setSaving(false)
+          }
+        }}
+        className="flex flex-col gap-4"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={photo.url} alt={photo.caption ?? ''} className="aspect-square w-full rounded-md object-cover" />
+        <Input
+          label="Caption"
+          value={caption}
+          onChange={(e) => setCaption(e.target.value)}
+        />
+        <div className="flex flex-col gap-1">
+          <label className="font-body text-[14px] text-brand-text">Tag with event</label>
+          <select
+            value={eventId}
+            onChange={(e) => setEventId(e.target.value)}
+            className="rounded-md border border-gray-300 px-4 py-2.5 font-body text-[16px] text-brand-text"
+          >
+            <option value="">— None —</option>
+            {events.map((ev) => (
+              <option key={ev.id} value={ev.id}>{ev.title}</option>
+            ))}
+          </select>
+        </div>
+        <div className="flex justify-end gap-2">
+          <Button variant="secondary" size="sm" onClick={onClose}>Cancel</Button>
+          <Button type="submit" variant="primary" size="sm" disabled={saving}>
+            {saving ? 'Saving...' : 'Save'}
+          </Button>
+        </div>
+      </form>
+    </Modal>
   )
 }
