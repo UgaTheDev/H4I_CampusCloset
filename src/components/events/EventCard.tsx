@@ -26,10 +26,8 @@ export default function EventCard({ event }: EventCardProps) {
   
   return (
     <div 
-      className="card-container flex flex-col overflow-hidden bg-white"
+      className="card-container flex flex-col overflow-hidden bg-white shadow-xl rounded-[20px]"
       style={{ 
-        boxShadow: "1px 1px 1px 1px", 
-        borderRadius: "20px", 
         fontFamily: "Telegraf, sans-serif"
       }}
     >
@@ -40,16 +38,16 @@ export default function EventCard({ event }: EventCardProps) {
         {/* Placeholder background */}
       </div>
 
-      <div className="content-area p-6 flex flex-col gap-4 text-black">
+      <div className="p-6 flex flex-col text-black">
         <p className="text-sm font-bold text-gray-800">
           {formattedDate}
         </p>
 
-        <h3 className="text-xl font-bold leading-tight">
+        <h3 className="text-xl font-bold">
           {event.title}
         </h3>
 
-        <p className="text-gray-600 text-sm leading-relaxed">
+        <p className="text-gray-600 text-sm">
           {event.description}
         </p>
 
