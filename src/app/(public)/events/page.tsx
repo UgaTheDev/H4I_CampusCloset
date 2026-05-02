@@ -1,9 +1,45 @@
+'use client';
 import EventCalendar from '@/components/events/EventCalendar'
 import EventCard from '@/components/events/EventCard'
 import SwapVsDrive from '@/components/events/SwapVsDrive'
 
+import { useEffect, useState } from "react";
+
+
+interface Event {
+  title: string;
+  type: string;
+  date: Date;
+  location: string;
+  description: string;
+  itemLimit: number;
+  isPast: boolean;
+}
+
 // Events page — calendar, swap/drive explainer, past event photos
 export default function EventsPage() {
+  const [events, setEvents] = useState<Event[]>([]);
+
+    useEffect(() => {
+    async function fetchEvents() {
+      try {
+        const res = await fetch("/api/events");
+        const events = await res.json();
+
+        const parsed: Event[] = events.data.map((e: any) => ({
+          ...e,
+          date: new Date(e.date),
+        }));
+        console.log(parsed)
+        setEvents(parsed);
+      } catch (err) {
+        console.error("Failed to fetch events:", err);
+      }
+    }
+
+    fetchEvents();
+  }, []);
+
   return (
   <div>
     <div className="text-center">
@@ -36,17 +72,18 @@ export default function EventsPage() {
         borderColor: "#4D3A29",
       }}
     />
-    <EventCalendar/>
-    <EventCard/>
+    <EventCalendar events={events}/>
+    <h1 style={{ fontFamily: "Brasika Display", fontSize: "40px" }}>Upcoming Swaps and Drives</h1>
+    <p style={{ fontFamily: "Telegraf" }}>Join us at our next clothing swap!</p>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      {events.slice(0, 3).map((e, index) => (
+        <EventCard key={index} event={e} />
+      ))}
+    </div>
+    
     <SwapVsDrive/>
   </div>)
 
-
-  // calendar thingy
-
-  // upcoming swaps and drives: join us at our next clothing swap, with up to 3 upcoming events (eventcard)
-
-  // clothing swap vs drive page general guidelines for all events
 
   // photos from past events 
 }

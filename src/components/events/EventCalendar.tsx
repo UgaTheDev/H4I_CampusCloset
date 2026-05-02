@@ -1,5 +1,4 @@
 'use client';
-import { useEffect, useState } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 
 import { format, parse, startOfWeek, getDay } from "date-fns";
@@ -14,6 +13,8 @@ interface Event {
   itemLimit: number;
   isPast: boolean;
 }
+
+
 const locales = {
   "en-US": enUS,
 };
@@ -26,28 +27,11 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-export default function EventCalendar() {
-  const [events, setEvents] = useState<Event[]>([]);
+interface EventCalendarProps {
+  events: Event[];
+}
 
-  useEffect(() => {
-    async function fetchEvents() {
-      try {
-        const res = await fetch("/api/events");
-        const events = await res.json();
-
-        const parsed: Event[] = events.data.map((e: any) => ({
-          ...e,
-          date: new Date(e.date),
-        }));
-        console.log(parsed)
-        setEvents(parsed);
-      } catch (err) {
-        console.error("Failed to fetch events:", err);
-      }
-    }
-
-    fetchEvents();
-  }, []);
+export default function EventCalendar({ events }: EventCalendarProps) {
 
   const groupedEvents = events.reduce((acc: Record<string, Event[]>, event) => {
     const key = event.date.toDateString();
