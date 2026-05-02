@@ -23,10 +23,16 @@ export default function AdminTeamPage() {
 
   async function load() {
     setLoading(true)
-    const res = await fetch('/api/team')
-    const json = await res.json()
-    setMembers(json.data ?? [])
-    setLoading(false)
+    try {
+      const res = await fetch('/api/team')
+      if (!res.ok) throw new Error(`Failed to load: ${res.status}`)
+      const json = await res.json()
+      setMembers(json.data ?? [])
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load team members')
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -54,37 +60,52 @@ export default function AdminTeamPage() {
   }
 
   async function handleUpdate(member: TeamMember, patch: Partial<TeamMember>) {
-    await fetch(`/api/team/${member.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(patch),
-    })
-    await load()
+    try {
+      const res = await fetch(`/api/team/${member.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(patch),
+      })
+      if (!res.ok) throw new Error((await res.json()).error ?? `Failed: ${res.status}`)
+      await load()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update')
+    }
   }
 
   async function handleDelete(id: string) {
     if (!confirm('Delete this team member?')) return
-    await fetch(`/api/team/${id}`, { method: 'DELETE' })
-    await load()
+    try {
+      const res = await fetch(`/api/team/${id}`, { method: 'DELETE' })
+      if (!res.ok) throw new Error((await res.json()).error ?? `Failed: ${res.status}`)
+      await load()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete')
+    }
   }
 
   async function handleReorder(index: number, direction: -1 | 1) {
     const swapWith = members[index + direction]
     const current = members[index]
     if (!swapWith || !current) return
-    await Promise.all([
-      fetch(`/api/team/${current.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ displayOrder: swapWith.displayOrder }),
-      }),
-      fetch(`/api/team/${swapWith.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ displayOrder: current.displayOrder }),
-      }),
-    ])
-    await load()
+    try {
+      const [r1, r2] = await Promise.all([
+        fetch(`/api/team/${current.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ displayOrder: swapWith.displayOrder }),
+        }),
+        fetch(`/api/team/${swapWith.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ displayOrder: current.displayOrder }),
+        }),
+      ])
+      if (!r1.ok || !r2.ok) throw new Error('Failed to reorder')
+      await load()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to reorder')
+    }
   }
 
   return (
