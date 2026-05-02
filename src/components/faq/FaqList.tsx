@@ -53,7 +53,7 @@ export default function FaqList({ items }: FaqListProps) {
 
       <div className="mx-auto grid max-w-5xl gap-10 md:grid-cols-[260px_1fr]">
         <aside>
-          <div className="mb-3 h-px bg-[#d9d9d9]" />
+          <div className="mb-3 h-px bg-gray-300" />
           <h3 className="mb-4 font-body text-[20px] font-extrabold text-brand-text md:text-[30px]">
             Categories
           </h3>
@@ -123,7 +123,7 @@ export default function FaqList({ items }: FaqListProps) {
                       </svg>
                     </button>
                     {isOpen && (
-                      <div className="border-t border-[#9e9e9e] px-6 pb-5 pt-4">
+                      <div className="border-t border-gray-400 px-6 pb-5 pt-4">
                         <p className="font-body text-[15px] leading-relaxed text-brand-text md:text-[20px] md:leading-[32px]">
                           {item.answer}
                         </p>
