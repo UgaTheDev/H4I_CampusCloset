@@ -20,6 +20,12 @@ interface Event {
 export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
 
+  const upcomingEvents = events.filter((event) => {
+    return (
+      event.isPast == true
+    );
+  });
+
     useEffect(() => {
     async function fetchEvents() {
       try {
@@ -42,7 +48,7 @@ export default function EventsPage() {
 
   return (
   <div>
-    <div className="text-center">
+    <div className="text-center m-[50px]">
       <p style={{ fontFamily: 'Brasika Display', fontSize: 64 }}>Events</p>
       <p style={{ fontFamily: 'Telegraf', fontSize: 24}}>Find upcoming clothing swaps, donation drives, and more campus closet events!</p>
       <div
@@ -58,9 +64,10 @@ export default function EventsPage() {
         borderStyle: "solid",
         padding: "10px",
         opacity: 1,
+        marginTop: "10px"
       }}
       >
-        <span>x+ events hosted this semester</span>
+        <span>15+ events hosted this semester</span>
       </div>
     </div>
     <div
@@ -73,17 +80,30 @@ export default function EventsPage() {
       }}
     />
     <EventCalendar events={events}/>
-    <h1 style={{ fontFamily: "Brasika Display", fontSize: "40px" }}>Upcoming Swaps and Drives</h1>
-    <p style={{ fontFamily: "Telegraf" }}>Join us at our next clothing swap!</p>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-      {events.slice(0, 3).map((e, index) => (
-        <EventCard key={index} event={e} />
-      ))}
+    <div className="mt-[30px] mx-[50px]">
+      
+      <div className="mb-6"> 
+        <h1 style={{ fontFamily: "Brasika Display", fontSize: "40px" }}>Upcoming Swaps and Drives</h1>
+        <p style={{ fontFamily: "Telegraf" }}>Join us at our next clothing swap!</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        {upcomingEvents.slice(0, 3).map((e, index) => (
+          <EventCard key={index} event={e} />
+        ))}
+      </div>
+
     </div>
     
     <SwapVsDrive/>
-  </div>)
+    <p 
+      className="text-5xl text-center m-10 font-bold" 
+      style={{ fontFamily: '"Brasika Display", serif' }}
+    >
+      Photos From Past Events
+    </p>
+  </div>
+  )
 
 
-  // photos from past events 
 }
