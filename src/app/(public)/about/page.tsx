@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Badge from '@/components/ui/Badge'
 
+export const revalidate = 60
+
 export const metadata: Metadata = {
   title: 'About | Campus Closet',
   description:

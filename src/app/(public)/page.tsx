@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Hero from '@/components/landing/Hero'
 
+export const revalidate = 60
+
 export const metadata: Metadata = {
   title: 'Campus Closet — BU Clothing Swap',
   description:

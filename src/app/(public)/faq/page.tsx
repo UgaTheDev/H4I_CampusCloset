@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 
+export const revalidate = 60
+
 export const metadata: Metadata = {
   title: 'FAQ | Campus Closet',
   description:
