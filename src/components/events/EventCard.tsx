@@ -32,7 +32,7 @@ export default function EventCard({ event }: EventCardProps) {
       }}
     >
       <div 
-        className="top-placeholder h-40 bg-gray-100" 
+        className="top-placeholder h-40 bg-purple-100" 
         style={{ borderRadius: "20px 20px 0 0" }}
       >
         {/* Placeholder background */}
