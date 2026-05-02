@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 const pillars = [
   {
     title: 'Sustainability',
@@ -21,11 +23,13 @@ export default function MissionSection() {
   return (
     <section className="bg-white px-6 py-20 md:px-12">
       <div className="mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-2 md:gap-16">
-        <div className="aspect-[6/5] overflow-hidden rounded-[20px]">
-          <img
+        <div className="relative aspect-[6/5] overflow-hidden rounded-[20px]">
+          <Image
             src="/mission.png"
             alt="Campus Closet community photo"
-            className="h-full w-full object-cover"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover"
           />
         </div>
 
