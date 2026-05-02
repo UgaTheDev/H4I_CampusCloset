@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
+import "react-big-calendar/lib/css/react-big-calendar.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],

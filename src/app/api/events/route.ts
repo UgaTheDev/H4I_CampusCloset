@@ -17,6 +17,7 @@ export async function GET() {
     try {
         const events = await prisma.event.findMany({
         orderBy: { createdAt: 'desc' },
+        where: { isPast: false }
         })
         return NextResponse.json({ data: events })
     } catch {
