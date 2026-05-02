@@ -1,15 +1,5 @@
 'use client';
 import { useState, useEffect } from "react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Cell
-} from "recharts";
 
 interface Impact {
   itemsReused: number;
@@ -30,7 +20,6 @@ export default function ImpactCharts() {
         const res = await fetch("/api/impact");
         const json = await res.json();
         
-        // Based on your backend code, Prisma aggregate returns data inside data._sum
         const stats = json?.data?._sum || json;
         setImpact(stats); 
       } catch (err) {
@@ -44,91 +33,71 @@ export default function ImpactCharts() {
   }, []);
 
   if (isLoading) {
-    return <div className="p-16 text-center" style={{ fontFamily: 'Telegraf' }}>Loading impact data...</div>;
+    return <div className="p-16 text-center" style={{ fontFamily: 'Telegraf, sans-serif' }}>Loading impact data...</div>;
   }
 
   if (!impact) {
-    return <div className="p-16 text-center" style={{ fontFamily: 'Telegraf' }}>No data available.</div>;
+    return <div className="p-16 text-center" style={{ fontFamily: 'Telegraf, sans-serif' }}>No data available.</div>;
   }
 
-  // Safe fallbacks in case the database returns null for sums
-  const itemsReused = impact.itemsReused || 0;
-  const attendance = impact.attendance || 0;
-  const wasteDiverted = impact.wasteDivertedKg || 0;
-  const waterSaved = impact.waterSavedL || 0;
+  const wasteLbs = Math.round((impact.wasteDivertedKg || 0) * 2.20462);
+  const waterLiters = Math.round(impact.waterSavedL || 0);
+  const carbonKg = Math.round((impact.carbonSavedKg || 0) * 2.20462);
 
-  // Chart Data Preparation
-  const operationalData = [
-    { name: "Items Reused", value: itemsReused, color: "#DEE8D0" },
-    { name: "Items Donated", value: impact.itemsDonated || 0, color: "#CED8E0" },
-    { name: "Attendance", value: attendance, color: "#F9F0EE" },
-  ];
 
-  const environmentalData = [
-    { name: "Waste Diverted (kg)", value: wasteDiverted, color: "#DEE8D0" },
-    { name: "Carbon Saved (kg)", value: impact.carbonSavedKg || 0, color: "#CED8E0" },
-  ];
+  const roundToTwoSigFigs = (num: number) => Number(num.toPrecision(2));
+
+  // Equivalency Calculations
+  // 1 fully packed suitcase ≈ 40 lbs
+  const rawSuitcases = wasteLbs / 40;
+  // 1 person drinks ≈ 1000 Liters of water per year
+  const rawWaterYears = waterLiters / 1000;
+  // 1 tree absorbs ≈ 48 lbs of CO2 per year
+  const rawTrees = carbonKg / 48;
+
+
+  const suitcases = Math.max(1, roundToTwoSigFigs(rawSuitcases));
+  const waterYears = Math.max(1, roundToTwoSigFigs(rawWaterYears));
+  const trees = Math.max(1, roundToTwoSigFigs(rawTrees));
 
   return (
-    <div className="w-full py-16 px-6" style={{ backgroundColor: '#FCFBFA', color: '#1a1a1a' }}>
+    <div className="w-full py-12" style={{ backgroundColor: 'transparent', color: '#1a1a1a' }}>
       <div className="max-w-5xl mx-auto">
-        
-        {/* Header section matching the image */}
-        <div className="text-center mb-12">
-          <h1 style={{ fontFamily: '"Brasika Display", serif' }} className="text-5xl md:text-6xl text-black">
-            Our Impact
-          </h1>
-          <p style={{ fontFamily: 'Telegraf, sans-serif' }} className="text-lg md:text-xl text-gray-800">
-            Since our launch, Campus Closet has made significant steps in promoting sustainable fashion.
-          </p>
-        </div>
 
-        {/* --- CHARTS SECTION --- */}
-        <div className="pt-10 border-t border-gray-200" style={{ fontFamily: 'Telegraf, sans-serif' }}>
-          <h2 style={{ fontFamily: '"Brasika Display", serif' }} className="text-3xl mb-8 text-center text-black">
-            Visualizing The Change
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        {/* --- EQUIVALENCY SECTION --- */}
+        <div className="pt-8 border-t border-gray-200" style={{ fontFamily: 'Telegraf, sans-serif' }}>
+          
+          <h3 className="text-3xl mb-10 text-center text-black" style={{ fontFamily: '"Brasika Display", serif' }}>
+            What does that look like?
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             
-            {/* Operational Chart */}
-            <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-              <h3 className="text-xl font-bold mb-6 text-center text-gray-800">Community Engagement</h3>
-              <div className="h-72">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={operationalData} margin={{ top: 20, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
-                    <XAxis dataKey="name" tick={{ fill: '#4b5563', fontSize: 12 }} axisLine={false} tickLine={false} />
-                    <YAxis tick={{ fill: '#4b5563', fontSize: 12 }} axisLine={false} tickLine={false} />
-                    <Tooltip cursor={{ fill: '#f9fafb' }} contentStyle={{ borderRadius: '12px', border: '1px solid #eee', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }} />
-                    <Bar dataKey="value" radius={[6, 6, 0, 0]} maxBarSize={60}>
-                      {operationalData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
+            {/* Waste Equivalency */}
+            <div className="bg-brand-stat-terra p-8 rounded-2xl border border-gray-200 shadow-sm flex flex-col items-center text-center transition-transform hover:-translate-y-1">
+              <div className="text-5xl mb-4">🎒</div>
+              <h4 className="text-xl font-bold mb-3 text-gray-800">{wasteLbs.toLocaleString()} lbs of waste</h4>
+              <p className="text-gray-600 leading-relaxed text-sm">
+                Equivalent to the weight of <span className="font-bold text-black">{suitcases.toLocaleString()}+ fully packed suitcases</span> kept out of landfills.
+              </p>
             </div>
 
-            {/* Environmental Chart */}
-            <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-              <h3 className="text-xl font-bold mb-6 text-center text-gray-800">Environmental Savings</h3>
-              <div className="h-72">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={environmentalData} margin={{ top: 20, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
-                    <XAxis dataKey="name" tick={{ fill: '#4b5563', fontSize: 12 }} axisLine={false} tickLine={false} />
-                    <YAxis tick={{ fill: '#4b5563', fontSize: 12 }} axisLine={false} tickLine={false} />
-                    <Tooltip cursor={{ fill: '#f9fafb' }} contentStyle={{ borderRadius: '12px', border: '1px solid #eee', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }} />
-                    <Bar dataKey="value" radius={[6, 6, 0, 0]} maxBarSize={60}>
-                      {environmentalData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
+            {/* Water Equivalency */}
+            <div className="bg-brand-faq-active p-8 rounded-2xl border border-gray-200 shadow-sm flex flex-col items-center text-center transition-transform hover:-translate-y-1">
+              <div className="text-5xl mb-4">💧</div>
+              <h4 className="text-xl font-bold mb-3 text-gray-800">{waterLiters.toLocaleString()} liters of water</h4>
+              <p className="text-gray-600 leading-relaxed text-sm">
+                Enough drinking water to sustain <span className="font-bold text-black">{waterYears.toLocaleString()}+ people</span> for an entire year.
+              </p>
+            </div>
+
+            {/* Carbon Equivalency */}
+            <div className="bg-brand-stat-green p-8 rounded-2xl border border-gray-200 shadow-sm flex flex-col items-center text-center transition-transform hover:-translate-y-1">
+              <div className="text-5xl mb-4">🌱</div>
+              <h4 className="text-xl font-bold mb-3 text-gray-800">{carbonKg.toLocaleString()} lbs of CO₂</h4>
+              <p className="text-gray-600 leading-relaxed text-sm">
+                Equivalent to the carbon absorbed by planting <span className="font-bold text-black">{trees.toLocaleString()}+ trees</span>.
+              </p>
             </div>
 
           </div>

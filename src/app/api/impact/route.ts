@@ -1,8 +1,8 @@
-// TODO: requireAdmin() on all mutating handlers before wiring to Prisma
 import { NextResponse } from 'next/server'
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { createSupabaseServerClient } from '@/lib/supabase-server'
+import { requireAdmin } from '@/lib/admin-guard'
 
 interface CreateImpact {
     itemsReused: number
@@ -13,26 +13,10 @@ interface CreateImpact {
     carbonSavedKg: number
 }
 
-async function requireAdmin(): Promise<{ error: NextResponse } | { error: null }> {
-  const supabase = await createSupabaseServerClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user?.email) {
-    return { error: NextResponse.json({ error: 'Not authenticated' }, { status: 401 }) }
-  }
-
-  const admin = await prisma.adminUser.findUnique({ where: { email: user.email } })
-  if (!admin) {
-    return { error: NextResponse.json({ error: 'Not admin' }, { status: 403 }) }
-  }
-
-  return { error: null }
-}
 
 // GET (aggregated stats), POST (add entry)
 export async function GET() { 
 
-    // event_id (FK, nullable), items_reused, items_donated, attendance, waste_diverted_kg, water_saved_l, carbon_saved_kg
     try {
         const event = await prisma.impactStats.aggregate({
             _sum: {
@@ -63,10 +47,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
     }
 
-    const admin = await prisma.adminUser.findUnique({ where: { email: user.email } })
-    if (!admin) {
-      return NextResponse.json({ error: 'Not admin' }, { status: 403 })
-    }
+    const authResult = await requireAdmin()
+    if (authResult.error) return authResult.error
 
     const body = (await request.json()) as CreateImpact
 
