@@ -20,7 +20,7 @@ export default function AboutPage() {
       <section className="bg-brand-cream px-6 pb-20 pt-16 text-center md:px-12">
         <div className="mx-auto max-w-4xl">
           <div className="mb-6 flex justify-center">
-            <Badge variant="outline" className="px-16">About Us</Badge>
+            <Badge variant="outline" className="border-2 rounded-[30px] px-16 py-2.5 text-[18px]">About Us</Badge>
           </div>
           <h1 className="mb-5 font-display text-[48px] leading-[1.05] text-brand-text md:text-[64px]">
             Campus Closet

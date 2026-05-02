@@ -216,7 +216,7 @@ export default function AdminPhotosPage() {
                 )}
                 <button
                   onClick={() => handleDelete(p.id)}
-                  className="font-body text-[12px] text-red-600 hover:underline"
+                  className="font-body text-[12px] text-brand-terra hover:underline"
                 >
                   Delete
                 </button>

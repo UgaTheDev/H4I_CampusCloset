@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 
 interface FaqSearchProps {
@@ -43,12 +44,12 @@ export default function FaqSearch({ onSearch }: FaqSearchProps) {
             className="h-[52px] w-full rounded-[10px] border border-[#858585] bg-[#f9f9f9] pl-12 pr-4 font-body text-[16px] text-brand-text/60 placeholder:text-brand-text/40 focus:outline-none focus:ring-1 focus:ring-brand-olive md:h-[62px] md:text-[20px]"
           />
         </div>
-        <button
+        <Button
           type="submit"
-          className="h-[52px] rounded-[10px] bg-brand-blue px-6 font-body text-[16px] font-extrabold text-white transition-opacity hover:opacity-90 md:h-[62px] md:px-10 md:text-[24px]"
+          className="h-[52px] rounded-[10px] bg-brand-blue px-6 font-body text-[16px] font-extrabold md:h-[62px] md:px-10 md:text-[24px]"
         >
           Search
-        </button>
+        </Button>
       </form>
     </Card>
   )
