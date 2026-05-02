@@ -20,10 +20,10 @@ export default async function AboutImpactStats() {
   const wasteLbs = Math.round((agg._sum.wasteDivertedKg ?? 0) * KG_TO_LBS)
 
   const cards = [
-    { value: fmt(items), label: 'Clothing Items Swapped', bgClass: 'bg-[#f6f7f4]', colorClass: 'text-brand-dark-olive' },
-    { value: `${swapCount}+`, label: 'Swap Events Hosted', bgClass: 'bg-[#ede7dd]', colorClass: 'text-brand-brown-light' },
-    { value: `${wasteLbs} lbs`, label: 'Waste Diverted', bgClass: 'bg-[#f6f7f4]', colorClass: 'text-brand-dark-olive' },
-    { value: fmt(attendance), label: 'Students Participated', bgClass: 'bg-[#fdf5f3]', colorClass: 'text-brand-terra' },
+    { value: fmt(items), label: 'Clothing Items Swapped', bg: '#f6f7f4', color: '#5f6a4f' },
+    { value: `${swapCount}+`, label: 'Swap Events Hosted', bg: '#ede7dd', color: '#8b6644' },
+    { value: `${wasteLbs} lbs`, label: 'Waste Diverted', bg: '#f6f7f4', color: '#5f6a4f' },
+    { value: fmt(attendance), label: 'Students Participated', bg: '#fdf5f3', color: '#c5543a' },
   ]
 
   return (
@@ -31,9 +31,13 @@ export default async function AboutImpactStats() {
       {cards.map((card) => (
         <div
           key={card.label}
-          className={`overflow-hidden rounded-[15px] border-2 border-brand-text px-6 py-6 ${card.bgClass}`}
+          className="overflow-hidden rounded-[15px] border-2 border-brand-text px-6 py-6"
+          style={{ backgroundColor: card.bg }}
         >
-          <p className={`mb-1 font-body text-[28px] font-extrabold leading-[40px] md:text-[36px] ${card.colorClass}`}>
+          <p
+            className="mb-1 font-body text-[28px] font-extrabold leading-[40px] md:text-[36px]"
+            style={{ color: card.color }}
+          >
             {card.value}
           </p>
           <p className="font-body text-[14px] text-brand-text md:text-[16px]">

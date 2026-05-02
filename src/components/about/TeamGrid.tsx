@@ -15,10 +15,10 @@ export default async function TeamGrid() {
     <section className="bg-white px-6 py-20 md:px-12">
       <div className="mx-auto max-w-6xl">
         <div className="mb-12 text-center">
-          <h2 className="mb-3 font-display text-[40px] text-brand-text md:text-[52px]">
+          <h2 className="mb-3 font-display text-[40px] text-brand-text md:text-[54px]">
             Meet the E-Board
           </h2>
-          <p className="font-body text-[15px] text-brand-text/70">
+          <p className="font-body text-[20px] leading-[28px] text-brand-text">
             A dedicated team of students passionate about sustainability, fashion, and community.
           </p>
         </div>
@@ -28,7 +28,7 @@ export default async function TeamGrid() {
             <div
               key={member?.id ?? i}
               className={cn(
-                'aspect-[4/5] overflow-hidden rounded-sm bg-white shadow-md transition-transform',
+                'aspect-[4/5] overflow-hidden rounded-sm bg-white shadow-[0px_4px_20px_0px_rgba(0,0,0,0.25)] transition-transform',
                 ROTATIONS[i % ROTATIONS.length],
               )}
             >
