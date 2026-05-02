@@ -32,10 +32,8 @@ interface EventCalendarProps {
 }
 
 export default function EventCalendar({ events }: EventCalendarProps) {
-  // 1. Add state to track the currently viewed date on the calendar
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  // 2. Filter events to only include those in the currently viewed month and year
   const currentMonthEvents = events.filter((event) => {
     return (
       event.date.getMonth() === currentDate.getMonth() &&
@@ -43,7 +41,6 @@ export default function EventCalendar({ events }: EventCalendarProps) {
     );
   });
 
-  // 3. Group ONLY the filtered events
   const groupedEvents = currentMonthEvents.reduce((acc: Record<string, Event[]>, event) => {
     const key = event.date.toDateString();
     if (!acc[key]) acc[key] = [];
@@ -66,24 +63,21 @@ export default function EventCalendar({ events }: EventCalendarProps) {
     });
   }
 
-  // The calendar itself can take all events; it automatically only shows what's in view
   const calendarEvents = events.map((e) => ({
     title: e.title,
     start: e.date,
     end: e.date,
   }));
 
-  // Helper to dynamically show the current month in the subtitle
   const currentMonthString = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
 
   return (
     <div style={{ backgroundColor: "#ffffff", display: "flex", justifyContent: "space-between", padding: "40px" }}>
       
-      <div style={{ width: "60%" }}>
+      <div style={{ width: "60%", marginTop: "30px", marginLeft: "20px" }}>
         <h1 style={{ fontFamily: "Brasika Display", fontSize: "48px", marginBottom: "0px" }}>
           Calendar
         </h1>
-        {/* Update subtitle to dynamically show the currently viewed month */}
         <p style={{ fontFamily: "Telegraf", marginBottom: "30px", color: "#666" }}>
           (Events for {currentMonthString})
         </p>
