@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/admin-guard'
 
@@ -25,8 +26,11 @@ export async function PATCH(request: Request, { params }: RouteContext) {
       data: { name, role, bio, photoUrl, displayOrder },
     })
     return NextResponse.json({ data: member })
-  } catch {
-    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    }
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
 
@@ -38,7 +42,10 @@ export async function DELETE(_request: Request, { params }: RouteContext) {
   try {
     await prisma.teamMember.delete({ where: { id } })
     return NextResponse.json({ ok: true })
-  } catch {
-    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    }
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

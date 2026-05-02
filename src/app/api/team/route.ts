@@ -20,8 +20,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'name and role are required' }, { status: 400 })
   }
 
-  const member = await prisma.teamMember.create({
-    data: { name, role, bio, photoUrl, displayOrder: displayOrder ?? 0 },
-  })
-  return NextResponse.json({ data: member }, { status: 201 })
+  try {
+    const member = await prisma.teamMember.create({
+      data: { name, role, bio, photoUrl, displayOrder: displayOrder ?? 0 },
+    })
+    return NextResponse.json({ data: member }, { status: 201 })
+  } catch {
+    return NextResponse.json({ error: 'Failed to create' }, { status: 500 })
+  }
 }
