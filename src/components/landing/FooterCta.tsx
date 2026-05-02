@@ -24,9 +24,6 @@ export default function FooterCta() {
           </Button>
         </div>
       </div>
-
-      {/* Brown block */}
-      <div className="mx-auto mt-16 h-64 max-w-5xl rounded-t-2xl bg-brand-brown" />
     </section>
   )
 }
