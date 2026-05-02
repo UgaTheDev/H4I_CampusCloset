@@ -34,7 +34,8 @@ export async function POST(request: Request) {
     'image/gif': 'gif',
   }
   const ext = MIME_TO_EXT[file.type] ?? 'jpg'
-  const filename = `team/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+  const folder = (formData.get('folder') as string) || 'team'
+  const filename = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
 
   const buffer = await file.arrayBuffer()
   const { error } = await supabaseAdmin.storage

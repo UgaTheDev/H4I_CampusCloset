@@ -1,14 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import Input from '@/components/ui/Input'
 import type { GalleryPhoto } from '@/types'
 
-type Form = { url: string; caption: string; eventId: string }
+type Form = { caption: string; eventId: string }
 
-const EMPTY: Form = { url: '', caption: '', eventId: '' }
+const EMPTY: Form = { caption: '', eventId: '' }
 
 type EventOption = { id: string; title: string }
 
@@ -17,8 +17,11 @@ export default function AdminPhotosPage() {
   const [events, setEvents] = useState<EventOption[]>([])
   const [loading, setLoading] = useState(true)
   const [form, setForm] = useState<Form>(EMPTY)
+  const [file, setFile] = useState<File | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
 
   async function load() {
     setLoading(true)
@@ -43,22 +46,46 @@ export default function AdminPhotosPage() {
     load()
   }, [])
 
+  function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const selected = e.target.files?.[0]
+    if (selected) {
+      setFile(selected)
+      setPreview(URL.createObjectURL(selected))
+    }
+    e.target.value = ''
+  }
+
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault()
+    if (!file) {
+      setError('Please select a photo to upload.')
+      return
+    }
     setSubmitting(true)
     setError(null)
     try {
+      // Upload file to Supabase Storage
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('folder', 'gallery')
+      const uploadRes = await fetch('/api/upload', { method: 'POST', body: formData })
+      const uploadJson = await uploadRes.json()
+      if (!uploadRes.ok) throw new Error(uploadJson.error ?? 'Upload failed')
+
+      // Create gallery photo record with the uploaded URL
       const res = await fetch('/api/photos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          url: form.url,
+          url: uploadJson.url,
           caption: form.caption || undefined,
           eventId: form.eventId || undefined,
         }),
       })
       if (!res.ok) throw new Error((await res.json()).error ?? 'Failed')
       setForm(EMPTY)
+      setFile(null)
+      setPreview(null)
       await load()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to add photo')
@@ -82,22 +109,61 @@ export default function AdminPhotosPage() {
     <div className="mx-auto max-w-4xl">
       <h1 className="font-display text-[28px] text-brand-brown">Photo Gallery</h1>
       <p className="mt-2 font-body text-[14px] text-brand-text/60">
-        Manage photos shown on the About page and landing gallery.{' '}
-        <span className="text-brand-text/40">
-          (Direct file upload coming soon — paste a hosted URL for now.)
-        </span>
+        Manage photos shown on the About page and landing gallery.
       </p>
 
       <Card className="mt-8 p-6">
         <h2 className="mb-4 font-heading text-[16px] font-bold text-brand-text">Add Photo</h2>
         <form onSubmit={handleCreate} className="flex flex-col gap-4">
-          <Input
-            label="Photo URL"
-            placeholder="https://..."
-            value={form.url}
-            onChange={(e) => setForm({ ...form, url: e.target.value })}
-            required
-          />
+          {/* File upload */}
+          <div>
+            <p className="mb-1 font-body text-[14px] text-brand-text">Photo</p>
+            {preview ? (
+              <div className="relative mb-2 h-48 w-full overflow-hidden rounded-lg bg-gray-100">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="h-full w-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => { setFile(null); setPreview(null) }}
+                  className="absolute right-2 top-2 rounded-full bg-black/50 p-1.5 text-white hover:bg-black/70"
+                >
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => fileRef.current?.click()}
+                className="flex h-48 w-full items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:border-brand-olive hover:bg-brand-cream"
+              >
+                <div className="text-center">
+                  <svg className="mx-auto mb-2 h-8 w-8 text-brand-text/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5a2.25 2.25 0 002.25-2.25V5.25a2.25 2.25 0 00-2.25-2.25H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
+                  </svg>
+                  <p className="font-body text-[14px] text-brand-text/50">
+                    Click to upload a photo
+                  </p>
+                  <p className="font-body text-[12px] text-brand-text/30">
+                    JPG, PNG, WebP, GIF — max 5 MB
+                  </p>
+                </div>
+              </button>
+            )}
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              className="hidden"
+              onChange={handleFileSelect}
+            />
+          </div>
+
           <Input
             label="Caption (optional)"
             value={form.caption}
@@ -119,8 +185,8 @@ export default function AdminPhotosPage() {
             </select>
           </div>
           {error && <p className="font-body text-[13px] text-brand-terra">{error}</p>}
-          <Button type="submit" variant="primary" disabled={submitting}>
-            {submitting ? 'Adding...' : 'Add Photo'}
+          <Button type="submit" variant="primary" disabled={submitting || !file}>
+            {submitting ? 'Uploading...' : 'Add Photo'}
           </Button>
         </form>
       </Card>
