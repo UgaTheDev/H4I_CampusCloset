@@ -143,7 +143,7 @@ export default function AdminTeamPage() {
             value={form.bio}
             onChange={(e) => setForm({ ...form, bio: e.target.value })}
           />
-          {error && <p className="font-body text-[13px] text-red-600">{error}</p>}
+          {error && <p className="font-body text-[13px] text-brand-terra">{error}</p>}
           <Button type="submit" variant="primary" disabled={submitting}>
             {submitting ? 'Adding...' : 'Add Member'}
           </Button>
@@ -199,7 +199,7 @@ export default function AdminTeamPage() {
                 </Button>
                 <button
                   onClick={() => handleDelete(m.id)}
-                  className="font-body text-[13px] text-red-600 hover:underline"
+                  className="font-body text-[13px] text-brand-terra hover:underline"
                 >
                   Delete
                 </button>

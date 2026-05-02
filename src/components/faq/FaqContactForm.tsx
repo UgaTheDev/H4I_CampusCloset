@@ -92,20 +92,22 @@ export default function FaqContactForm() {
           onChange={(e) => setMessage(e.target.value)}
           required
         />
-        <button
+        <Button
           type="submit"
+          variant="primary"
+          fullWidth
           disabled={status === 'submitting'}
-          className="h-[54px] w-full rounded-[10px] bg-brand-olive font-body text-[20px] font-extrabold tracking-[-0.26px] text-white transition-opacity hover:opacity-90 disabled:opacity-60 md:text-[26px]"
+          className="h-[54px] rounded-[10px] font-body text-[20px] font-extrabold tracking-[-0.26px] md:text-[26px]"
         >
           {status === 'submitting' ? 'Sending...' : 'Send Message'}
-        </button>
+        </Button>
         {status === 'success' && (
           <p className="text-center font-body text-[14px] text-brand-olive">
             Thanks! We&apos;ll get back to you within 24 hours.
           </p>
         )}
         {status === 'error' && (
-          <p className="text-center font-body text-[14px] text-red-600">
+          <p className="text-center font-body text-[14px] text-brand-terra">
             {error ?? 'Failed to send. Please try again.'}
           </p>
         )}

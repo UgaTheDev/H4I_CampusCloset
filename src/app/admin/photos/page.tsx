@@ -118,7 +118,7 @@ export default function AdminPhotosPage() {
               ))}
             </select>
           </div>
-          {error && <p className="font-body text-[13px] text-red-600">{error}</p>}
+          {error && <p className="font-body text-[13px] text-brand-terra">{error}</p>}
           <Button type="submit" variant="primary" disabled={submitting}>
             {submitting ? 'Adding...' : 'Add Photo'}
           </Button>
@@ -150,7 +150,7 @@ export default function AdminPhotosPage() {
                 )}
                 <button
                   onClick={() => handleDelete(p.id)}
-                  className="font-body text-[12px] text-red-600 hover:underline"
+                  className="font-body text-[12px] text-brand-terra hover:underline"
                 >
                   Delete
                 </button>
