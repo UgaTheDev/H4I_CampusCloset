@@ -185,8 +185,13 @@ export default function AdminPhotosPage() {
             </select>
           </div>
           {error && <p className="font-body text-[13px] text-brand-terra">{error}</p>}
+<<<<<<< HEAD
           <Button type="submit" variant="primary" disabled={submitting || !file}>
             {submitting ? 'Uploading...' : 'Add Photo'}
+=======
+          <Button type="submit" variant="primary" disabled={submitting || !form.url}>
+            {submitting ? 'Adding...' : 'Add Photo'}
+>>>>>>> 3c27af5 (feat: file upload for gallery photos admin page)
           </Button>
         </form>
       </Card>

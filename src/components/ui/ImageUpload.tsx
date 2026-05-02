@@ -6,10 +6,11 @@ import Image from 'next/image'
 interface ImageUploadProps {
   currentUrl?: string
   onUpload: (url: string) => void
+  folder?: string
   className?: string
 }
 
-export default function ImageUpload({ currentUrl, onUpload, className }: ImageUploadProps) {
+export default function ImageUpload({ currentUrl, onUpload, folder = 'team', className }: ImageUploadProps) {
   const [preview, setPreview] = useState<string | null>(currentUrl ?? null)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -23,6 +24,7 @@ export default function ImageUpload({ currentUrl, onUpload, className }: ImageUp
     try {
       const form = new FormData()
       form.append('file', file)
+      form.append('folder', folder)
       const res = await fetch('/api/upload', { method: 'POST', body: form })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error ?? 'Upload failed')
