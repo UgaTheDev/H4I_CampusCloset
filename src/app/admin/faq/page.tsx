@@ -24,10 +24,16 @@ export default function AdminFaqPage() {
 
   async function load() {
     setLoading(true)
-    const res = await fetch('/api/faq')
-    const json = await res.json()
-    setItems(json.data ?? [])
-    setLoading(false)
+    try {
+      const res = await fetch('/api/faq')
+      if (!res.ok) throw new Error(`Failed to load: ${res.status}`)
+      const json = await res.json()
+      setItems(json.data ?? [])
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load FAQ items')
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -55,37 +61,52 @@ export default function AdminFaqPage() {
   }
 
   async function handleUpdate(item: FaqItem, patch: Partial<FaqItem>) {
-    await fetch(`/api/faq/${item.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(patch),
-    })
-    await load()
+    try {
+      const res = await fetch(`/api/faq/${item.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(patch),
+      })
+      if (!res.ok) throw new Error((await res.json()).error ?? `Failed: ${res.status}`)
+      await load()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update')
+    }
   }
 
   async function handleDelete(id: string) {
     if (!confirm('Delete this FAQ item?')) return
-    await fetch(`/api/faq/${id}`, { method: 'DELETE' })
-    await load()
+    try {
+      const res = await fetch(`/api/faq/${id}`, { method: 'DELETE' })
+      if (!res.ok) throw new Error((await res.json()).error ?? `Failed: ${res.status}`)
+      await load()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete')
+    }
   }
 
   async function handleReorder(index: number, direction: -1 | 1) {
     const swapWith = visible[index + direction]
     const current = visible[index]
     if (!swapWith || !current) return
-    await Promise.all([
-      fetch(`/api/faq/${current.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ displayOrder: swapWith.displayOrder }),
-      }),
-      fetch(`/api/faq/${swapWith.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ displayOrder: current.displayOrder }),
-      }),
-    ])
-    await load()
+    try {
+      const [r1, r2] = await Promise.all([
+        fetch(`/api/faq/${current.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ displayOrder: swapWith.displayOrder }),
+        }),
+        fetch(`/api/faq/${swapWith.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ displayOrder: current.displayOrder }),
+        }),
+      ])
+      if (!r1.ok || !r2.ok) throw new Error('Failed to reorder')
+      await load()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to reorder')
+    }
   }
 
   const visible = filter === 'All' ? items : items.filter((i) => i.category === filter)
