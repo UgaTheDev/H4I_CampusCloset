@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
-import { createSupabaseServerClient } from '@/lib/supabase-server'
-import { prisma } from '@/lib/prisma'
+import { createSupabaseServerClient } from './supabase-server'
+import { prisma } from './prisma'
 
 export async function requireAdmin() {
   const supabase = await createSupabaseServerClient()

@@ -25,8 +25,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'url is required' }, { status: 400 })
   }
 
-  const photo = await prisma.galleryPhoto.create({
-    data: { url, caption, eventId },
-  })
-  return NextResponse.json({ data: photo }, { status: 201 })
+  try {
+    const photo = await prisma.galleryPhoto.create({
+      data: { url, caption, eventId },
+    })
+    return NextResponse.json({ data: photo }, { status: 201 })
+  } catch {
+    return NextResponse.json({ error: 'Failed to create' }, { status: 500 })
+  }
 }

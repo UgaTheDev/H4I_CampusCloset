@@ -19,6 +19,10 @@ const config: Config = {
           'dark-olive':  '#5F6A4F',
           terra:        '#C5543A',
           text:         '#222222',
+          'stat-green': '#F6F7F4',
+          'stat-tan':   '#EDE7DD',
+          'stat-terra': '#FDF5F3',
+          'faq-active': '#F5F7F9',
         },
       },
       fontFamily: {

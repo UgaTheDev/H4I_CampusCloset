@@ -53,7 +53,7 @@ export default function FaqList({ items }: FaqListProps) {
 
       <div className="mx-auto grid max-w-5xl gap-10 md:grid-cols-[260px_1fr]">
         <aside>
-          <div className="mb-3 h-px bg-[#d9d9d9]" />
+          <div className="mb-3 h-px bg-gray-300" />
           <h3 className="mb-4 font-body text-[20px] font-extrabold text-brand-text md:text-[30px]">
             Categories
           </h3>
@@ -68,7 +68,7 @@ export default function FaqList({ items }: FaqListProps) {
                     className={cn(
                       'w-full rounded-[10px] px-5 py-2.5 text-left font-body text-[16px] transition-colors md:text-[20px]',
                       isActive
-                        ? 'border-l-[7px] border-brand-blue-light bg-[#f5f7f9] pl-4 font-medium text-brand-text'
+                        ? 'border-l-[7px] border-brand-blue-light bg-brand-faq-active pl-4 font-medium text-brand-text'
                         : 'text-brand-text/70 hover:text-brand-text',
                     )}
                   >
@@ -93,8 +93,8 @@ export default function FaqList({ items }: FaqListProps) {
                   <div
                     key={item.id}
                     className={cn(
-                      'overflow-hidden rounded-[15px] border border-[#9e9e9e]',
-                      isOpen ? 'bg-[#f5f7f9]' : 'bg-white',
+                      'overflow-hidden rounded-[15px] border border-gray-400',
+                      isOpen ? 'bg-brand-faq-active' : 'bg-white',
                     )}
                   >
                     <button
@@ -123,7 +123,7 @@ export default function FaqList({ items }: FaqListProps) {
                       </svg>
                     </button>
                     {isOpen && (
-                      <div className="border-t border-[#9e9e9e] px-6 pb-5 pt-4">
+                      <div className="border-t border-gray-400 px-6 pb-5 pt-4">
                         <p className="font-body text-[15px] leading-relaxed text-brand-text md:text-[20px] md:leading-[32px]">
                           {item.answer}
                         </p>

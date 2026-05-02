@@ -20,13 +20,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'question and answer are required' }, { status: 400 })
   }
 
-  const item = await prisma.faqItem.create({
-    data: {
-      question,
-      answer,
-      category: category ?? 'General',
-      displayOrder: displayOrder ?? 0,
-    },
-  })
-  return NextResponse.json({ data: item }, { status: 201 })
+  try {
+    const item = await prisma.faqItem.create({
+      data: {
+        question,
+        answer,
+        category: category ?? 'General',
+        displayOrder: displayOrder ?? 0,
+      },
+    })
+    return NextResponse.json({ data: item }, { status: 201 })
+  } catch {
+    return NextResponse.json({ error: 'Failed to create' }, { status: 500 })
+  }
 }
