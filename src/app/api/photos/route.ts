@@ -8,12 +8,11 @@ export async function GET(request: Request) {
 
   const photos = await prisma.galleryPhoto.findMany({
     where: eventId ? { eventId } : undefined,
-    orderBy: { createdAt: 'desc' },
+    orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
   })
   return NextResponse.json({ data: photos })
 }
 
-// TODO: support direct file upload via Supabase Storage; for now accept a hosted URL
 export async function POST(request: Request) {
   const guard = await requireAdmin()
   if (guard.error) return guard.error

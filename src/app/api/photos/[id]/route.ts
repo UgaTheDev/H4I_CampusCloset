@@ -18,12 +18,12 @@ export async function PATCH(request: Request, { params }: RouteContext) {
 
   const { id } = await params
   const body = await request.json()
-  const { url, caption, eventId } = body
+  const { url, caption, eventId, displayOrder } = body
 
   try {
     const photo = await prisma.galleryPhoto.update({
       where: { id },
-      data: { url, caption, eventId },
+      data: { url, caption, eventId, displayOrder },
     })
     return NextResponse.json({ data: photo })
   } catch (err) {
