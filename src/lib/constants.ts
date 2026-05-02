@@ -10,6 +10,7 @@ export const NAV_LINKS = [
   { label: "About", href: "/about" },
   { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },
+  { label: "Admin", href: "/admin" },
 ] as const;
 
 export const SITE_METADATA = {
