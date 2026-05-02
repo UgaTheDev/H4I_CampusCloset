@@ -7,8 +7,8 @@ export default function AdminDashboardPage() {
   const [email, setEmail] = useState<string | null>(null)
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setEmail(session?.user?.email ?? null)
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setEmail(user?.email ?? null)
     })
   }, [])
 

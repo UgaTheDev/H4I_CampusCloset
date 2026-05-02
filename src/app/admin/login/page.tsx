@@ -13,8 +13,8 @@ export default function AdminLoginPage() {
 
   useEffect(() => {
     // Check on mount
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) router.replace('/admin')
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) router.replace('/admin')
     })
 
     // Auto-redirect when session appears (e.g. after OAuth callback)
