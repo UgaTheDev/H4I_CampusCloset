@@ -22,7 +22,7 @@ export default function Footer() {
           </Link>
           <p className="mt-4 font-body text-[16px] leading-relaxed text-white/80">
             A sustainability-focused clothing swap initiative at Boston
-            University, built by Hack4Impact BU.
+            University.
           </p>
         </div>
 

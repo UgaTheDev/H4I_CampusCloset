@@ -1,6 +1,6 @@
 # Campus Closet
 
-A sustainability-focused clothing swap website for Boston University, built by Hack4Impact BU. Features a public site for students and a custom admin portal for non-technical eboard members to manage events, impact data, FAQ, team bios, photos, donation bins, and contact requests.
+A sustainability-focused clothing swap website for Boston University. Features a public site for students and a custom admin portal for non-technical eboard members to manage events, impact data, FAQ, team bios, photos, donation bins, and contact requests.
 
 ## Tech Stack
 
@@ -111,11 +111,11 @@ Work is divided by data domain. Each developer owns the database tables, API rou
 
 All required vars are in `.env.example`. Real values go in `.env` (gitignored). Also set in Vercel project settings.
 
-| Variable | Description |
-|----------|-------------|
-| `DATABASE_URL` | Pooled connection (port 6543, `?pgbouncer=true`) |
-| `DIRECT_URL` | Direct connection (port 5432, for migrations) |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key (server only) |
-| `NEXT_PUBLIC_SITE_URL` | Production URL (for OAuth redirects) |
+| Variable                        | Description                                      |
+| ------------------------------- | ------------------------------------------------ |
+| `DATABASE_URL`                  | Pooled connection (port 6543, `?pgbouncer=true`) |
+| `DIRECT_URL`                    | Direct connection (port 5432, for migrations)    |
+| `NEXT_PUBLIC_SUPABASE_URL`      | Supabase project URL                             |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key                           |
+| `SUPABASE_SERVICE_ROLE_KEY`     | Supabase service role key (server only)          |
+| `NEXT_PUBLIC_SITE_URL`          | Production URL (for OAuth redirects)             |
