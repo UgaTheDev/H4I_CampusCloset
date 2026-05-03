@@ -57,7 +57,7 @@ export async function PUT(request: Request,
     if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
       return NextResponse.json({ error: 'Event not found' }, { status: 404 })
     }
-    return NextResponse.json({ error: 'Failed to get event' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to update event' }, { status: 500 })
   }
 }
 
@@ -73,7 +73,7 @@ export async function DELETE(
 
     await prisma.event.delete({ where: { id } })
 
-    return NextResponse.json({ message: 'Event deleted' })
+    return NextResponse.json({ ok: true })
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
       return NextResponse.json({ error: 'Event not found' }, { status: 404 })

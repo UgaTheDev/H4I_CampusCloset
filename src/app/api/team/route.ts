@@ -3,10 +3,14 @@ import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/admin-guard'
 
 export async function GET() {
-  const members = await prisma.teamMember.findMany({
-    orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
-  })
-  return NextResponse.json({ data: members })
+  try {
+    const members = await prisma.teamMember.findMany({
+      orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
+    })
+    return NextResponse.json({ data: members })
+  } catch {
+    return NextResponse.json({ error: 'Failed to fetch' }, { status: 500 })
+  }
 }
 
 export async function POST(request: Request) {

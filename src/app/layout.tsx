@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     type: 'website',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'Campus Closet — BU Clothing Swap',
     description: 'Swap, donate, and discover clothing while reducing fast fashion at BU.',
   },

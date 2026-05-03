@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/admin-guard'
 
@@ -29,10 +28,7 @@ export async function GET() {
         })
 
         return NextResponse.json({ data: event })
-    } catch (err) {
-    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
-      return NextResponse.json({ error: 'Impact stats not found' }, { status: 404 })
-    }
+    } catch {
     return NextResponse.json({ error: 'Failed to get impact stats' }, { status: 500 })
   }
 }

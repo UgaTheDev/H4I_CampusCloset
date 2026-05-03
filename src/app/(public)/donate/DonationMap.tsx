@@ -45,6 +45,7 @@ export default function DonationMap() {
       zoom={15}
       className="h-full w-full"
       scrollWheelZoom={false}
+      aria-label="Donation bin locations map"
     >
       <TileLayer
         attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'

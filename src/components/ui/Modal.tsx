@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { cn } from '@/lib/cn'
 
 interface ModalProps {
@@ -12,6 +12,8 @@ interface ModalProps {
 }
 
 export default function Modal({ open, onClose, title, className, children }: ModalProps) {
+  const dialogRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     if (!open) return
 
@@ -21,6 +23,9 @@ export default function Modal({ open, onClose, title, className, children }: Mod
 
     document.addEventListener('keydown', handleEscape)
     document.body.style.overflow = 'hidden'
+
+    // Focus the dialog container on open for screen readers
+    dialogRef.current?.focus()
 
     return () => {
       document.removeEventListener('keydown', handleEscape)
@@ -34,10 +39,12 @@ export default function Modal({ open, onClose, title, className, children }: Mod
     <div className="fixed inset-0 z-[100] flex items-center justify-center">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} aria-hidden="true" />
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal={true}
-        aria-label={title}
-        className={cn('relative z-10 w-full max-w-lg rounded-xl bg-white p-6 shadow-xl', className)}
+        aria-labelledby={title ? 'modal-title' : undefined}
+        tabIndex={-1}
+        className={cn('relative z-10 w-full max-w-lg rounded-xl bg-white p-6 shadow-xl outline-none', className)}
       >
         <button
           onClick={onClose}
@@ -47,7 +54,7 @@ export default function Modal({ open, onClose, title, className, children }: Mod
           &times;
         </button>
         {title && (
-          <h2 className="mb-4 font-heading text-[20px] font-bold text-brand-text pr-8">{title}</h2>
+          <h2 id="modal-title" className="mb-4 font-heading text-[20px] font-bold text-brand-text pr-8">{title}</h2>
         )}
         {children}
       </div>

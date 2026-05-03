@@ -6,10 +6,14 @@ import { requireAdmin } from '@/lib/admin-guard'
 type RouteContext = { params: Promise<{ id: string }> }
 
 export async function GET(_request: Request, { params }: RouteContext) {
-  const { id } = await params
-  const member = await prisma.teamMember.findUnique({ where: { id } })
-  if (!member) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  return NextResponse.json({ data: member })
+  try {
+    const { id } = await params
+    const member = await prisma.teamMember.findUnique({ where: { id } })
+    if (!member) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    return NextResponse.json({ data: member })
+  } catch {
+    return NextResponse.json({ error: 'Failed to fetch' }, { status: 500 })
+  }
 }
 
 export async function PATCH(request: Request, { params }: RouteContext) {

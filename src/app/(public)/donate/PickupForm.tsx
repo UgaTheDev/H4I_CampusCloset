@@ -144,7 +144,7 @@ export default function PickupForm() {
       />
 
       {error && (
-        <p className="font-body text-[14px] text-red-500">{error}</p>
+        <p role="alert" className="font-body text-[14px] text-brand-terra">{error}</p>
       )}
 
       <div className="mt-2 flex">
