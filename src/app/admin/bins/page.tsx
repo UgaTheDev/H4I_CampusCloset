@@ -185,7 +185,7 @@ export default function AdminBinsPage() {
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-olive border-t-transparent" />
         </div>
       ) : error ? (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-5 py-4">
+        <div className="rounded-xl border border-brand-terra/20 bg-brand-terra/5 px-5 py-4">
           <p className="font-body text-[14px] text-brand-terra">{error}</p>
         </div>
       ) : bins.length === 0 ? (

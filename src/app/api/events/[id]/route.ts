@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { Prisma } from '@prisma/client'
+import { Prisma, EventType } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/admin-guard'
 
@@ -46,9 +46,26 @@ export async function PUT(request: Request,
 
         const { title, type, location, description, itemLimit, isPast } = body
 
+        const validTypes = ['swap', 'drive', 'meeting']
+        if (title !== undefined && (typeof title !== 'string' || title.trim() === '')) {
+          return NextResponse.json({ error: 'title must be a non-empty string' }, { status: 400 })
+        }
+        if (type !== undefined && (typeof type !== 'string' || !validTypes.includes(type))) {
+          return NextResponse.json({ error: 'type must be one of: swap, drive, meeting' }, { status: 400 })
+        }
+        if (location !== undefined && (typeof location !== 'string' || location.trim() === '')) {
+          return NextResponse.json({ error: 'location must be a non-empty string' }, { status: 400 })
+        }
+        if (itemLimit !== undefined && (!Number.isInteger(itemLimit) || itemLimit < 0)) {
+          return NextResponse.json({ error: 'itemLimit must be a non-negative integer' }, { status: 400 })
+        }
+        if (isPast !== undefined && typeof isPast !== 'boolean') {
+          return NextResponse.json({ error: 'isPast must be a boolean' }, { status: 400 })
+        }
+
         const event = await prisma.event.update({
             where: { id },
-            data: { title, type, location, description, itemLimit, isPast },
+            data: { title, type: type as EventType | undefined, location, description, itemLimit, isPast },
         })
 
         return NextResponse.json({ data: event })

@@ -33,12 +33,12 @@ export async function PATCH(
 
     const updateData: {
       status?: string
-      preferredDate?: string
+      preferredDate?: Date
       preferredTime?: string
       preferredLocation?: string
     } = {}
     if (body.status !== undefined) updateData.status = body.status
-    if (body.preferredDate !== undefined) updateData.preferredDate = body.preferredDate
+    if (body.preferredDate !== undefined) updateData.preferredDate = new Date(body.preferredDate)
     if (body.preferredTime !== undefined) updateData.preferredTime = body.preferredTime
     if (body.preferredLocation !== undefined) updateData.preferredLocation = body.preferredLocation
 

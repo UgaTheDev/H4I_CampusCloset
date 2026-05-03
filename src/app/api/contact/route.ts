@@ -52,7 +52,7 @@ export async function POST(request: Request) {
         message: messageTrim,
         type: resolvedType,
         preferredLocation: preferredLocation?.trim() ?? null,
-        preferredDate: preferredDate?.trim() ?? null,
+        preferredDate: preferredDate ? new Date(preferredDate) : null,
         preferredTime: preferredTime?.trim() ?? null,
       },
     })
