@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import Badge from '@/components/ui/Badge'
 import EventCalendar from '@/components/events/EventCalendar'
 import EventCard from '@/components/events/EventCard'
-import SwapVsDrive from '@/components/events/SwapVsDrive'
 
 interface Event {
   id: string
@@ -92,10 +91,6 @@ export default function EventsPageClient() {
         )}
       </div>
 
-      <SwapVsDrive />
-      <h2 className="m-10 text-center font-display text-5xl font-bold">
-        Photos From Past Events
-      </h2>
     </div>
   )
 }
