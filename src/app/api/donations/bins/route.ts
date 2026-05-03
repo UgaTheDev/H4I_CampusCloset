@@ -1,7 +1,6 @@
-// TODO: requireAdmin() on all mutating handlers before wiring to Prisma
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { createSupabaseServerClient } from '@/lib/supabase-server'
+import { requireAdmin } from '@/lib/admin-guard'
 
 interface CreateBinBody {
   name: string
@@ -26,17 +25,8 @@ export async function GET() {
 // Admin only — create a new bin
 export async function POST(request: Request) {
   try {
-    const supabase = await createSupabaseServerClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user?.email) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
-    }
-
-    const admin = await prisma.adminUser.findUnique({ where: { email: user.email } })
-    if (!admin) {
-      return NextResponse.json({ error: 'Not admin' }, { status: 403 })
-    }
+    const guard = await requireAdmin()
+    if (guard.error) return guard.error
 
     const body = (await request.json()) as CreateBinBody
     const { name, building, latitude, longitude, active } = body

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
-import { createSupabaseServerClient } from '@/lib/supabase-server'
+import { requireAdmin } from '@/lib/admin-guard'
 
 interface UpdateContactBody {
   status?: string
@@ -20,17 +20,8 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const supabase = await createSupabaseServerClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user?.email) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
-    }
-
-    const admin = await prisma.adminUser.findUnique({ where: { email: user.email } })
-    if (!admin) {
-      return NextResponse.json({ error: 'Not admin' }, { status: 403 })
-    }
+    const guard = await requireAdmin()
+    if (guard.error) return guard.error
 
     const { id } = await params
     const body = (await request.json()) as UpdateContactBody
@@ -42,12 +33,12 @@ export async function PATCH(
 
     const updateData: {
       status?: string
-      preferredDate?: string
+      preferredDate?: Date
       preferredTime?: string
       preferredLocation?: string
     } = {}
     if (body.status !== undefined) updateData.status = body.status
-    if (body.preferredDate !== undefined) updateData.preferredDate = body.preferredDate
+    if (body.preferredDate !== undefined) updateData.preferredDate = new Date(body.preferredDate)
     if (body.preferredTime !== undefined) updateData.preferredTime = body.preferredTime
     if (body.preferredLocation !== undefined) updateData.preferredLocation = body.preferredLocation
 

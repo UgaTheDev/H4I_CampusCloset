@@ -32,7 +32,7 @@ export default function AdminSidebar() {
         </Link>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-3 py-4">
+      <nav aria-label="Admin navigation" className="flex-1 overflow-y-auto px-3 py-4">
         <ul className="flex flex-col gap-1">
           {ADMIN_LINKS.map((link) => {
             const isActive =

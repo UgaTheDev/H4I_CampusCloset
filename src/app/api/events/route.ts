@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { EventType } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/admin-guard'
 
@@ -64,7 +65,7 @@ export async function POST(request: Request) {
     const event = await prisma.event.create({
       data: {
         title,
-        type,
+        type: type as EventType,
         date: new Date(date),
         location,
         description,

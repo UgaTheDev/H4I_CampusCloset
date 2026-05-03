@@ -1,7 +1,6 @@
-// TODO: requireAdmin() on all mutating handlers before wiring to Prisma
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { createSupabaseServerClient } from '@/lib/supabase-server'
+import { requireAdmin } from '@/lib/admin-guard'
 
 interface CreateContactBody {
   name: string
@@ -16,17 +15,8 @@ interface CreateContactBody {
 // Admin only — list all contact requests
 export async function GET() {
   try {
-    const supabase = await createSupabaseServerClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user?.email) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
-    }
-
-    const admin = await prisma.adminUser.findUnique({ where: { email: user.email } })
-    if (!admin) {
-      return NextResponse.json({ error: 'Not admin' }, { status: 403 })
-    }
+    const guard = await requireAdmin()
+    if (guard.error) return guard.error
 
     const requests = await prisma.contactRequest.findMany({
       orderBy: { createdAt: 'desc' },
@@ -62,7 +52,7 @@ export async function POST(request: Request) {
         message: messageTrim,
         type: resolvedType,
         preferredLocation: preferredLocation?.trim() ?? null,
-        preferredDate: preferredDate?.trim() ?? null,
+        preferredDate: preferredDate ? new Date(preferredDate) : null,
         preferredTime: preferredTime?.trim() ?? null,
       },
     })

@@ -33,7 +33,6 @@ export default function EventsPageClient() {
         const res = await fetch('/api/events')
 
         if (!res.ok) {
-          console.error('Failed to fetch events: Response not OK', res.status)
           setEvents([])
           return
         }
@@ -41,7 +40,6 @@ export default function EventsPageClient() {
         const events = await res.json()
 
         if (!events || !events.data || !Array.isArray(events.data)) {
-          console.error('Failed to fetch events: Invalid data structure', events)
           setEvents([])
           return
         }
@@ -51,8 +49,8 @@ export default function EventsPageClient() {
           date: new Date(e.date),
         }))
         setEvents(parsed)
-      } catch (err) {
-        console.error('Failed to fetch events:', err)
+      } catch {
+        setEvents([])
       }
     }
 
@@ -62,12 +60,12 @@ export default function EventsPageClient() {
   return (
     <div>
       <div className="m-[50px] text-center">
-        <p className="font-display text-[64px]">Events</p>
+        <h1 className="font-display text-[64px]">Events</h1>
         <p className="font-body text-[24px]">
           Find upcoming clothing swaps, donation drives, and more campus closet events!
         </p>
         <Badge className="mx-auto mt-2 flex h-[52.17px] w-[342.93px] items-center justify-center border-2 px-2.5 py-2.5 text-center">
-          15+ events hosted this semester
+          {events.length}+ events hosted
         </Badge>
       </div>
 
@@ -77,7 +75,7 @@ export default function EventsPageClient() {
 
       <div className="mx-[50px] mt-[30px]">
         <div className="mb-6">
-          <h1 className="font-display text-[40px]">Upcoming Swaps and Drives</h1>
+          <h2 className="font-display text-[40px]">Upcoming Swaps and Drives</h2>
           <p className="font-body">Join us at our next clothing swap!</p>
         </div>
 
@@ -95,9 +93,9 @@ export default function EventsPageClient() {
       </div>
 
       <SwapVsDrive />
-      <p className="m-10 text-center font-display text-5xl font-bold">
+      <h2 className="m-10 text-center font-display text-5xl font-bold">
         Photos From Past Events
-      </p>
+      </h2>
     </div>
   )
 }

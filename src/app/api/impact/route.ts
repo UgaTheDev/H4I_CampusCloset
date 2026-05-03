@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/admin-guard'
 
@@ -13,26 +12,32 @@ interface CreateImpact {
 }
 
 
-// GET (aggregated stats), POST (add entry)
-export async function GET() { 
+// GET — returns aggregate totals + individual records (for admin listing)
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const mode = searchParams.get('mode')
 
-    try {
-        const event = await prisma.impactStats.aggregate({
-            _sum: {
-                itemsReused: true,
-                itemsDonated: true,
-                attendance: true,
-                wasteDivertedKg: true,
-                waterSavedL: true,
-                carbonSavedKg: true
-            }
-        })
-
-        return NextResponse.json({ data: event })
-    } catch (err) {
-    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
-      return NextResponse.json({ error: 'Impact stats not found' }, { status: 404 })
+    if (mode === 'list') {
+      const records = await prisma.impactStats.findMany({
+        orderBy: { createdAt: 'desc' },
+        include: { Event: { select: { id: true, title: true } } },
+      })
+      return NextResponse.json({ data: records })
     }
+
+    const agg = await prisma.impactStats.aggregate({
+      _sum: {
+        itemsReused: true,
+        itemsDonated: true,
+        attendance: true,
+        wasteDivertedKg: true,
+        waterSavedL: true,
+        carbonSavedKg: true,
+      },
+    })
+    return NextResponse.json({ data: agg })
+  } catch {
     return NextResponse.json({ error: 'Failed to get impact stats' }, { status: 500 })
   }
 }

@@ -3,14 +3,18 @@ import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/lib/admin-guard'
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
-  const eventId = searchParams.get('eventId')
+  try {
+    const { searchParams } = new URL(request.url)
+    const eventId = searchParams.get('eventId')
 
-  const photos = await prisma.galleryPhoto.findMany({
-    where: eventId ? { eventId } : undefined,
-    orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
-  })
-  return NextResponse.json({ data: photos })
+    const photos = await prisma.galleryPhoto.findMany({
+      where: eventId ? { eventId } : undefined,
+      orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
+    })
+    return NextResponse.json({ data: photos })
+  } catch {
+    return NextResponse.json({ error: 'Failed to fetch' }, { status: 500 })
+  }
 }
 
 export async function POST(request: Request) {

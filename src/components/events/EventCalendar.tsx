@@ -77,9 +77,9 @@ export default function EventCalendar({ events }: EventCalendarProps) {
     <div className="flex justify-between bg-white p-10">
       
       <div className="ml-5 mt-[30px] w-[60%]">
-        <h1 className="mb-0 font-display text-[48px]">
+        <h2 className="mb-0 font-display text-[48px]">
           Calendar
-        </h1>
+        </h2>
         <p className="mb-[30px] font-body text-brand-text/60">
           (Events for {currentMonthString})
         </p>

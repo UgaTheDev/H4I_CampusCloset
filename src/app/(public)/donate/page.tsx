@@ -1,12 +1,15 @@
 import type { Metadata } from 'next'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
+import { cn } from '@/lib/cn'
 import PickupForm from './PickupForm'
 import DonationMapWrapper from './DonationMapWrapper'
 
+export const revalidate = 60
+
 export const metadata: Metadata = {
   title: 'Donate | Campus Closet',
-  description: 'Donate clothing to BU Campus Closet',
+  description: 'Donate clothing to BU Campus Closet. Find donation bins across campus, learn what we accept, and schedule a free pickup.',
 }
 
 // ── SVG Icons ─────────────────────────────────────────────
@@ -91,7 +94,7 @@ export default function DonatePage() {
     <>
       {/* ── Section 1: Hero ─────────────────────────────── */}
       <section className="bg-brand-cream py-16">
-        <div className={`${INNER} text-center`}>
+        <div className={cn(INNER, 'text-center')}>
           <h1 className="font-display text-4xl md:text-5xl text-brand-text">
             Donate Clothes
           </h1>
@@ -107,7 +110,7 @@ export default function DonatePage() {
 
       {/* ── Section 2: How to Donate ────────────────────── */}
       <section className="bg-brand-cream py-16">
-        <div className={`${INNER} text-center`}>
+        <div className={cn(INNER, 'text-center')}>
           <h2 className="font-display text-3xl text-brand-text">How to Donate</h2>
           <p className="mt-3 font-body text-brand-text/70">
             Simple steps to make your clothing donation count!
@@ -116,7 +119,7 @@ export default function DonatePage() {
           <div className="mt-12 grid gap-8 md:grid-cols-3">
             {HOW_STEPS.map((step) => (
               <div key={step.label} className="flex flex-col items-center text-center">
-                <div className={`flex h-16 w-16 items-center justify-center rounded-full ${step.bg}`}>
+                <div className={cn('flex h-16 w-16 items-center justify-center rounded-full', step.bg)}>
                   {step.icon}
                 </div>
                 <p className="mt-4 font-heading text-[17px] font-bold text-brand-text">
@@ -182,7 +185,7 @@ export default function DonatePage() {
 
       {/* ── Section 4: Drop-Off Locations ───────────────── */}
       <section className="bg-white py-16">
-        <div className={`${INNER} text-center`}>
+        <div className={cn(INNER, 'text-center')}>
           <h2 className="font-display text-3xl text-brand-text">Drop-Off Locations</h2>
           <p className="mt-3 font-body text-brand-text/70">
             Find convenient donation bins across BU campus
@@ -221,7 +224,7 @@ export default function DonatePage() {
 
       {/* ── Section 6: Questions? ───────────────────────── */}
       <section className="bg-white py-16">
-        <div className={`${INNER} text-center`}>
+        <div className={cn(INNER, 'text-center')}>
           <h2 className="font-display text-3xl text-brand-text">Questions?</h2>
           <p className="mt-3 font-body text-brand-text/70">
             We&apos;re here to help with any questions about donating to BU Campus Closet.

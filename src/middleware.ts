@@ -25,6 +25,9 @@ export async function middleware(request: NextRequest) {
   )
 
   // Refresh the session — this is critical for keeping tokens alive
+  // Note: Prisma cannot run in Edge Middleware, so the AdminUser DB check
+  // happens in the client-side AdminLayout via /api/admin/check.
+  // This middleware only gates on Supabase session (authentication).
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user && request.nextUrl.pathname.startsWith('/admin')) {

@@ -8,11 +8,11 @@ type RouteContext = { params: Promise<{ id: string }> }
 export async function GET(_request: Request, { params }: RouteContext) {
   try {
     const { id } = await params
-    const member = await prisma.teamMember.findUnique({ where: { id } })
-    if (!member) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    return NextResponse.json({ data: member })
+    const stats = await prisma.impactStats.findUnique({ where: { id } })
+    if (!stats) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    return NextResponse.json({ data: stats })
   } catch {
-    return NextResponse.json({ error: 'Failed to fetch' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to fetch impact stats' }, { status: 500 })
   }
 }
 
@@ -22,19 +22,19 @@ export async function PATCH(request: Request, { params }: RouteContext) {
 
   const { id } = await params
   const body = await request.json()
-  const { name, role, bio, photoUrl, displayOrder } = body
+  const { itemsReused, itemsDonated, attendance, wasteDivertedKg, waterSavedL, carbonSavedKg, eventId } = body
 
   try {
-    const member = await prisma.teamMember.update({
+    const stats = await prisma.impactStats.update({
       where: { id },
-      data: { name, role, bio, photoUrl, displayOrder },
+      data: { itemsReused, itemsDonated, attendance, wasteDivertedKg, waterSavedL, carbonSavedKg, eventId },
     })
-    return NextResponse.json({ data: member })
+    return NextResponse.json({ data: stats })
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
       return NextResponse.json({ error: 'Not found' }, { status: 404 })
     }
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to update impact stats' }, { status: 500 })
   }
 }
 
@@ -44,12 +44,12 @@ export async function DELETE(_request: Request, { params }: RouteContext) {
 
   const { id } = await params
   try {
-    await prisma.teamMember.delete({ where: { id } })
+    await prisma.impactStats.delete({ where: { id } })
     return NextResponse.json({ ok: true })
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
       return NextResponse.json({ error: 'Not found' }, { status: 404 })
     }
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to delete impact stats' }, { status: 500 })
   }
 }

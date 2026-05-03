@@ -29,13 +29,17 @@ export default function Accordion({ items, allowMultiple = false, className }: A
     <div className={cn('flex flex-col gap-4', className)}>
       {items.map((item, i) => {
         const isOpen = openIndices.has(i)
+        const panelId = `accordion-panel-${item.question.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}-${i}`
+        const headingId = `accordion-heading-${item.question.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}-${i}`
         return (
           <div key={i} className="rounded-lg border border-gray-300 bg-white overflow-hidden">
             <button
               type="button"
+              id={headingId}
               className="flex w-full items-center gap-3 px-5 py-4 text-left"
               onClick={() => toggle(i)}
               aria-expanded={isOpen}
+              aria-controls={panelId}
             >
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-gray-400 text-[14px] font-bold leading-none">
                 {isOpen ? '−' : '+'}
@@ -45,7 +49,12 @@ export default function Accordion({ items, allowMultiple = false, className }: A
               </span>
             </button>
             {isOpen && (
-              <div className="px-5 pb-4 pl-14">
+              <div
+                id={panelId}
+                role="region"
+                aria-labelledby={headingId}
+                className="px-5 pb-4 pl-14"
+              >
                 <p className="font-body text-[14px] leading-relaxed text-brand-text/70">
                   {item.answer}
                 </p>

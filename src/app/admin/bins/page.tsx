@@ -185,8 +185,8 @@ export default function AdminBinsPage() {
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-olive border-t-transparent" />
         </div>
       ) : error ? (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-5 py-4">
-          <p className="font-body text-[14px] text-red-600">{error}</p>
+        <div className="rounded-xl border border-brand-terra/20 bg-brand-terra/5 px-5 py-4">
+          <p className="font-body text-[14px] text-brand-terra">{error}</p>
         </div>
       ) : bins.length === 0 ? (
         <div className="rounded-xl border border-dashed border-gray-300 py-16 text-center">
@@ -299,7 +299,7 @@ export default function AdminBinsPage() {
           </label>
 
           {formError && (
-            <p className="font-body text-[13px] text-red-500">{formError}</p>
+            <p className="font-body text-[13px] text-brand-terra">{formError}</p>
           )}
 
           <div className="mt-2 flex justify-end gap-3">
