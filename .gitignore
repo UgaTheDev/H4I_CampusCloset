@@ -35,6 +35,10 @@ yarn-error.log*
 CLAUDE.md
 .mcp.json
 
+# audit docs (tracked separately)
+AUDIT.md
+NEXTSTEPS.md
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
