@@ -18,12 +18,21 @@ export default function ImpactCharts() {
     async function fetchImpact() {
       try {
         const res = await fetch("/api/impact");
+        if (!res.ok) {
+          throw new Error(`Impact API failed: ${res.status}`);
+        }
         const json = await res.json();
-        
-        const stats = json?.data?._sum || json;
+        const stats = json?.data?._sum;
+
+        if (!stats) {
+          setImpact(null);
+          return;
+        }
+
         setImpact(stats); 
       } catch (err) {
         console.error("Failed to fetch impact:", err);
+        setImpact(null);
       } finally {
         setIsLoading(false);
       }
@@ -56,9 +65,10 @@ export default function ImpactCharts() {
   const rawTrees = carbonKg / 48;
 
 
-  const suitcases = Math.max(1, roundToTwoSigFigs(rawSuitcases));
-  const waterYears = Math.max(1, roundToTwoSigFigs(rawWaterYears));
-  const trees = Math.max(1, roundToTwoSigFigs(rawTrees));
+  const normalize = (raw: number) => (raw <= 0 ? 0 : Math.max(1, roundToTwoSigFigs(raw)));
+  const suitcases = normalize(rawSuitcases);
+  const waterYears = normalize(rawWaterYears);
+  const trees = normalize(rawTrees);
 
   return (
     <div className="w-full py-12" style={{ backgroundColor: 'transparent', color: '#1a1a1a' }}>

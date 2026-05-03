@@ -21,7 +21,7 @@ export default async function AboutImpactStats() {
   const attendance = agg._sum.attendance ?? 0
   const wasteLbs = Math.round((agg._sum.wasteDivertedKg ?? 0) * KG_TO_LBS)
   const carbonLbs = Math.round((agg._sum.carbonSavedKg ?? 0) * KG_TO_LBS)
-  const waterSavedL = agg._sum.waterSavedL ?? 0
+  const waterSavedL = Math.round(agg._sum.waterSavedL ?? 0)
 
   const cards = [
     { value: fmt(items), label: 'Clothing Items Swapped', bgClass: 'bg-brand-stat-green', colorClass: 'text-brand-dark-olive' },
@@ -29,7 +29,7 @@ export default async function AboutImpactStats() {
     { value: `${wasteLbs} lbs`, label: 'Waste Diverted', bgClass: 'bg-brand-stat-green', colorClass: 'text-brand-dark-olive' },
     { value: fmt(attendance), label: 'Students Participated', bgClass: 'bg-brand-stat-terra', colorClass: 'text-brand-terra' },
     { value: `${carbonLbs} lbs`, label: 'Carbon Saved', bgClass: 'bg-brand-stat-green', colorClass: 'text-brand-dark-olive' },
-    { value: `${waterSavedL} liters`, label: 'Water Saved', bgClass: 'bg-brand-faq-active', colorClass: 'text-brand-blue' },
+    { value: `${waterSavedL.toLocaleString()} liters`, label: 'Water Saved', bgClass: 'bg-brand-faq-active', colorClass: 'text-brand-blue' },
   ]
 
   return (

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
-import { createSupabaseServerClient } from '@/lib/supabase-server'
 import { requireAdmin } from '@/lib/admin-guard'
 
 interface CreateImpact {
@@ -40,38 +39,35 @@ export async function GET() {
 
 export async function POST(request: Request) { 
     try {
-    const supabase = await createSupabaseServerClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user?.email) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
-    }
-
     const authResult = await requireAdmin()
     if (authResult.error) return authResult.error
 
     const body = (await request.json()) as CreateImpact
 
-    const { itemsReused, itemsDonated, attendance, wasteDivertedKg, waterSavedL } = body
+    const { itemsReused, itemsDonated, attendance, wasteDivertedKg, waterSavedL, carbonSavedKg } = body
 
     if (typeof itemsReused !== 'number' || !Number.isFinite(itemsReused)) {
-      return NextResponse.json({ error: 'items reused must be a finite number' }, { status: 400 })
+      return NextResponse.json({ error: 'itemsReused must be a finite number' }, { status: 400 })
     }
 
     if (typeof itemsDonated !== 'number' || !Number.isFinite(itemsDonated)) {
-      return NextResponse.json({ error: 'items reused must be a finite number' }, { status: 400 })
+      return NextResponse.json({ error: 'itemsDonated must be a finite number' }, { status: 400 })
     }
 
     if (typeof attendance !== 'number' || !Number.isFinite(attendance)) {
-      return NextResponse.json({ error: 'items reused must be a finite number' }, { status: 400 })
+      return NextResponse.json({ error: 'attendance must be a finite number' }, { status: 400 })
     }
 
     if (typeof wasteDivertedKg !== 'number' || !Number.isFinite(wasteDivertedKg)) {
-      return NextResponse.json({ error: 'items reused must be a finite number' }, { status: 400 })
+      return NextResponse.json({ error: 'wasteDivertedKg must be a finite number' }, { status: 400 })
     }
 
     if (typeof waterSavedL !== 'number' || !Number.isFinite(waterSavedL)) {
-      return NextResponse.json({ error: 'items reused must be a finite number' }, { status: 400 })
+      return NextResponse.json({ error: 'waterSavedL must be a finite number' }, { status: 400 })
+    }
+
+    if (typeof carbonSavedKg !== 'number' || !Number.isFinite(carbonSavedKg)) {
+      return NextResponse.json({ error: 'carbonSavedKg must be a finite number' }, { status: 400 })
     }
 
     const impact = await prisma.impactStats.create({
@@ -80,7 +76,8 @@ export async function POST(request: Request) {
         itemsDonated,
         attendance,
         wasteDivertedKg,
-        waterSavedL
+        waterSavedL,
+        carbonSavedKg
       },
     })
 
