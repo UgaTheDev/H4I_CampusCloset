@@ -18,7 +18,9 @@ export async function GET() {
     }
 
     return NextResponse.json({ ok: true })
-  } catch {
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    console.error('Admin check failed:', message)
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
