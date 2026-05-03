@@ -157,7 +157,7 @@ export default function AdminBinsPage() {
       setDeleteId(null)
       await fetchBins()
     } catch {
-      // Could surface a toast here; for now just close
+      setError('Failed to delete bin')
       setDeleteId(null)
     }
   }

@@ -1,5 +1,5 @@
-// TODO: requireAdmin() on all mutating handlers before wiring to Prisma
 import { NextResponse } from 'next/server'
+import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { createSupabaseServerClient } from '@/lib/supabase-server'
 
@@ -61,7 +61,10 @@ export async function PATCH(
     })
 
     return NextResponse.json({ data: contactRequest })
-  } catch {
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
+      return NextResponse.json({ error: 'Contact request not found' }, { status: 404 })
+    }
     return NextResponse.json({ error: 'Failed to update contact request' }, { status: 500 })
   }
 }
