@@ -1,4 +1,3 @@
-// TODO: requireAdmin() on all mutating handlers before wiring to Prisma
 import { NextResponse } from 'next/server'
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
@@ -6,6 +5,13 @@ import { createSupabaseServerClient } from '@/lib/supabase-server'
 
 interface UpdateContactBody {
   status?: string
+  name?: string
+  email?: string
+  message?: string
+  type?: string
+  preferredLocation?: string
+  preferredDate?: string
+  preferredTime?: string
 }
 
 // Admin only — update a contact request (e.g. status change)
@@ -28,16 +34,30 @@ export async function PATCH(
 
     const { id } = await params
     const body = (await request.json()) as UpdateContactBody
-    const { status } = body
 
     const validStatuses = ['new', 'responded', 'completed']
-    if (!status || !validStatuses.includes(status)) {
+    if (body.status && !validStatuses.includes(body.status)) {
       return NextResponse.json({ error: 'Invalid status value' }, { status: 400 })
+    }
+
+    const updateData: {
+      status?: string
+      preferredDate?: string
+      preferredTime?: string
+      preferredLocation?: string
+    } = {}
+    if (body.status !== undefined) updateData.status = body.status
+    if (body.preferredDate !== undefined) updateData.preferredDate = body.preferredDate
+    if (body.preferredTime !== undefined) updateData.preferredTime = body.preferredTime
+    if (body.preferredLocation !== undefined) updateData.preferredLocation = body.preferredLocation
+
+    if (Object.keys(updateData).length === 0) {
+      return NextResponse.json({ error: 'No valid fields to update' }, { status: 400 })
     }
 
     const contactRequest = await prisma.contactRequest.update({
       where: { id },
-      data: { status },
+      data: updateData,
     })
 
     return NextResponse.json({ data: contactRequest })

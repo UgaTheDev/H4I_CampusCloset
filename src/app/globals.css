@@ -29,6 +29,12 @@
   font-display: swap;
 }
 
+/* ── Leaflet Map ──────────────────────────────────────── */
+
+.leaflet-tile-pane {
+  filter: sepia(0.5) hue-rotate(90deg) saturate(0.5) brightness(0.88);
+}
+
 /* ── Base Styles ──────────────────────────────────────── */
 
 body {
