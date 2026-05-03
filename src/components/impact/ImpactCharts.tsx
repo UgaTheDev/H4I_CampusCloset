@@ -31,7 +31,6 @@ export default function ImpactCharts() {
 
         setImpact(stats); 
       } catch (err) {
-        console.error("Failed to fetch impact:", err);
         setImpact(null);
       } finally {
         setIsLoading(false);
@@ -42,11 +41,11 @@ export default function ImpactCharts() {
   }, []);
 
   if (isLoading) {
-    return <div className="p-16 text-center" style={{ fontFamily: 'Telegraf, sans-serif' }}>Loading impact data...</div>;
+    return <div className="p-16 text-center font-body">Loading impact data...</div>;
   }
 
   if (!impact) {
-    return <div className="p-16 text-center" style={{ fontFamily: 'Telegraf, sans-serif' }}>No data available.</div>;
+    return <div className="p-16 text-center font-body">No data available.</div>;
   }
 
   const wasteLbs = Math.round((impact.wasteDivertedKg || 0) * 2.20462);
@@ -71,13 +70,13 @@ export default function ImpactCharts() {
   const trees = normalize(rawTrees);
 
   return (
-    <div className="w-full py-12" style={{ backgroundColor: 'transparent', color: '#1a1a1a' }}>
+    <div className="w-full py-12 bg-transparent color-black">
       <div className="max-w-5xl mx-auto">
 
         {/* --- EQUIVALENCY SECTION --- */}
-        <div className="pt-8 border-t border-gray-200" style={{ fontFamily: 'Telegraf, sans-serif' }}>
+        <div className="pt-8 border-t border-gray-200 font-body">
           
-          <h3 className="text-3xl mb-10 text-center text-black" style={{ fontFamily: '"Brasika Display", serif' }}>
+          <h3 className="text-3xl mb-10 text-center text-black text-brand-text">
             What does that look like?
           </h3>
           
