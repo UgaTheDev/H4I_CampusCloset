@@ -110,6 +110,8 @@ export default function AdminContactPage() {
       }
       const json = (await res.json()) as { data: ContactRequest[] }
       setRequests(json.data ?? [])
+    } catch {
+      setError('Failed to load requests')
     } finally {
       setLoading(false)
     }
@@ -120,6 +122,7 @@ export default function AdminContactPage() {
   // ── Status update ─────────────────────────────────────
 
   async function updateStatus(id: string, status: ContactStatus) {
+    setError(null)
     setUpdatingId(id)
     try {
       const res = await fetch(`/api/contact/${id}`, {
