@@ -85,7 +85,15 @@ export default function AdminContentPage() {
   const [saving, setSaving] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
-  const [values, setValues] = useState<Record<string, string>>({})
+  const [values, setValues] = useState<Record<string, string>>(() => {
+    const defaults: Record<string, string> = {}
+    for (const section of CONTENT_SECTIONS) {
+      for (const item of section.items) {
+        defaults[item.key] = item.default
+      }
+    }
+    return defaults
+  })
 
   async function load() {
     setLoading(true)
@@ -94,11 +102,13 @@ export default function AdminContentPage() {
       if (!res.ok) throw new Error('Failed to load')
       const json = await res.json()
       setEntries(json.data ?? [])
-      const map: Record<string, string> = {}
-      for (const entry of json.data ?? []) {
-        map[entry.key] = entry.value
-      }
-      setValues(map)
+      setValues((prev) => {
+        const next = { ...prev }
+        for (const entry of json.data ?? []) {
+          next[entry.key] = entry.value
+        }
+        return next
+      })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load')
     } finally {
@@ -108,8 +118,8 @@ export default function AdminContentPage() {
 
   useEffect(() => { load() }, [])
 
-  function getValue(key: string, defaultValue: string) {
-    return values[key] ?? defaultValue
+  function getValue(key: string) {
+    return values[key] ?? ''
   }
 
   function setValue(key: string, value: string) {
@@ -138,9 +148,8 @@ export default function AdminContentPage() {
 
   function isModified(key: string, defaultValue: string) {
     const dbValue = entries.find((e) => e.key === key)?.value
-    const current = values[key]
-    if (dbValue !== undefined) return current !== dbValue
-    return current !== undefined && current !== defaultValue
+    const baseline = dbValue ?? defaultValue
+    return values[key] !== baseline
   }
 
   if (loading) {
@@ -174,13 +183,13 @@ export default function AdminContentPage() {
                     <Textarea
                       label={item.label}
                       rows={Math.min(8, Math.max(3, item.default.split('\n').length + 1))}
-                      value={getValue(item.key, item.default)}
+                      value={getValue(item.key)}
                       onChange={(e) => setValue(item.key, e.target.value)}
                     />
                   ) : (
                     <Input
                       label={item.label}
-                      value={getValue(item.key, item.default)}
+                      value={getValue(item.key)}
                       onChange={(e) => setValue(item.key, e.target.value)}
                     />
                   )}
