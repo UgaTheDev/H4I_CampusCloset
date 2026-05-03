@@ -14,6 +14,7 @@ const ADMIN_LINKS = [
   { label: 'Team', href: '/admin/team' },
   { label: 'FAQ', href: '/admin/faq' },
   { label: 'Photos', href: '/admin/photos' },
+  { label: 'Site Content', href: '/admin/content' },
 ] as const
 
 export default function AdminSidebar() {

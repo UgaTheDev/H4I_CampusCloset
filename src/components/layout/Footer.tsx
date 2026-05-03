@@ -1,12 +1,19 @@
-import Link from "next/link";
-import Image from "next/image";
-import { NAV_LINKS } from "@/lib/constants";
+import Link from 'next/link'
+import Image from 'next/image'
+import { NAV_LINKS } from '@/lib/constants'
+import { getContentMap } from '@/lib/site-content'
 
-export default function Footer() {
+export default async function Footer() {
+  const content = await getContentMap({
+    'footer.email': 'campuscloset@bu.edu',
+    'footer.instagram_url': 'https://www.instagram.com/bucampuscloset/',
+    'footer.instagram_handle': '@bucampuscloset',
+    'footer.tagline': 'A sustainability-focused clothing swap initiative at Boston University.',
+  })
+
   return (
     <footer className="bg-brand-brown text-white">
       <div className="mx-auto flex max-w-[1440px] flex-col gap-10 px-6 py-16 md:flex-row md:justify-between lg:px-[104px]">
-        {/* Brand */}
         <div className="max-w-sm">
           <Link href="/" className="flex items-center gap-2">
             <Image
@@ -16,28 +23,19 @@ export default function Footer() {
               height={48}
               className="h-12 w-12 object-cover brightness-0 invert"
             />
-            <span className="font-display text-[28px] leading-none">
-              Campus Closet
-            </span>
+            <span className="font-display text-[28px] leading-none">Campus Closet</span>
           </Link>
           <p className="mt-4 font-body text-[16px] leading-relaxed text-white/80">
-            A sustainability-focused clothing swap initiative at Boston
-            University.
+            {content['footer.tagline']}
           </p>
         </div>
 
-        {/* Quick Links */}
         <div>
-          <h3 className="font-body text-[18px] font-extrabold uppercase tracking-wide">
-            Quick Links
-          </h3>
+          <h3 className="font-body text-[18px] font-extrabold uppercase tracking-wide">Quick Links</h3>
           <ul className="mt-4 space-y-2">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="font-body text-[16px] text-white/80 transition-opacity hover:opacity-100"
-                >
+                <Link href={link.href} className="font-body text-[16px] text-white/80 transition-opacity hover:opacity-100">
                   {link.label}
                 </Link>
               </li>
@@ -45,54 +43,36 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Contact / Social */}
         <div>
-          <h3 className="font-body text-[18px] font-extrabold uppercase tracking-wide">
-            Connect
-          </h3>
+          <h3 className="font-body text-[18px] font-extrabold uppercase tracking-wide">Connect</h3>
           <ul className="mt-4 space-y-2 font-body text-[16px] text-white/80">
             <li>
-              <a
-                href="https://www.instagram.com/bucampuscloset/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-opacity hover:opacity-100"
-              >
-                Instagram
+              <a href={content['footer.instagram_url']} target="_blank" rel="noopener noreferrer" className="transition-opacity hover:opacity-100">
+                {content['footer.instagram_handle']}
               </a>
             </li>
             <li>
-              <a
-                href="mailto:campuscloset@bu.edu"
-                className="transition-opacity hover:opacity-100"
-              >
-                campuscloset@bu.edu
+              <a href={`mailto:${content['footer.email']}`} className="transition-opacity hover:opacity-100">
+                {content['footer.email']}
               </a>
             </li>
           </ul>
         </div>
       </div>
 
-      {/* Bottom bar */}
       <div className="border-t border-white/20">
         <div className="mx-auto max-w-[1440px] px-6 py-4 lg:px-[104px]">
           <p className="font-body text-[14px] text-white/50">
-            &copy; {new Date().getFullYear()} Campus Closet &middot; Boston
-            University
+            &copy; {new Date().getFullYear()} Campus Closet &middot; Boston University
           </p>
           <p className="mt-1 font-body text-[14px] text-white/50">
-            Developed by{" "}
-            <a
-              href="https://bu.hack4impact.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white/70 underline transition-opacity hover:opacity-100"
-            >
+            Developed by{' '}
+            <a href="https://bu.hack4impact.org/" target="_blank" rel="noopener noreferrer" className="text-white/70 underline transition-opacity hover:opacity-100">
               Hack4Impact BU
             </a>
           </p>
         </div>
       </div>
     </footer>
-  );
+  )
 }

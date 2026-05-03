@@ -102,6 +102,13 @@ model FaqItem {
   updatedAt    DateTime @updatedAt
 }
 
+model SiteContent {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
 model GalleryPhoto {
   id           String   @id @default(uuid())
   url          String

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import { cn } from '@/lib/cn'
+import { getContentMap } from '@/lib/site-content'
 import PickupForm from './PickupForm'
 import DonationMapWrapper from './DonationMapWrapper'
 
@@ -48,20 +49,9 @@ function XIcon({ className }: { className?: string }) {
 
 // ── Data ───────────────────────────────────────────────────
 
-const ACCEPT_ITEMS = [
-  'Tops (t-shirts, blouses, long sleeves)',
-  'Bottoms (jeans, pants, skirts, shorts)',
-  'Dresses & jumpsuits',
-  'Sweaters & hoodies',
-  'Jackets & coats',
-]
+const DEFAULT_ACCEPT = 'Tops (t-shirts, blouses, long sleeves)\nBottoms (jeans, pants, skirts, shorts)\nDresses & jumpsuits\nSweaters & hoodies\nJackets & coats'
 
-const REJECT_ITEMS = [
-  'Undergarments',
-  'Shoes',
-  'Bedding or linens',
-  'Heavily damaged items',
-]
+const DEFAULT_REJECT = 'Undergarments\nShoes\nBedding or linens\nHeavily damaged items'
 
 const HOW_STEPS = [
   {
@@ -89,7 +79,14 @@ const INNER = 'mx-auto max-w-5xl px-6 lg:px-12'
 
 // ── Page ──────────────────────────────────────────────────
 
-export default function DonatePage() {
+export default async function DonatePage() {
+  const content = await getContentMap({
+    'donate.accept_items': DEFAULT_ACCEPT,
+    'donate.reject_items': DEFAULT_REJECT,
+  })
+  const ACCEPT_ITEMS = content['donate.accept_items'].split('\n').filter(Boolean)
+  const REJECT_ITEMS = content['donate.reject_items'].split('\n').filter(Boolean)
+
   return (
     <>
       {/* ── Section 1: Hero ─────────────────────────────── */}

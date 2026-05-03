@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { cn } from '@/lib/cn'
+import { getContentMap } from '@/lib/site-content'
 
 const pillars = [
   {
@@ -20,7 +21,12 @@ const pillars = [
   },
 ]
 
-export default function MissionSection() {
+export default async function MissionSection() {
+  const content = await getContentMap({
+    'mission.body1': 'Campus Closet was founded on a simple belief: clothing should be shared, not wasted. As fast fashion fuels overconsumption and closets overflow, many students still struggle to access affordable options. We\u2019re working to break that cycle through free, circular clothing swaps that extend garment lifespans and reduce textile waste.',
+    'mission.body2': 'By making contribution the currency instead of cash, we strengthen both community and environmental responsibility. Now as Campus Closet, we\u2019re expanding beyond Boston University to partner with other campuses and organizations, growing access to sustainable, free clothing wherever it\u2019s needed.',
+  })
+
   return (
     <section className="bg-white px-6 py-20 md:px-12">
       <div className="mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-2 md:gap-16">
@@ -45,18 +51,10 @@ export default function MissionSection() {
             Expanding Access.
           </p>
           <p className="mb-6 font-body text-[16px] leading-[1.55] tracking-[0.18px] text-brand-text md:text-[18px] md:leading-[23px]">
-            Campus Closet was founded on a simple belief: clothing should be shared,
-            not wasted. As fast fashion fuels overconsumption and closets overflow,
-            many students still struggle to access affordable options. We&apos;re
-            working to break that cycle through free, circular clothing swaps that
-            extend garment lifespans and reduce textile waste.
+            {content['mission.body1']}
           </p>
           <p className="mb-10 font-body text-[16px] leading-[1.55] tracking-[0.18px] text-brand-text md:text-[18px] md:leading-[23px]">
-            By making contribution the currency instead of cash, we strengthen both
-            community and environmental responsibility. Now as Campus Closet, we&apos;re
-            expanding beyond Boston University to partner with other campuses and
-            organizations, growing access to sustainable, free clothing wherever
-            it&apos;s needed.
+            {content['mission.body2']}
           </p>
 
           <div className="flex gap-6">

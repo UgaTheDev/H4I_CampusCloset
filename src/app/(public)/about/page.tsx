@@ -13,8 +13,14 @@ import MissionSection from '@/components/about/MissionSection'
 import TeamGrid from '@/components/about/TeamGrid'
 import PhotoGallery from '@/components/about/PhotoGallery'
 import AboutImpactStats from '@/components/about/AboutImpactStats'
+import { getContentMap } from '@/lib/site-content'
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const content = await getContentMap({
+    'about.tagline': 'Est. 2021 | Our mission is to cultivate community and environmental responsibility through free, sustainable, and circular clothing consumption.',
+    'about.join_heading': 'Want to join the team?',
+    'about.join_body': "We're always looking for passionate students to help organize swaps, run drives, and grow the Campus Closet community. Applications open each semester.",
+  })
   return (
     <>
       <section className="bg-brand-cream px-6 pb-20 pt-16 text-center md:px-12">
@@ -26,10 +32,7 @@ export default function AboutPage() {
             Campus Closet
           </h1>
           <p className="mx-auto max-w-3xl font-body text-[16px] leading-[1.4] text-brand-text/85 md:text-[20px] md:leading-[28px]">
-            Est. 2021 | Our mission is to cultivate community and environmental
-            responsibility through{' '}
-            <span className="font-extrabold">free, sustainable, and circular</span>{' '}
-            clothing consumption.
+            {content['about.tagline']}
           </p>
         </div>
       </section>
@@ -60,12 +63,10 @@ export default function AboutPage() {
       <section className="bg-brand-olive px-6 py-20 text-center md:px-12">
         <div className="mx-auto max-w-3xl">
           <h2 className="mb-4 font-display text-[40px] text-white md:text-[48px]">
-            Want to join the team?
+            {content['about.join_heading']}
           </h2>
           <p className="mb-8 font-body text-[15px] leading-relaxed text-white/85">
-            We&apos;re always looking for passionate students to help organize swaps,
-            run drives, and grow the Campus Closet community. Applications open each
-            semester.
+            {content['about.join_body']}
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button variant="secondary" href="/contact">

@@ -29,6 +29,7 @@ export default function AdminDashboardPage() {
           { label: 'Team Members', href: '/admin/team', desc: 'Edit team bios and photos' },
           { label: 'FAQ', href: '/admin/faq', desc: 'Add and edit FAQ entries' },
           { label: 'Photo Gallery', href: '/admin/photos', desc: 'Upload and manage photos' },
+          { label: 'Site Content', href: '/admin/content', desc: 'Edit public-facing text and copy' },
         ].map((item) => (
           <a
             key={item.href}

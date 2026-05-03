@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { getContentMap } from '@/lib/site-content'
 import ContactForm from './ContactForm'
 
 export const revalidate = 60
@@ -9,7 +10,12 @@ export const metadata: Metadata = {
     'Get in touch with Campus Closet — submit a general inquiry, request a pickup, or ask about dropping off donations.',
 }
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const content = await getContentMap({
+    'footer.email': 'campuscloset@bu.edu',
+    'footer.instagram_url': 'https://www.instagram.com/bucampuscloset/',
+    'footer.instagram_handle': '@bucampuscloset',
+  })
   return (
     <>
       {/* Hero */}
@@ -47,10 +53,10 @@ export default function ContactPage() {
               </div>
               <p className="font-heading text-[16px] font-bold text-brand-text">Email</p>
               <a
-                href="mailto:campuscloset@bu.edu"
+                href={`mailto:${content['footer.email']}`}
                 className="font-body text-[15px] text-brand-olive underline-offset-2 hover:underline"
               >
-                campuscloset@bu.edu
+                {content['footer.email']}
               </a>
             </div>
 
@@ -65,12 +71,12 @@ export default function ContactPage() {
               </div>
               <p className="font-heading text-[16px] font-bold text-brand-text">Instagram</p>
               <a
-                href="https://www.instagram.com/bucampuscloset"
+                href={content['footer.instagram_url']}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-body text-[15px] text-brand-lavender underline-offset-2 hover:underline"
               >
-                @bucampuscloset
+                {content['footer.instagram_handle']}
               </a>
             </div>
           </div>
