@@ -194,6 +194,9 @@ async function main() {
       { email: 'dliao@bu.edu' },
       { email: 'aflopez@bu.edu' },
       { email: 'diggyzar@bu.edu' },
+      { email: 'bucampuscloset@gmail.com' },
+      { email: 'riashahh@bu.edu' },
+      { email: 'mnyak@bu.edu' },
     ],
   })
 

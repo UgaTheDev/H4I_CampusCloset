@@ -60,7 +60,13 @@ export default function AdminSidebar() {
         </ul>
       </nav>
 
-      <div className="border-t border-gray-200 px-3 py-4">
+      <div className="border-t border-gray-200 px-3 py-4 flex flex-col gap-1">
+        <Link
+          href="/"
+          className="block rounded-lg px-3 py-2 font-body text-[14px] text-brand-text/70 transition-colors hover:bg-gray-100 hover:text-brand-text"
+        >
+          ← View Site
+        </Link>
         <button
           onClick={handleSignOut}
           className="w-full rounded-lg px-3 py-2 text-left font-body text-[14px] text-brand-terra transition-colors hover:bg-brand-terra/10"
