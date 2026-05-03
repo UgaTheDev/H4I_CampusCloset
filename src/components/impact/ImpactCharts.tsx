@@ -1,6 +1,3 @@
-'use client';
-import { useState, useEffect } from "react";
-
 interface Impact {
   itemsReused: number;
   itemsDonated: number;
@@ -10,44 +7,7 @@ interface Impact {
   carbonSavedKg: number;
 }
 
-export default function ImpactCharts() {
-  const [impact, setImpact] = useState<Impact | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchImpact() {
-      try {
-        const res = await fetch("/api/impact");
-        if (!res.ok) {
-          throw new Error(`Impact API failed: ${res.status}`);
-        }
-        const json = await res.json();
-        const stats = json?.data?._sum;
-
-        if (!stats) {
-          setImpact(null);
-          return;
-        }
-
-        setImpact(stats); 
-      } catch (err) {
-        setImpact(null);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchImpact();
-  }, []);
-
-  if (isLoading) {
-    return <div className="p-16 text-center font-body">Loading impact data...</div>;
-  }
-
-  if (!impact) {
-    return <div className="p-16 text-center font-body">No data available.</div>;
-  }
-
+export default function ImpactCharts({ impact }: { impact: Impact }) {
   const wasteLbs = Math.round((impact.wasteDivertedKg || 0) * 2.20462);
   const waterLiters = Math.round(impact.waterSavedL || 0);
   const carbonKg = Math.round((impact.carbonSavedKg || 0) * 2.20462);
@@ -70,13 +30,13 @@ export default function ImpactCharts() {
   const trees = normalize(rawTrees);
 
   return (
-    <div className="w-full py-12 bg-transparent color-black">
+    <div className="w-full py-12 bg-transparent">
       <div className="max-w-5xl mx-auto">
 
         {/* --- EQUIVALENCY SECTION --- */}
         <div className="pt-8 border-t border-gray-200 font-body">
           
-          <h3 className="text-3xl mb-10 text-center text-black text-brand-text">
+          <h3 className="text-3xl mb-10 text-center text-brand-text">
             What does that look like?
           </h3>
           

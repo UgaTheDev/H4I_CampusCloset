@@ -12,12 +12,13 @@ function fmt(n: number, unit?: string) {
 export default async function AboutImpactStats() {
   const [agg, swapCount] = await Promise.all([
     prisma.impactStats.aggregate({
-      _sum: { itemsReused: true, attendance: true, wasteDivertedKg: true, waterSavedL: true, carbonSavedKg: true },
-    }).catch(() => ({ _sum: { itemsReused: 0, attendance: 0, wasteDivertedKg: 0, waterSavedL: 0, carbonSavedKg: 0 } })),
+      _sum: { itemsReused: true, itemsDonated: true, attendance: true, wasteDivertedKg: true, waterSavedL: true, carbonSavedKg: true },
+    }).catch(() => ({ _sum: { itemsReused: 0, itemsDonated: 0, attendance: 0, wasteDivertedKg: 0, waterSavedL: 0, carbonSavedKg: 0 } })),
     prisma.event.count({ where: { type: 'swap' } }).catch(() => 0),
   ])
 
   const items = agg._sum.itemsReused ?? 0
+  const itemsDonated = agg._sum.itemsDonated ?? 0
   const attendance = agg._sum.attendance ?? 0
   const wasteLbs = Math.round((agg._sum.wasteDivertedKg ?? 0) * KG_TO_LBS)
   const carbonLbs = Math.round((agg._sum.carbonSavedKg ?? 0) * KG_TO_LBS)
@@ -26,9 +27,9 @@ export default async function AboutImpactStats() {
   const cards = [
     { value: fmt(items), label: 'Clothing Items Swapped', bgClass: 'bg-brand-stat-green', colorClass: 'text-brand-dark-olive' },
     { value: `${swapCount}+`, label: 'Swap Events Hosted', bgClass: 'bg-brand-stat-tan', colorClass: 'text-brand-brown-light' },
-    { value: `${wasteLbs} lbs`, label: 'Waste Diverted', bgClass: 'bg-brand-stat-green', colorClass: 'text-brand-dark-olive' },
+    { value: `${wasteLbs.toLocaleString()} lbs`, label: 'Waste Diverted', bgClass: 'bg-brand-stat-green', colorClass: 'text-brand-dark-olive' },
     { value: fmt(attendance), label: 'Students Participated', bgClass: 'bg-brand-stat-terra', colorClass: 'text-brand-terra' },
-    { value: `${carbonLbs} lbs`, label: 'Carbon Saved', bgClass: 'bg-brand-stat-green', colorClass: 'text-brand-dark-olive' },
+    { value: `${carbonLbs.toLocaleString()} lbs`, label: 'Carbon Saved', bgClass: 'bg-brand-stat-green', colorClass: 'text-brand-dark-olive' },
     { value: `${waterSavedL.toLocaleString()} liters`, label: 'Water Saved', bgClass: 'bg-brand-faq-active', colorClass: 'text-brand-blue' },
   ]
 
@@ -49,7 +50,16 @@ export default async function AboutImpactStats() {
           </div>
         ))}
       </div>
-      <ImpactCharts/>
+      <ImpactCharts
+        impact={{
+          itemsReused: items,
+          itemsDonated,
+          attendance,
+          wasteDivertedKg: agg._sum.wasteDivertedKg ?? 0,
+          waterSavedL: agg._sum.waterSavedL ?? 0,
+          carbonSavedKg: agg._sum.carbonSavedKg ?? 0,
+        }}
+      />
     </div>
   )
 }

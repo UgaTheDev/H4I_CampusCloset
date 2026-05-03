@@ -46,16 +46,16 @@ export async function POST(request: Request) {
 
     const { itemsReused, itemsDonated, attendance, wasteDivertedKg, waterSavedL, carbonSavedKg } = body
 
-    if (typeof itemsReused !== 'number' || !Number.isFinite(itemsReused)) {
-      return NextResponse.json({ error: 'itemsReused must be a finite number' }, { status: 400 })
+    if (typeof itemsReused !== 'number' || !Number.isFinite(itemsReused) || !Number.isInteger(itemsReused) || itemsReused < 0) {
+      return NextResponse.json({ error: 'itemsReused must be a non-negative integer' }, { status: 400 })
     }
 
-    if (typeof itemsDonated !== 'number' || !Number.isFinite(itemsDonated)) {
-      return NextResponse.json({ error: 'itemsDonated must be a finite number' }, { status: 400 })
+    if (typeof itemsDonated !== 'number' || !Number.isFinite(itemsDonated) || !Number.isInteger(itemsDonated) || itemsDonated < 0) {
+      return NextResponse.json({ error: 'itemsDonated must be a non-negative integer' }, { status: 400 })
     }
 
-    if (typeof attendance !== 'number' || !Number.isFinite(attendance)) {
-      return NextResponse.json({ error: 'attendance must be a finite number' }, { status: 400 })
+    if (typeof attendance !== 'number' || !Number.isFinite(attendance) || !Number.isInteger(attendance) || attendance < 0) {
+      return NextResponse.json({ error: 'attendance must be a non-negative integer' }, { status: 400 })
     }
 
     if (typeof wasteDivertedKg !== 'number' || !Number.isFinite(wasteDivertedKg)) {
