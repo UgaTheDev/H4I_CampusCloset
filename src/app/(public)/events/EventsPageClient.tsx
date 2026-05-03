@@ -65,7 +65,7 @@ export default function EventsPageClient() {
           Find upcoming clothing swaps, donation drives, and more campus closet events!
         </p>
         <Badge className="mx-auto mt-2 flex h-[52.17px] w-[342.93px] items-center justify-center border-2 px-2.5 py-2.5 text-center">
-          {events.length}+ events hosted
+          {events.filter((e) => e.type === 'swap' || e.type === 'drive').length}+ events hosted
         </Badge>
       </div>
 

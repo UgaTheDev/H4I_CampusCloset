@@ -11,8 +11,8 @@ function fmt(n: number) {
 export default async function WhyItMatters() {
   const [agg, swapCount] = await Promise.all([
     prisma.impactStats.aggregate({
-      _sum: { itemsReused: true, attendance: true, wasteDivertedKg: true },
-    }).catch(() => ({ _sum: { itemsReused: 0, attendance: 0, wasteDivertedKg: 0 } })),
+      _sum: { itemsReused: true, attendance: true, wasteDivertedKg: true, waterSavedL: true, carbonSavedKg: true },
+    }).catch(() => ({ _sum: { itemsReused: 0, attendance: 0, wasteDivertedKg: 0, waterSavedL: 0, carbonSavedKg: 0 } })),
     prisma.event.count({ where: { type: 'swap' } }).catch(() => 0),
   ])
 

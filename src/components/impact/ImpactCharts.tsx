@@ -7,21 +7,21 @@ interface Impact {
   carbonSavedKg: number;
 }
 
-export default function ImpactCharts({ impact }: { impact: Impact }) {
-  const wasteLbs = Math.round((impact.wasteDivertedKg || 0) * 2.20462);
-  const waterLiters = Math.round(impact.waterSavedL || 0);
-  const carbonKg = Math.round((impact.carbonSavedKg || 0) * 2.20462);
+const KG_TO_LBS = 2.20462
+const LBS_PER_SUITCASE = 40
+const LITERS_PER_PERSON_PER_YEAR = 1000
+const LBS_CO2_PER_TREE_PER_YEAR = 48
 
+export default function ImpactCharts({ impact }: { impact: Impact }) {
+  const wasteLbs = Math.round((impact.wasteDivertedKg || 0) * KG_TO_LBS);
+  const waterLiters = Math.round(impact.waterSavedL || 0);
+  const carbonLbs = Math.round((impact.carbonSavedKg || 0) * KG_TO_LBS);
 
   const roundToTwoSigFigs = (num: number) => Number(num.toPrecision(2));
 
-  // Equivalency Calculations
-  // 1 fully packed suitcase ≈ 40 lbs
-  const rawSuitcases = wasteLbs / 40;
-  // 1 person drinks ≈ 1000 Liters of water per year
-  const rawWaterYears = waterLiters / 1000;
-  // 1 tree absorbs ≈ 48 lbs of CO2 per year
-  const rawTrees = carbonKg / 48;
+  const rawSuitcases = wasteLbs / LBS_PER_SUITCASE;
+  const rawWaterYears = waterLiters / LITERS_PER_PERSON_PER_YEAR;
+  const rawTrees = carbonLbs / LBS_CO2_PER_TREE_PER_YEAR;
 
 
   const normalize = (raw: number) => (raw <= 0 ? 0 : Math.max(1, roundToTwoSigFigs(raw)));
@@ -63,7 +63,7 @@ export default function ImpactCharts({ impact }: { impact: Impact }) {
             {/* Carbon Equivalency */}
             <div className="bg-brand-stat-green p-8 rounded-2xl border-2 border-black shadow-sm flex flex-col items-center text-center">
               <div className="text-5xl mb-4" aria-hidden="true">🌱</div>
-              <h4 className="text-xl font-bold mb-3 text-brand-text">{carbonKg.toLocaleString()} lbs of CO₂</h4>
+              <h4 className="text-xl font-bold mb-3 text-brand-text">{carbonLbs.toLocaleString()} lbs of CO₂</h4>
               <p className="text-brand-text/70 leading-relaxed text-sm">
                 Equivalent to the carbon absorbed by planting <span className="font-bold text-black">{trees.toLocaleString()}+ trees</span>.
               </p>
