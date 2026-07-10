@@ -13,20 +13,20 @@ jobs:
       - name: Ping Supabase REST API
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
           set -euo pipefail
 
-          if [ -z "${SUPABASE_URL:-}" ] || [ -z "${SUPABASE_SERVICE_ROLE_KEY:-}" ]; then
-            echo "::error::Missing required secrets SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY"
+          if [ -z "${SUPABASE_URL:-}" ] || [ -z "${SUPABASE_ANON_KEY:-}" ]; then
+            echo "::error::Missing required secrets SUPABASE_URL or SUPABASE_ANON_KEY"
             exit 1
           fi
 
-          # service_role key hits PostgREST → PostgreSQL, resetting the inactivity clock
+          # queries keepalive table — anon SELECT policy, hits PostgreSQL directly
           HTTP_STATUS=$(curl -s -o /tmp/response.json -w "%{http_code}" \
-            "${SUPABASE_URL}/rest/v1/" \
-            -H "apikey: ${SUPABASE_SERVICE_ROLE_KEY}" \
-            -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}")
+            "${SUPABASE_URL}/rest/v1/keepalive?select=id" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}")
 
           echo "HTTP status: ${HTTP_STATUS}"
           cat /tmp/response.json
